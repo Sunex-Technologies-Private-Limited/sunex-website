@@ -1,0 +1,478 @@
+/* UrbanTree air-field: a seven-stage constellation that turns purification into a readable, living system. */
+.urban-airfield {
+  position: relative;
+  display: flex;
+  min-height: 585px;
+  align-items: stretch;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 36px;
+  background: radial-gradient(circle at 50% 45%, #285882 0%, #163d68 34%, #102e56 72%);
+  box-shadow: 0 24px 52px rgba(17, 48, 84, 0.15);
+  color: #fff;
+  isolation: isolate;
+}
+
+.urban-airfield::before,
+.urban-airfield::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 50%;
+  content: "";
+}
+
+.urban-airfield::before {
+  width: 520px;
+  height: 520px;
+  top: 34px;
+  left: 50%;
+  box-shadow: 0 0 0 44px rgba(255, 255, 255, 0.025), 0 0 0 88px rgba(255, 255, 255, 0.014);
+  transform: translateX(-50%);
+}
+
+.urban-airfield::after {
+  width: 78%;
+  height: 120%;
+  top: -37%;
+  left: -31%;
+  border-color: rgba(191, 226, 201, 0.1);
+  transform: rotate(28deg);
+}
+
+.urban-airfield__topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 23px 25px 0;
+}
+
+.urban-airfield__topbar > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.77);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.urban-airfield__topbar > span {
+  color: rgba(255, 255, 255, 0.49);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.urban-airfield__stage-map {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 430px;
+}
+
+.urban-airfield__core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: min(182px, 37vw);
+  height: min(182px, 37vw);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 30%, rgba(255, 255, 255, 0.37), rgba(255, 255, 255, 0.11) 38%, rgba(12, 43, 74, 0.46) 71%);
+  box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.035), 0 18px 42px rgba(5, 22, 42, 0.24), inset 0 0 34px rgba(218, 244, 226, 0.12);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(12px);
+}
+
+.urban-airfield__core::before,
+.urban-airfield__core::after {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 50%;
+  content: "";
+}
+
+.urban-airfield__core::before { width: 76%; height: 76%; }
+.urban-airfield__core::after { width: 48%; height: 48%; border-color: rgba(199, 247, 208, 0.27); }
+
+.urban-airfield__core-content { position: relative; z-index: 1; padding: 18px; }
+.urban-airfield__core-content > span { color: #c7f7d0; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; }
+.urban-airfield__core-content > svg { display: block; margin: 8px auto 6px; color: #fff1e8; }
+.urban-airfield__core-content small { display: block; color: rgba(255, 255, 255, 0.56); font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.urban-airfield__core-content strong { display: block; max-width: 125px; margin: 4px auto 0; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; }
+
+.urban-airfield__node {
+  position: absolute;
+  z-index: 2;
+  width: 95px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.urban-airfield__node:nth-of-type(1) { top: 5%; left: 50%; transform: translateX(-50%); }
+.urban-airfield__node:nth-of-type(2) { top: 20%; right: 7%; }
+.urban-airfield__node:nth-of-type(3) { top: 46%; right: 3%; }
+.urban-airfield__node:nth-of-type(4) { right: 13%; bottom: 8%; }
+.urban-airfield__node:nth-of-type(5) { bottom: 3%; left: 50%; transform: translateX(-50%); }
+.urban-airfield__node:nth-of-type(6) { bottom: 8%; left: 13%; }
+.urban-airfield__node:nth-of-type(7) { top: 46%; left: 3%; }
+
+.urban-airfield__node > .urban-airfield__node-icon {
+  display: grid;
+  min-height: 82px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 22px 22px 22px 7px;
+  background: rgba(14, 47, 79, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 9px 18px rgba(5, 21, 40, 0.12);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.24s ease, background-color 0.24s ease, box-shadow 0.24s ease, transform 0.24s var(--ease-app);
+}
+
+.urban-airfield__node:hover > .urban-airfield__node-icon { border-color: rgba(199, 247, 208, 0.68); background: rgba(255, 255, 255, 0.13); transform: translateY(-3px); }
+.urban-airfield__node.is-active > .urban-airfield__node-icon { border-color: rgba(255, 224, 202, 0.82); background: linear-gradient(145deg, rgba(255, 166, 109, 0.56), rgba(255, 255, 255, 0.17)); box-shadow: 0 11px 24px rgba(4, 22, 41, 0.23), inset 0 1px 0 rgba(255, 255, 255, 0.28); }
+.urban-airfield__node small { display: block; margin-top: 6px; color: rgba(255, 255, 255, 0.8); font-size: 8px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.urban-airfield__node.is-active small { color: #fff1e8; }
+.urban-airfield__node svg { color: #c7f7d0; }
+.urban-airfield__node.is-active svg { color: #fff; }
+
+.urban-airfield__flowline {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-items: center;
+  grid-platform-columns: auto 1fr auto;
+  gap: 11px;
+  margin: 0 25px 22px;
+  color: rgba(255, 255, 255, 0.54);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.urban-airfield__flowline i { display: block; height: 1px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(199, 247, 208, 0.72), rgba(255, 255, 255, 0.15)); }
+.urban-airfield__flowline span:last-child { color: rgba(199, 247, 208, 0.9); }
+
+@media (max-width: 620px) {
+  .urban-airfield { min-height: 530px; border-radius: 27px; }
+  .urban-airfield__topbar { padding: 18px 18px 0; }
+  .urban-airfield__topbar > span { display: none; }
+  .urban-airfield__stage-map { min-height: 390px; }
+  .urban-airfield__core { width: 142px; height: 142px; }
+  .urban-airfield__core-content > svg { margin: 6px auto 4px; }
+  .urban-airfield__core-content strong { font-size: 12px; }
+  .urban-airfield__node { width: 58px; }
+  .urban-airfield__node > .urban-airfield__node-icon { min-height: 56px; border-radius: 17px 17px 17px 5px; }
+  .urban-airfield__node small { display: none; }
+  .urban-airfield__node:nth-of-type(2) { right: 4%; }
+  .urban-airfield__node:nth-of-type(3) { right: 1%; }
+  .urban-airfield__node:nth-of-type(4) { right: 8%; }
+  .urban-airfield__node:nth-of-type(6) { left: 8%; }
+  .urban-airfield__node:nth-of-type(7) { left: 1%; }
+  .urban-airfield__flowline { margin: 0 18px 18px; font-size: 8px; }
+}
+
+/* Device-led treatment scene: the supplied UrbanTree device is the visual core, with clear selectable stage callouts around it. */
+.urban-airfield {
+  min-height: 610px;
+  border-color: rgba(255, 255, 255, 0.24);
+  background: linear-gradient(135deg, #123f6d 0%, #0e315b 46%, #153f68 100%);
+}
+
+.urban-airfield::before {
+  z-index: -1;
+  width: auto;
+  height: auto;
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(110deg, rgba(7, 28, 54, 0.86) 8%, rgba(15, 55, 92, 0.61) 47%, rgba(9, 33, 60, 0.9) 100%);
+  box-shadow: none;
+  content: "";
+  transform: none;
+}
+
+.urban-airfield::after {
+  z-index: -1;
+  width: 88%;
+  height: 78%;
+  top: 14%;
+  left: 6%;
+  border-color: rgba(199, 247, 208, 0.16);
+  border-radius: 42% 58% 54% 46%;
+  box-shadow: 0 0 0 42px rgba(255, 255, 255, 0.025), 0 0 0 90px rgba(199, 247, 208, 0.017);
+  transform: rotate(-7deg);
+}
+
+.urban-airfield__city {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+.urban-airfield__stage-map { min-height: 457px; }
+
+.urban-airfield__device-stage {
+  position: absolute;
+  z-index: 2;
+  top: 49%;
+  left: 50%;
+  display: grid;
+  width: min(242px, 34vw);
+  min-height: 348px;
+  align-items: center;
+  justify-items: center;
+  transform: translate(-50%, -50%);
+}
+
+.urban-airfield__device-halo {
+  position: absolute;
+  width: 225px;
+  height: 225px;
+  border: 1px solid rgba(199, 247, 208, 0.35);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218, 244, 226, 0.18), rgba(218, 244, 226, 0.04) 56%, transparent 70%);
+  box-shadow: 0 0 0 24px rgba(255, 255, 255, 0.035), 0 0 76px rgba(133, 220, 179, 0.18);
+}
+
+.urban-airfield__device-frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  height: 282px;
+  place-items: center;
+  border-radius: 42% 42% 18% 18%;
+  background: linear-gradient(180deg, rgba(220, 243, 236, 0.1), rgba(7, 29, 53, 0.01) 60%);
+}
+
+.urban-airfield__device-frame::after {
+  position: absolute;
+  right: 20%;
+  bottom: 7px;
+  left: 20%;
+  height: 21px;
+  border-radius: 50%;
+  background: rgba(1, 13, 27, 0.46);
+  box-shadow: 0 0 24px 9px rgba(4, 18, 34, 0.32);
+  content: "";
+  filter: blur(7px);
+}
+
+.urban-airfield__device-frame img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-height: 282px;
+  object-fit: cover;
+  object-position: 23% center;
+  filter: drop-shadow(0 18px 21px rgba(2, 16, 31, 0.29));
+}
+
+.urban-airfield__device-caption {
+  position: absolute;
+  z-index: 3;
+  right: -13px;
+  bottom: -3px;
+  min-width: 154px;
+  padding: 12px 14px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 16px 16px 4px 16px;
+  background: rgba(8, 36, 63, 0.74);
+  box-shadow: 0 12px 25px rgba(2, 19, 37, 0.23), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.urban-airfield__device-caption > span { color: #c7f7d0; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; }
+.urban-airfield__device-caption > svg { margin: 0 0 -4px 5px; color: #fff1e8; }
+.urban-airfield__device-caption small { display: block; margin-top: 5px; color: rgba(255, 255, 255, 0.56); font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.urban-airfield__device-caption strong { display: block; max-width: 150px; margin-top: 3px; color: #fff; font-size: 13px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; }
+
+.urban-airfield__node {
+  z-index: 3;
+  display: flex;
+  width: 166px;
+  align-items: center;
+  gap: 9px;
+  border-radius: 15px 15px 15px 4px;
+  background: rgba(8, 37, 65, 0.56);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 21px rgba(5, 21, 40, 0.15);
+  padding: 9px 10px;
+  text-align: left;
+  transition: border-color 0.24s ease, background-color 0.24s ease, box-shadow 0.24s ease, transform 0.24s var(--ease-app);
+}
+
+.urban-airfield__node::after {
+  position: absolute;
+  z-index: -1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(199, 247, 208, 0.62), rgba(199, 247, 208, 0.05));
+  content: "";
+  pointer-events: none;
+}
+
+.urban-airfield__node:nth-of-type(1) { top: 7%; left: 4%; transform: none; }
+.urban-airfield__node:nth-of-type(1)::after { top: 50%; left: calc(100% - 3px); width: 83px; transform: rotate(17deg); transform-origin: left; }
+.urban-airfield__node:nth-of-type(2) { top: 10%; right: 4%; }
+.urban-airfield__node:nth-of-type(2)::after { top: 50%; right: calc(100% - 3px); width: 78px; transform: rotate(-18deg); transform-origin: right; }
+.urban-airfield__node:nth-of-type(3) { top: 43%; right: 1.5%; }
+.urban-airfield__node:nth-of-type(3)::after { top: 50%; right: calc(100% - 3px); width: 77px; }
+.urban-airfield__node:nth-of-type(4) { right: 7%; bottom: 5%; }
+.urban-airfield__node:nth-of-type(4)::after { top: 10%; right: calc(100% - 3px); width: 83px; transform: rotate(24deg); transform-origin: right; }
+.urban-airfield__node:nth-of-type(5) { bottom: 0; left: 50%; transform: translateX(-50%); }
+.urban-airfield__node:nth-of-type(5)::after { display: none; }
+.urban-airfield__node:nth-of-type(6) { bottom: 5%; left: 7%; }
+.urban-airfield__node:nth-of-type(6)::after { top: 10%; left: calc(100% - 3px); width: 83px; transform: rotate(-24deg); transform-origin: left; }
+.urban-airfield__node:nth-of-type(7) { top: 43%; left: 1.5%; }
+.urban-airfield__node:nth-of-type(7)::after { top: 50%; left: calc(100% - 3px); width: 77px; transform: rotate(180deg); transform-origin: left; }
+
+.urban-airfield__node:hover { background: rgba(255, 255, 255, 0.14); box-shadow: 0 14px 24px rgba(4, 22, 41, 0.23), inset 0 1px 0 rgba(255, 255, 255, 0.21); transform: translateY(-3px); }
+.urban-airfield__node:nth-of-type(5):hover { transform: translateX(-50%) translateY(-3px); }
+.urban-airfield__node.is-active { background: linear-gradient(125deg, rgba(244, 143, 77, 0.84), rgba(249, 178, 120, 0.46)); box-shadow: 0 14px 27px rgba(4, 22, 41, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.34); }
+.urban-airfield__node.is-active::after { background: linear-gradient(90deg, rgba(255, 237, 221, 0.96), rgba(199, 247, 208, 0.1)); }
+.urban-airfield__node:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+.urban-airfield__node > .urban-airfield__node-icon {
+  display: grid;
+  width: 34px;
+  min-height: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 11px 11px 4px 11px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  transform: none;
+}
+
+.urban-airfield__node.is-active > .urban-airfield__node-icon { border-color: rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.15); }
+.urban-airfield__node svg { color: #c7f7d0; }
+.urban-airfield__node.is-active svg { color: #fff; }
+.urban-airfield__node-copy { display: block; min-width: 0; }
+.urban-airfield__node-copy small { display: block; margin: 0; color: rgba(255, 255, 255, 0.65); font-size: 7px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+.urban-airfield__node-copy strong { display: block; margin-top: 3px; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; }
+.urban-airfield__node.is-active .urban-airfield__node-copy small { color: #fff3e9; }
+
+.urban-airfield__flowline { z-index: 3; }
+
+@media (max-width: 780px) {
+  .urban-airfield { min-height: 602px; }
+  .urban-airfield__node { width: 138px; }
+  .urban-airfield__node:nth-of-type(1) { left: 2.5%; }
+  .urban-airfield__node:nth-of-type(2) { right: 2.5%; }
+  .urban-airfield__node:nth-of-type(3) { right: 0.5%; }
+  .urban-airfield__node:nth-of-type(4) { right: 3%; }
+  .urban-airfield__node:nth-of-type(6) { left: 3%; }
+  .urban-airfield__node:nth-of-type(7) { left: 0.5%; }
+  .urban-airfield__node::after { width: 48px !important; }
+  .urban-airfield__device-stage { width: 205px; }
+}
+
+@media (max-width: 620px) {
+  .urban-airfield { min-height: 0; border-radius: 27px; }
+  .urban-airfield::after { top: 11%; width: 123%; height: 48%; left: -12%; }
+  .urban-airfield__stage-map { display: grid; min-height: 0; grid-platform-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 298px 15px 16px; }
+  .urban-airfield__device-stage { top: 139px; width: 194px; min-height: 241px; }
+  .urban-airfield__device-halo { width: 177px; height: 177px; box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.035), 0 0 57px rgba(133, 220, 179, 0.17); }
+  .urban-airfield__device-frame { height: 202px; }
+  .urban-airfield__device-frame img { max-height: 202px; }
+  .urban-airfield__device-caption { right: -17px; bottom: -13px; min-width: 143px; padding: 10px 11px; }
+  .urban-airfield__device-caption strong { font-size: 12px; }
+  .urban-airfield__node,
+  .urban-airfield__node:nth-of-type(1),
+  .urban-airfield__node:nth-of-type(2),
+  .urban-airfield__node:nth-of-type(3),
+  .urban-airfield__node:nth-of-type(4),
+  .urban-airfield__node:nth-of-type(5),
+  .urban-airfield__node:nth-of-type(6),
+  .urban-airfield__node:nth-of-type(7) { position: static; width: auto; min-height: 58px; transform: none; }
+  .urban-airfield__node:nth-of-type(7) { grid-column: 1 / -1; }
+  .urban-airfield__node::after { display: none; }
+  .urban-airfield__node:hover,
+  .urban-airfield__node:nth-of-type(5):hover { transform: translateY(-2px); }
+  .urban-airfield__node > .urban-airfield__node-icon { width: 31px; min-height: 31px; height: 31px; }
+  .urban-airfield__node-copy strong { font-size: 10px; }
+  .urban-airfield__node-copy small { font-size: 6.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .urban-airfield__node { transition: none; }
+}
+
+/* Ordered circular treatment field: stages progress clockwise around the supplied single UrbanTree device. */
+.urban-airfield { min-height: 650px; background: radial-gradient(circle at 50% 49%, #245786 0%, #143f6d 39%, #0e2e54 100%); }
+.urban-airfield::before { background: linear-gradient(135deg, rgba(10, 40, 71, .38), rgba(9, 33, 59, .86)); }
+.urban-airfield::after { width: 66%; height: 64%; top: 17%; left: 17%; border-color: rgba(199, 247, 208, .23); border-radius: 50%; box-shadow: 0 0 0 36px rgba(255, 255, 255, .025), 0 0 0 74px rgba(199, 247, 208, .015); transform: none; }
+.urban-airfield__stage-map { min-height: 497px; }
+
+.urban-airfield__device-stage { top: 51%; width: min(188px, 21vw); min-height: 392px; }
+.urban-airfield__device-halo { width: 292px; height: 292px; border-color: rgba(199, 247, 208, .42); box-shadow: 0 0 0 21px rgba(255, 255, 255, .03), 0 0 66px rgba(133, 220, 179, .16); }
+.urban-airfield__device-frame { width: 100%; height: 362px; border-radius: 0; background: transparent; }
+.urban-airfield__device-frame::after { right: 13%; bottom: 3px; left: 13%; height: 18px; }
+.urban-airfield__device-frame img { width: auto; height: 100%; max-width: 100%; max-height: none; object-fit: contain; object-position: center; }
+.urban-airfield__device-caption { right: auto; bottom: -7px; left: 50%; min-width: 178px; padding: 10px 12px; transform: translateX(-50%); }
+.urban-airfield__device-caption strong { max-width: 170px; font-size: 12px; }
+
+.urban-airfield__node { width: 164px; min-height: 57px; border: 1px solid rgba(255, 255, 255, .15); background: rgba(7, 34, 62, .7); }
+.urban-airfield__node::after { z-index: -1; background: linear-gradient(90deg, rgba(199, 247, 208, .75), rgba(199, 247, 208, .05)); }
+.urban-airfield__node:nth-of-type(1) { top: 5%; left: 4%; transform: none; }
+.urban-airfield__node:nth-of-type(1)::after { top: 55%; left: calc(100% - 2px); width: 98px; transform: rotate(22deg); transform-origin: left; }
+.urban-airfield__node:nth-of-type(2) { top: 8%; right: 4%; }
+.urban-airfield__node:nth-of-type(2)::after { top: 56%; right: calc(100% - 2px); width: 91px; transform: rotate(-23deg); transform-origin: right; }
+.urban-airfield__node:nth-of-type(3) { top: 42%; right: 1.5%; }
+.urban-airfield__node:nth-of-type(3)::after { top: 50%; right: calc(100% - 2px); width: 90px; }
+.urban-airfield__node:nth-of-type(4) { right: 8%; bottom: 7%; }
+.urban-airfield__node:nth-of-type(4)::after { top: 8%; right: calc(100% - 2px); width: 93px; transform: rotate(29deg); transform-origin: right; }
+.urban-airfield__node:nth-of-type(5) { bottom: 1%; left: 50%; transform: translateX(-50%); }
+.urban-airfield__node:nth-of-type(5)::after { display: none; }
+.urban-airfield__node:nth-of-type(6) { bottom: 7%; left: 8%; }
+.urban-airfield__node:nth-of-type(6)::after { top: 8%; left: calc(100% - 2px); width: 93px; transform: rotate(-29deg); transform-origin: left; }
+.urban-airfield__node:nth-of-type(7) { top: 42%; left: 1.5%; }
+.urban-airfield__node:nth-of-type(7)::after { top: 50%; left: calc(100% - 2px); width: 90px; transform: rotate(180deg); transform-origin: left; }
+.urban-airfield__node.is-active { border-color: rgba(255, 237, 221, .64); }
+
+@media (max-width: 780px) {
+  .urban-airfield { min-height: 620px; }
+  .urban-airfield__stage-map { min-height: 472px; }
+  .urban-airfield__device-stage { width: 168px; min-height: 362px; }
+  .urban-airfield__device-frame { height: 333px; }
+  .urban-airfield__node { width: 129px; }
+  .urban-airfield__node:nth-of-type(1)::after, .urban-airfield__node:nth-of-type(2)::after, .urban-airfield__node:nth-of-type(3)::after, .urban-airfield__node:nth-of-type(4)::after, .urban-airfield__node:nth-of-type(6)::after, .urban-airfield__node:nth-of-type(7)::after { width: 54px; }
+}
+
+@media (max-width: 620px) {
+  .urban-airfield { min-height: 0; }
+  .urban-airfield::after { width: 79%; height: 35%; top: 9%; left: 10.5%; }
+  .urban-airfield__stage-map { grid-platform-columns: repeat(2, minmax(0, 1fr)); padding: 313px 15px 16px; }
+  .urban-airfield__device-stage { top: 142px; width: 137px; min-height: 282px; }
+  .urban-airfield__device-halo { width: 215px; height: 215px; }
+  .urban-airfield__device-frame { height: 260px; }
+  .urban-airfield__device-caption { bottom: -13px; min-width: 150px; }
+  .urban-airfield__node, .urban-airfield__node:nth-of-type(1), .urban-airfield__node:nth-of-type(2), .urban-airfield__node:nth-of-type(3), .urban-airfield__node:nth-of-type(4), .urban-airfield__node:nth-of-type(5), .urban-airfield__node:nth-of-type(6), .urban-airfield__node:nth-of-type(7) { width: auto; min-height: 59px; }
+}
+
+/* Desktop connectors begin beyond the card edge, never beneath callout content. */
+@media (min-width: 621px) {
+  .urban-airfield__node:nth-of-type(1)::after { left: calc(100% + 2px); }
+  .urban-airfield__node:nth-of-type(2)::after, .urban-airfield__node:nth-of-type(3)::after, .urban-airfield__node:nth-of-type(4)::after { right: calc(100% + 2px); }
+  .urban-airfield__node:nth-of-type(6)::after, .urban-airfield__node:nth-of-type(7)::after { left: calc(100% + 2px); }
+  .urban-airfield__node:nth-of-type(7)::after { transform: none; }
+}

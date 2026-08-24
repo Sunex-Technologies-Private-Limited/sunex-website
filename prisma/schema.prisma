@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum ContactSolution {
+  urbantree
+  education
+  healthcare
+  partnership
+  csr
+  other
+}
+
+enum ContactIndustry {
+  gov
+  smartcity
+  edu
+  health
+  mfg
+  realestate
+  ngo
+  other
+}
+
+enum NotificationStatus {
+  pending
+  processing
+  sent
+  retry
+  failed
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  openId       String   @unique @db.VarChar(64)
+  name         String?
+  email        String?  @db.VarChar(320)
+  loginMethod  String?  @db.VarChar(64)
+  role         UserRole @default(user)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastSignedIn DateTime @default(now())
+
+  @@map("users")
+}
+
+model ContactInquiry {
+  id             BigInt               @id @default(autoincrement())
+  name           String               @db.VarChar(120)
+  organization   String?              @db.VarChar(160)
+  email          String               @db.VarChar(320)
+  phone          String?              @db.VarChar(60)
+  solution       ContactSolution
+  industry       ContactIndustry
+  message        String
+  idempotencyKey String?              @unique @db.VarChar(72)
+  createdAt      DateTime             @default(now())
+  notification   ContactNotification?
+
+  @@index([createdAt])
+  @@index([solution, createdAt])
+  @@map("contact_inquiries")
+}
+
+model ContactNotification {
+  id                BigInt             @id @default(autoincrement())
+  contactInquiryId  BigInt             @unique
+  status            NotificationStatus @default(pending)
+  attemptCount      Int                @default(0)
+  nextAttemptAt     DateTime           @default(now())
+  lockedAt          DateTime?
+  sentAt            DateTime?
+  providerMessageId String?            @db.VarChar(128)
+  lastErrorCode     String?            @db.VarChar(64)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  inquiry           ContactInquiry     @relation(fields: [contactInquiryId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextAttemptAt])
+  @@index([lockedAt])
+  @@map("contact_notifications")
+}

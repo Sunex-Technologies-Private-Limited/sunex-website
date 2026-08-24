@@ -1,0 +1,47 @@
+.reveal {
+  position: relative;
+  isolation: isolate;
+}
+
+.reveal__solar-sweep {
+  position: absolute;
+  inset: -10%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 38%, rgba(255, 107, 31, .05) 46%, rgba(255, 243, 226, .38) 50%, rgba(255, 107, 31, .05) 54%, transparent 62%);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+.reveal > :not(.reveal__solar-disc):not(.reveal__solar-sweep) {
+  position: relative;
+  z-index: 1;
+}
+
+.reveal__solar-disc {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: clamp(-140px, -8vw, -72px);
+  width: clamp(190px, 28vw, 420px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 107, 31, .20);
+  border-radius: 50%;
+  background: radial-gradient(circle at 43% 42%, rgba(255, 232, 213, .36), rgba(255, 107, 31, .09) 28%, transparent 67%);
+  box-shadow: 0 0 0 23px rgba(255, 107, 31, .035), 0 0 0 46px rgba(255, 107, 31, .018);
+  pointer-events: none;
+  transform: translateY(-50%);
+  will-change: transform, opacity;
+}
+
+.reveal__solar-disc:after {
+  position: absolute;
+  inset: 14%;
+  border: 1px dashed rgba(255, 107, 31, .18);
+  border-radius: 50%;
+  content: "";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal__solar-disc { display: none; }
+}

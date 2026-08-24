@@ -1,0 +1,23 @@
+/* The header uses the supplied actual SunEx lockup rather than a CSS approximation. */
+.site-nav .sunex-mark {
+  display: block;
+}
+
+.sunex-mark__actual-lockup {
+  display: block;
+  width: 164px;
+  height: auto;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.62));
+}
+
+@media (max-width: 720px) {
+  .sunex-mark__actual-lockup {
+    width: 145px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sunex-mark__actual-lockup {
+    width: 130px;
+  }
+}

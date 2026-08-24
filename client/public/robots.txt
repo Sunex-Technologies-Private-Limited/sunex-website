@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# A sitemap with absolute URLs will be added once SunEx confirms its final public domain.

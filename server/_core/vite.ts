@@ -1,0 +1,80 @@
+import express, { type Express } from "express";
+import fs from "fs";
+import { type Server } from "http";
+import { nanoid } from "nanoid";
+import path from "path";
+import { createServer as createViteServer } from "vite";
+import viteConfig from "../../vite.config";
+
+export const reactRefreshPreamble = `
+    <script type="module">
+      import RefreshRuntime from "/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>`;
+
+export async function setupVite(app: Express, server: Server) {
+  const serverOptions = {
+    middlewareMode: true,
+    hmr: { server },
+    allowedHosts: true as const,
+  };
+
+  const vite = await createViteServer({
+    ...viteConfig,
+    configFile: false,
+    server: serverOptions,
+    appType: "custom",
+  });
+
+  app.use(vite.middlewares);
+  app.use("*", async (req, res, next) => {
+    const url = req.originalUrl;
+
+    try {
+      const clientplatform = path.resolve(
+        import.meta.dirname,
+        "../..",
+        "client",
+        "index.html"
+      );
+
+      // always reload the index.html file from disk incase it changes
+      let platform = await fs.promises.readFile(clientplatform, "utf-8");
+      // In custom middleware mode the React plugin does not always inject this
+      // client preamble itself. Without it, every React module fails before the
+      // route can render with "can't detect preamble" in the browser console.
+      platform = platform.replace("<head>", `<head>${reactRefreshPreamble}`);
+      platform = platform.replace(
+        `src="/src/main.tsx"`,
+        `src="/src/main.tsx?v=${nanoid()}"`
+      );
+      const page = await vite.transformIndexHtml(url, platform);
+      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+    } catch (e) {
+      vite.ssrFixStacktrace(e as Error);
+      next(e);
+    }
+  });
+}
+
+export function serveStatic(app: Express) {
+  const distPath =
+    process.env.NODE_ENV === "development"
+      ? path.resolve(import.meta.dirname, "../..", "dist", "public")
+      : path.resolve(import.meta.dirname, "public");
+  if (!fs.existsSync(distPath)) {
+    console.error(
+      `Could not find the build directory: ${distPath}, make sure to build the client first`
+    );
+  }
+
+  app.use(express.static(distPath));
+
+  // fall through to index.html if the file doesn't exist
+  app.use("*", (_req, res) => {
+    res.sendFile(path.resolve(distPath, "index.html"));
+  });
+}

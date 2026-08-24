@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "gafpKWdzAwJVxxBMphYhX9OtPeRASFINf5VcbdO4pV2nlo3hmlwXhwTpfOZmCSxP1/EZqKrjnMR3l+woM0xZqw==",
+  "success": true,
+  "projectFilePath": "/home/ubuntu/sunex-rivr-replica/backend-dotnet/Sunex.Api/Sunex.Api.csproj",
+  "expectedPackageFiles": [
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.2/microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.2/microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "/home/ubuntu/.nuget/packages/mysqlconnector/2.4.0/mysqlconnector.2.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}
