@@ -13,12 +13,12 @@ RUN npm install -g corepack@latest \
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS runtime
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl \
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
     && groupadd --system sunex \
     && useradd --system --gid sunex --home-dir /app --shell /usr/sbin/nologin sunex \
     && rm -rf /var/lib/apt/lists/*
+COPY --from=node-builder /usr/local/bin/node /usr/local/bin/
+COPY --from=node-builder /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 WORKDIR /app
 COPY --chown=sunex:sunex --from=node-builder /app/dist ./dist
 COPY --chown=sunex:sunex --from=node-builder /app/node_modules ./node_modules
