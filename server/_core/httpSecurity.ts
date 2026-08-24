@@ -15,7 +15,7 @@ function contentSecurityPolicy() {
   const sources = ["'self'", ...configuredSources, analyticsOrigin].filter(Boolean).join(" ");
   return [
     "default-src 'self'",
-    `script-src ${sources}`,
+    `script-src ${sources} 'unsafe-inline'`,
     `connect-src ${sources}`,
     `img-src ${sources} data: blob:`,
     `font-src ${sources} data:`,
