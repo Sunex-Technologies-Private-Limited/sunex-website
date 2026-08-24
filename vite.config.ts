@@ -150,59 +150,9 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-export function buildStoragePresignUrl(forgeApiUrl: string, storageKey: string) {
-  const forgeUrl = new URL("v1/storage/presign/get", forgeApiUrl.replace(/\/+$/, "") + "/");
-  forgeUrl.searchParams.set("path", storageKey);
-  return forgeUrl.toString();
-}
 
-function vitePluginStorageProxy(): Plugin {
-  return {
-    name: "manus-storage-proxy",
-    configureServer(server: ViteDevServer) {
-      server.middlewares.use("/manus-storage", async (req, res) => {
-        const storageKey = (req.url ?? "").split("?")[0]?.replace(/^\/+/, "");
-        const forgeApiUrl = process.env.BUILT_IN_FORGE_API_URL;
-        const forgeApiKey = process.env.BUILT_IN_FORGE_API_KEY;
 
-        if (!storageKey) {
-          res.writeHead(400, { "Content-Type": "text/plain" });
-          res.end("Missing storage key");
-          return;
-        }
-        if (!forgeApiUrl || !forgeApiKey) {
-          res.writeHead(500, { "Content-Type": "text/plain" });
-          res.end("Storage proxy not configured");
-          return;
-        }
-
-        try {
-          const upstream = await fetch(buildStoragePresignUrl(forgeApiUrl, storageKey), {
-            headers: { Authorization: `Bearer ${forgeApiKey}` },
-          });
-          if (!upstream.ok) {
-            res.writeHead(502, { "Content-Type": "text/plain" });
-            res.end("Storage backend error");
-            return;
-          }
-          const { url } = await upstream.json() as { url?: string };
-          if (!url) {
-            res.writeHead(502, { "Content-Type": "text/plain" });
-            res.end("Storage backend error");
-            return;
-          }
-          res.writeHead(307, { Location: url, "Cache-Control": "no-store" });
-          res.end();
-        } catch {
-          res.writeHead(502, { "Content-Type": "text/plain" });
-          res.end("Storage proxy error");
-        }
-      });
-    },
-  };
-}
-
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
   plugins,

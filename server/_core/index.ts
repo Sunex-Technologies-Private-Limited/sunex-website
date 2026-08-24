@@ -6,7 +6,7 @@ import { registerApiSecurity } from "./apiSecurity";
 import { registerHealthRoute } from "./health";
 import { registerHttpSecurity } from "./httpSecurity";
 import { registerOAuthRoutes } from "./oauth";
-import { registerStorageProxy } from "./storageProxy";
+
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
@@ -27,7 +27,7 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "64kb", extended: false, parameterLimit: 100 }));
   registerApiSecurity(app);
   registerHealthRoute(app);
-  registerStorageProxy(app);
+
   registerOAuthRoutes(app);
   // tRPC API
   app.use(
