@@ -466,7 +466,7 @@
   .urban-airfield__device-halo { width: 215px; height: 215px; }
   .urban-airfield__device-frame { height: 260px; }
   .urban-airfield__device-caption { bottom: -13px; min-width: 150px; }
-  .urban-airfield__node, .urban-airfield__node:nth-of-type(1), .urban-airfield__node:nth-of-type(2), .urban-airfield__node:nth-of-type(3), .urban-airfield__node:nth-of-type(4), .urban-airfield__node:nth-of-type(5), .urban-airfield__node:nth-of-type(6), .urban-airfield__node:nth-of-type(7) { width: auto; min-height: 59px; }
+  .urban-airfield__node, .urban-airfield__node:nth-of-type(1), .urban-airfield__node:nth-of-type(2), .urban-airfield__node:nth-of-type(3), .urban-airfield__node:nth-of-type(4), .urban-airfield__node:nth-of-type(5), .urban-airfield__node:nth-of-type(6), .urban-airfield__node:nth-of-type(7) { position: static; width: auto; min-height: 59px; transform: none; }
 }
 
 /* Desktop connectors begin beyond the card edge, never beneath callout content. */
