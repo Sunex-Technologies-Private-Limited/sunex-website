@@ -63,6 +63,6 @@ async function startServer() {
 }
 
 startServer().catch(error => {
-  logger.fatal({ event: "server_start_failed", errorType: error instanceof Error ? error.name : "unknown" }, "server startup failed");
+  logger.fatal({ event: "server_start_failed", errorType: error instanceof Error ? error.name : "unknown", errorMessage: error instanceof Error ? error.message : String(error) }, "server startup failed");
   process.exitCode = 1;
 });

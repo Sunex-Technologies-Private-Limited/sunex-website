@@ -4,10 +4,10 @@ const productionConfigSchema = z.object({
   NODE_ENV: z.literal("production"),
   DATABASE_URL: z.string().url().refine(value => value.startsWith("mysql://"), "DATABASE_URL must use mysql://"),
   JWT_SECRET: z.string().min(32),
-  VITE_APP_ID: z.string().min(1),
-  OAUTH_SERVER_URL: z.string().url(),
-  BUILT_IN_FORGE_API_URL: z.string().url(),
-  BUILT_IN_FORGE_API_KEY: z.string().min(1),
+  VITE_APP_ID: z.string().min(1).optional(),
+  OAUTH_SERVER_URL: z.string().optional().or(z.literal("")),
+  BUILT_IN_FORGE_API_URL: z.string().optional().or(z.literal("")),
+  BUILT_IN_FORGE_API_KEY: z.string().optional().or(z.literal("")),
 });
 
 function configurationError(issues: z.ZodIssue[]) {
