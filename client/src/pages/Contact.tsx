@@ -1,5 +1,5 @@
 import { ArrowUpRight, BadgeCheck, Building2, CheckCircle2, Compass, GraduationCap, Leaf, Mail, MapPin, Stethoscope } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Link } from "wouter";
 import { PageHero } from "@/components/sunex/PageHero";
 import { Reveal } from "@/components/sunex/Reveal";
@@ -111,7 +111,7 @@ export default function Contact() {
                   </label>
                 </div>
                 {submit.error && <p className="form-error">{submit.error.message || "We could not submit your inquiry. Please try again."}</p>}
-                <button className="action-pill form-submit" type="submit" disabled={submit.isPending}>
+                <button className="rivr-pill form-submit" type="submit" disabled={submit.isPending}>
                   {submit.isPending ? "Submitting..." : <>Submit inquiry <span><ArrowUpRight className="sunex-action-glyph" size={16} /></span></>}
                 </button>
                 <p className="contact-privacy-note">Your submitted details are used to respond to and route this enquiry. Read our <Link href="/privacy">privacy information</Link>.</p>
@@ -131,9 +131,26 @@ export default function Contact() {
                 <ul>{["Innovation-Driven Solutions", "Experienced Leadership", "Trusted Industry Partnerships", "Technology with Social Impact", "Customer-Centric Approach", "Scalable & Sustainable", "Quality & Transparency", "Global Standards"].map((item) => <li key={item}>{item}</li>)}</ul>
               </ContactSideCard>
               <ContactSideCard Icon={Mail} title="Direct contact" delay={0.1}>
-                <p><strong>Email</strong><br />contact@sunextech.com</p>
-                <p><strong>Location</strong><br /><MapPin size={13} /> India</p>
+                <p><strong>Enquiries</strong><br />Use the enquiry form to start a conversation with SunEx.</p>
                 <p><strong>Response time</strong><br />Within 24 Hours</p>
+              </ContactSideCard>
+              <ContactSideCard Icon={MapPin} title="Locations" delay={0.12}>
+                <div className="location-list">
+                  <div className="location-list__item">
+                    <span>Main branch</span>
+                    <strong>Hassan</strong>
+                  </div>
+                  <div className="location-list__item">
+                    <span>Training location</span>
+                    <strong>Mysuru</strong>
+                    <p>1133/D, Third Floor, Gokulam 2nd Stage, 2nd Main, Mysuru, Karnataka 570002.</p>
+                    <p className="location-list__landmark">Near Ganapathi Temple and Adithya Hospital.</p>
+                  </div>
+                  <div className="location-list__item location-list__item--coming">
+                    <span>Coming soon</span>
+                    <strong>Bengaluru</strong>
+                  </div>
+                </div>
               </ContactSideCard>
               <ContactSideCard Icon={Building2} title="Industries we serve" delay={0.15}>
                 <p>Government · Smart Cities · Education · Healthcare · Manufacturing · CSR · Real Estate · NGOs</p>

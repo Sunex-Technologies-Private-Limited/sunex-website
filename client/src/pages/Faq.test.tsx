@@ -12,11 +12,12 @@ vi.mock("@/components/sunex/Reveal", () => ({
 }));
 
 describe("SunEx FAQs", () => {
-  it("groups decision-support answers by service and keeps a direct contact escalation", () => {
+  it("groups the supplied SunEx questions and keeps a direct conversation action", () => {
     render(<Faq />);
+    expect(screen.getByText("What is SunEx Technologies?")).toBeTruthy();
     expect(screen.getByText("What is UrbanTree?")).toBeTruthy();
-    expect(screen.getByText("Where can I confirm course duration, eligibility, and fees?")).toBeTruthy();
+    expect(screen.getByText("Does SunEx work in education?")).toBeTruthy();
     expect(screen.getByText("Does this website provide medical advice?")).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Start a guided enquiry" }).getAttribute("href")).toBe("/contact");
+    expect(screen.getByRole("link", { name: "Start a conversation" }).getAttribute("href")).toBe("/contact");
   });
 });

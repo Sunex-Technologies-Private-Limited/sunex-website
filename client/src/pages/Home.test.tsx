@@ -3,49 +3,109 @@ import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Home, { HomeExperience } from "./Home";
 
-vi.mock("wouter", () => ({
-  Link: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => <a href={href} {...props}>{children}</a>,
-}));
-
-class IntersectionObserverMock {
-  constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {}
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-  takeRecords(): IntersectionObserverEntry[] { return []; }
-}
-
+vi.mock("wouter", () => ({ Link: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => <a href={href} {...props}>{children}</a> }));
+class IntersectionObserverMock { constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {} observe() {} unobserve() {} disconnect() {} takeRecords(): IntersectionObserverEntry[] { return []; } }
 vi.stubGlobal("IntersectionObserver", IntersectionObserverMock);
 
-describe("Home cinematic hero", () => {
-  afterEach(() => {
-    cleanup();
-    vi.useRealTimers();
-  });
-
-  it("automatically advances from UrbanTree to SkillConnect and updates the guided enquiry destination", () => {
-    vi.useFakeTimers();
-    render(<Home />);
-
-    expect(screen.getByRole("heading", { name: /Air that helps cities/i })).toBeTruthy();
-    expect(document.querySelector("#proof-title")?.textContent).toContain("Evidence we can");
-    expect(screen.getByText("Publication standard")).toBeTruthy();
-
+describe("Home supplied visual sequence", () => {
+  afterEach(() => { cleanup(); vi.useRealTimers(); });
+  it("renders the supplied future-city story and advances to the education story", () => {
+    vi.useFakeTimers(); render(<Home />);
+    expect(screen.getByRole("heading", { name: /Technology\. Innovation\.\s*Impact\./i })).toBeTruthy();
+    expect(document.querySelector(".hero-badge")?.textContent).toContain("Technology");
+    expect(document.querySelectorAll(".metric strong")).toHaveLength(4);
+    expect(screen.getByText("15+")).toBeTruthy();
+    expect(screen.getByText("Learning opportunities")).toBeTruthy();
+    expect(screen.getByText("10k+")).toBeTruthy();
+    expect(screen.getByText("Students plan to train")).toBeTruthy();
+    expect(screen.getByText("05+")).toBeTruthy();
+    expect(screen.getByText("Product R&D")).toBeTruthy();
+    expect(screen.getByText("20+")).toBeTruthy();
+    expect(screen.getByText("Industry professionals")).toBeTruthy();
+    expect(screen.getByText(/Our focus is on empowering people, enabling innovation/i).tagName).toBe("P");
+    expect(document.querySelector(".copy--overview-primary")?.textContent).toContain("SunEx Technologies is a technology and innovation-driven organisation");
+    const sectionClasses = Array.from(document.querySelectorAll("section")).map(section => section.className);
+    const missionSection = sectionClasses.findIndex(classes => classes === "section sunex-purpose-section");
+    const whySection = sectionClasses.findIndex(classes => classes.includes("sunex-why-section"));
+    const visionSection = sectionClasses.findIndex(classes => classes.includes("sunex-purpose-section--vision"));
+    expect(whySection).toBeLessThan(visionSection);
+    expect(visionSection).toBeLessThan(missionSection);
+    expect(document.querySelector(".sunex-purpose-hero .eyebrow")?.textContent).toBe("Our mission");
+    expect(screen.getByRole("heading", { name: /Turning ideas into\s*meaningful impact\./i })).toBeTruthy();
+    expect(document.querySelector(".sunex-purpose-hero__mission-intro")?.textContent).toBe("We enable, develop, build, advance, collaborate and innovate to create practical solutions and opportunities that improve lives and support a sustainable future.");
+    expect(document.querySelector("ul.sunex-mission-list")).toBeTruthy();
+    expect(document.querySelectorAll(".sunex-mission-list li")).toHaveLength(7);
+    expect(screen.getByText("Enable").tagName).toBe("STRONG");
+    expect(document.querySelectorAll(".sunex-mission-list li")[6]?.textContent).toBe("Foster innovation, entrepreneurship and continuous learning.");
+    expect(screen.queryByText("Shared direction")).toBeNull();
+    expect(document.querySelector(".sunex-mission .eyebrow")?.textContent).toBe("Our vision");
+    expect(screen.getByRole("heading", { name: /A smarter, healthier\s*and more sustainable future\./i })).toBeTruthy();
+    expect(screen.getByText(/We envision a future where technology, education, healthcare and innovation/i).tagName).toBe("P");
+    expect(screen.getByText(/We aspire to contribute to a world where technology creates opportunities/i).tagName).toBe("P");
+    expect(screen.getByRole("heading", { name: /Technology with purpose\.\s*Innovation with impact\./i })).toBeTruthy();
+    expect(screen.getByAltText(/Technology-enabled learning studio representing people and partnerships/i).getAttribute("src")).toBe("/manus-storage/sunex-home-learning-studio_acd6f2b9.png");
+    expect(screen.getByText(/Together, we can turn ideas, capabilities and opportunities into meaningful action/i).tagName).toBe("SMALL");
+    expect(screen.getByRole("link", { name: /Partner with SunEx/i }).getAttribute("href")).toBe("/contact?interest=partnership");
+    expect(screen.queryByText("Multi-domain perspective")).toBeNull();
+    expect(screen.queryByText(/The world is changing rapidly\. Emerging technologies are transforming industries/i)).toBeNull();
+    expect(screen.getByRole("link", { name: /Explore our area/i }).getAttribute("href")).toBe("/product");
+    expect(screen.queryByText("Explore our areas")).toBeNull();
+    expect(document.querySelector(".home-hero__content > p")?.textContent).toBe("We explore and develop technology solutions that address real challenges and improve efficiency, accessibility and decision making.");
+    expect(screen.getByAltText(/Sunlit sustainable city/i).getAttribute("src")).toBe("/manus-storage/sunex-home-future-city_9cede339.png");
+    expect(screen.getByRole("heading", { name: /Four areas\.\s*One purpose\./i })).toBeTruthy();
+    expect(document.querySelectorAll(".sunex-area-card")).toHaveLength(4);
+    expect(document.querySelectorAll(".sunex-area-card__media")).toHaveLength(4);
+    expect(document.querySelectorAll(".sunex-area-card__shade")).toHaveLength(0);
+    expect(screen.queryByRole("heading", { name: "Environmental sustainability" })).toBeNull();
+    expect(document.querySelector(".sunex-approach-grid--layered")).toBeTruthy();
+    expect(screen.getByText("At SunEx, we focus on moving beyond ideas - turning concepts into practical solutions, capabilities and initiatives that can create measurable and lasting impact.")).toBeTruthy();
+    expect(document.querySelectorAll(".sunex-approach-card")).toHaveLength(7);
+    expect(document.querySelectorAll(".sunex-approach-card__icon")).toHaveLength(7);
+    expect(document.querySelectorAll(".sunex-approach-card__meta")).toHaveLength(7);
+    expect(screen.getByText("Why Partner with SunEx?")).toBeTruthy();
+    expect(screen.getByText("Building Through", { selector: "h2" }).textContent).toContain("Collaboration");
+    expect(screen.getByText(/SunEx Technologies brings together technology, innovation, expertise and partnerships/i)).toBeTruthy();
+    expect(screen.getByText(/We believe the strongest solutions are created/i)).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Start a conversation/i }).className).toContain("large-cta__action");
+    expect(document.querySelectorAll(".large-cta__principles > li")).toHaveLength(6);
+    expect(screen.getByText("Multi-Domain Perspective")).toBeTruthy();
+    expect(screen.getByText("Collaborative Ecosystem")).toBeTruthy();
+    expect(screen.getByText("Future Focus")).toBeTruthy();
+    expect(screen.queryByText(/Insert approved testimonial/i)).toBeNull();
+    expect(screen.getByRole("heading", { name: /Built through\s*real experience\./i })).toBeTruthy();
+    expect(document.querySelectorAll(".sunex-testimonial")).toHaveLength(1);
+    expect(document.querySelectorAll(".sunex-testimonial-showcase__controls button")).toHaveLength(4);
+    expect(document.querySelector(".sunex-testimonial__attribution")).toBeTruthy();
+    expect(document.querySelector(".sunex-testimonial__monogram")).toBeNull();
+    expect(screen.getByText("Padmanabha N")).toBeTruthy();
+    expect(screen.getByText("3rd Year BVA")).toBeTruthy();
+    expect(screen.getByText("The College of Fine Arts, Chitrakala Parishat, Bengaluru")).toBeTruthy();
+    expect(screen.queryByText("Omkar Chaithanya R")).toBeNull();
+    expect(screen.getByText("Only genuine and approved testimonials are published.")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(6200));
+    expect(screen.getByText("Omkar Chaithanya R")).toBeTruthy();
+    expect(screen.getByText("Dayananda Sagar University")).toBeTruthy();
     act(() => vi.advanceTimersByTime(6800));
-
-    expect(screen.getByRole("heading", { name: /Learning that turns into\s*opportunity/i })).toBeTruthy();
-    const enquiryLinks = screen.getAllByRole("link", { name: /Discuss SkillConnect/i });
-    expect(enquiryLinks[0]?.getAttribute("href")).toBe("/contact?interest=education");
+    expect(screen.getByRole("heading", { name: /Empowering people through\s*knowledge & skills\./i })).toBeTruthy();
+    expect(document.querySelector(".hero-badge")?.textContent).toContain("Education");
+    expect(screen.getByRole("link", { name: /Explore our area/i }).getAttribute("href")).toBe("/education");
+    expect(screen.getByText("through knowledge & skills.").className).toContain("hero-title__accent--education");
+    expect(document.querySelector(".home-hero__content > p")?.textContent).toBe("We work to bridge the gap between academic learning and real world capabilities through practical learning, skill development, technology exposure and industry engagement.");
+    act(() => vi.advanceTimersByTime(6800));
+    expect(document.querySelector(".hero-badge")?.textContent).toContain("Environmental");
+    expect(screen.getByRole("link", { name: /Explore our area/i }).getAttribute("href")).toBe("/product");
+    expect(document.querySelector(".home-hero__content > p")?.textContent).toBe("We develop and support innovative projects that address real-world challenges across technology, environmental sustainability, society and emerging areas.");
+    act(() => vi.advanceTimersByTime(6800));
+    expect(document.querySelector(".hero-badge")?.textContent).toContain("Healthcare");
+    expect(screen.getByRole("link", { name: /Explore our area/i }).getAttribute("href")).toBe("/healthcare");
+    expect(document.querySelector(".home-hero__content > p")?.textContent).toBe("We explore technology driven opportunities that can contribute to better healthcare accessibility, efficiency and outcomes.");
   });
-
-  it("holds the first UrbanTree scene when reduced motion is requested", () => {
-    vi.useFakeTimers();
-    render(<HomeExperience forceReducedMotion />);
-
-    act(() => vi.advanceTimersByTime(13_600));
-
-    expect(screen.getByRole("heading", { name: /Air that helps cities/i })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /Learning that turns into\s*opportunity/i })).toBeNull();
-    expect(screen.queryByLabelText(/Automatic SunEx scene/i)).toBeNull();
+  it("holds the first supplied visual when reduced motion is requested", () => {
+    vi.useFakeTimers(); render(<HomeExperience forceReducedMotion />); act(() => vi.advanceTimersByTime(13_600));
+    expect(screen.getByRole("heading", { name: /Technology\. Innovation\.\s*Impact\./i })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: /Empowering people through\s*knowledge & skills\./i })).toBeNull();
+    expect(screen.getByText("Padmanabha N")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(12_400));
+    expect(screen.getByText("Padmanabha N")).toBeTruthy();
   });
 });

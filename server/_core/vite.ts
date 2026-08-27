@@ -34,7 +34,7 @@ export async function setupVite(app: Express, server: Server) {
     const url = req.originalUrl;
 
     try {
-      const clientplatform = path.resolve(
+      const clientTemplate = path.resolve(
         import.meta.dirname,
         "../..",
         "client",
@@ -42,16 +42,16 @@ export async function setupVite(app: Express, server: Server) {
       );
 
       // always reload the index.html file from disk incase it changes
-      let platform = await fs.promises.readFile(clientplatform, "utf-8");
+      let template = await fs.promises.readFile(clientTemplate, "utf-8");
       // In custom middleware mode the React plugin does not always inject this
       // client preamble itself. Without it, every React module fails before the
       // route can render with "can't detect preamble" in the browser console.
-      platform = platform.replace("<head>", `<head>${reactRefreshPreamble}`);
-      platform = platform.replace(
+      template = template.replace("<head>", `<head>${reactRefreshPreamble}`);
+      template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`
       );
-      const page = await vite.transformIndexHtml(url, platform);
+      const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);

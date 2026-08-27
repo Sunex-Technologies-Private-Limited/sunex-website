@@ -1,23 +1,63 @@
 /* The header uses the supplied actual SunEx lockup rather than a CSS approximation. */
-.site-nav .sunex-mark {
-  display: block;
+.site-nav .sunex-mark { display: inline-flex; }
+
+.sunex-mark__clean-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #183754;
 }
 
-.sunex-mark__actual-lockup {
-  display: block;
-  width: 164px;
-  height: auto;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,.62));
+.sunex-mark__clean-lockup .sunex-mark__logo {
+  width: 31px;
+  height: 31px;
+}
+
+.sunex-mark__wordmark {
+  display: grid;
+  gap: 2px;
+  line-height: 1;
+}
+
+.sunex-mark__wordmark strong {
+  color: #183754;
+  display: inline-block;
+  font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .075em;
+  line-height: .88;
+  transform: scaleX(1.1);
+  transform-origin: left center;
+}
+
+.sunex-mark__x {
+  position: relative;
+  display: inline-block;
+  color: #183754;
+}
+
+.sunex-mark__x::after {
+  display: none;
+}
+
+.sunex-mark__wordmark small {
+  color: var(--sunex-orange);
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: .145em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 720px) {
-  .sunex-mark__actual-lockup {
-    width: 145px;
-  }
+  .sunex-mark__clean-lockup { gap: 7px; }
+  .sunex-mark__clean-lockup .sunex-mark__logo { width: 29px; height: 29px; }
+  .sunex-mark__wordmark strong { font-size: 15px; }
 }
 
 @media (max-width: 420px) {
-  .sunex-mark__actual-lockup {
-    width: 130px;
-  }
+  .sunex-mark__clean-lockup { gap: 6px; }
+  .sunex-mark__clean-lockup .sunex-mark__logo { width: 27px; height: 27px; }
+  .sunex-mark__wordmark strong { font-size: 14px; }
+  .sunex-mark__wordmark small { font-size: 7px; }
 }

@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import About from "./About";
 
-vi.mock("@/components/sunex/PageHero", () => ({ PageHero: () => <div data-testid="page-hero" /> }));
+vi.mock("@/components/sunex/PageHero", () => ({ PageHero: ({ image }: { image: string }) => <div data-testid="page-hero" data-image={image} /> }));
 vi.mock("@/components/sunex/Reveal", () => ({ Reveal: ({ children, className }: { children: React.ReactNode; className?: string }) => <div className={className}>{children}</div> }));
 vi.mock("@/components/sunex/BentoCard", () => ({ BentoCard: ({ children }: { children: React.ReactNode }) => <article>{children}</article> }));
 vi.mock("wouter", () => ({ Link: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => <a href={href} {...props}>{children}</a> }));
@@ -17,6 +17,10 @@ describe("About leadership portraits", () => {
     expect(screen.getByText("Our perspective").closest(".about-intro__copy")).not.toBeNull();
     expect(screen.getByText("and improve lives.")).toBeTruthy();
     expect(screen.getByText("Guiding principles").parentElement?.className).toContain("image-panel__float--about");
+    expect(screen.getByTestId("page-hero").getAttribute("data-image")).toBe("/manus-storage/about-collaboration-hero_9c8e4ce5.png");
+    expect(document.querySelector(".origin-section--dark")).not.toBeNull();
+    expect(document.querySelector(".values-field-section--dark")).not.toBeNull();
+    expect(document.querySelector(".values-field-hero--blue")).not.toBeNull();
   });
 
   it("uses portrait-specific framing classes so each leader remains visible", () => {

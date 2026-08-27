@@ -17,6 +17,7 @@ const Home = lazy(() => import("@/pages/Home"));
 const Product = lazy(() => import("@/pages/Product"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
 const Services = lazy(() => import("@/pages/Services"));
+const Technology = lazy(() => import("@/pages/Technology"));
 
 function Router() {
   return (
@@ -26,7 +27,9 @@ function Router() {
       <Suspense fallback={<div className="route-loading" role="status" aria-live="polite"><span /><p>Preparing the next SunEx experience.</p></div>}><Switch>
         <Route path="/" component={Home} />
         <Route path="/about" component={About} />
+        <Route path="/technology" component={Technology} />
         <Route path="/product" component={Product} />
+        <Route path="/urbantree" component={Product} />
         <Route path="/education" component={Education} />
         <Route path="/healthcare" component={Healthcare} />
         <Route path="/faq" component={Faq} />

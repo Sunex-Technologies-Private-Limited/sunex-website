@@ -6,7 +6,7 @@ import { registerApiSecurity } from "./apiSecurity";
 import { registerHealthRoute } from "./health";
 import { registerHttpSecurity } from "./httpSecurity";
 import { registerOAuthRoutes } from "./oauth";
-
+import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
@@ -14,6 +14,7 @@ import { isDotnetApiEnabled, startDotnetApi, stopDotnetApi } from "../dotnetRunt
 import { logger } from "./logger";
 import { assertRuntimeConfiguration } from "./runtimeConfig";
 import { resolveServerPort } from "./serverPort";
+import { registerInternalDispatchHealthRoute } from "./internalDispatch";
 
 async function startServer() {
   assertRuntimeConfiguration();
@@ -27,7 +28,8 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "64kb", extended: false, parameterLimit: 100 }));
   registerApiSecurity(app);
   registerHealthRoute(app);
-
+  registerInternalDispatchHealthRoute(app);
+  registerStorageProxy(app);
   registerOAuthRoutes(app);
   // tRPC API
   app.use(

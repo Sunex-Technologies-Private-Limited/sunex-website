@@ -1,134 +1,94 @@
-import { ArrowUpRight, ChevronRight, Compass as Sparkles, GraduationCap, Sprout as Leaf, Stethoscope as HeartPulse } from "lucide-react";
+import { ArrowUpRight, Compass, Cpu, GraduationCap, HeartPulse, Lightbulb, Maximize2, Network, PenTool, Radar, RefreshCw, Rocket, Search, Sparkles, Sprout as Leaf, Target, UsersRound, Wrench } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Reveal } from "@/components/sunex/Reveal";
 
-const verticals = [
-  {
-    id: "urbantree",
-    label: "UrbanTree",
-    index: "01",
-    category: "Environmental infrastructure",
-    image: "/manus-storage/urbantree-city-clean_b9b26676.png",
-    alt: "SunEx UrbanTree device in a clean-city setting",
-    headline: "Air that helps cities",
-    accent: "breathe better.",
-    summary: "Bio-mechanical infrastructure that creates cleaner localized air pockets where people live, learn, work, and move.",
-    proof: "200+ IoT sensors deployed",
-    route: "/product#urbantree",
-    contact: "/contact?interest=urbantree",
-    Icon: Leaf,
-    navigator: ["Localized air pockets", "Live environmental intelligence", "Modular city-ready systems"],
-  },
-  {
-    id: "education",
-    label: "SkillConnect",
-    index: "02",
-    category: "Future-ready talent",
-    image: "/manus-storage/education_93e3980f.png",
-    alt: "SkillConnect applied technology learning session",
-    headline: "Learning that turns into",
-    accent: "opportunity.",
-    summary: "Industry-oriented technology education that helps students and professionals move from learning into applied work.",
-    proof: "2,500+ students trained",
-    route: "/service#education",
-    contact: "/contact?interest=education",
-    Icon: GraduationCap,
-    navigator: ["Applied technology pathways", "Institutional capacity building", "Career-oriented learning"],
-  },
-  {
-    id: "healthcare",
-    label: "Healthcare",
-    index: "03",
-    category: "Care across borders",
-    image: "/manus-storage/healthcare_60e8d462.png",
-    alt: "SunEx Healthcare patient-support environment",
-    headline: "Care that travels with",
-    accent: "people.",
-    summary: "A developing medical-tourism journey designed to make quality Indian healthcare more navigable for international patients.",
-    proof: "Healthcare journey in development",
-    route: "/service#healthcare",
-    contact: "/contact?interest=healthcare",
-    Icon: HeartPulse,
-    navigator: ["Patient-first coordination", "Care journey visibility", "Cross-border support"],
-  },
+const slides = [
+  { id: "future-city", index: "01", category: "Technology, innovation & impact", badgeLabel: "Technology", badgeIconSize: 19, image: "/images/sunex-home-future-city.jpg", alt: "Sunlit sustainable city with renewable-energy infrastructure", headline: "Technology. Innovation.", accent: "Impact.", summary: "We explore and develop technology solutions that address real challenges and improve efficiency, accessibility and decision making.", contact: "/product", Icon: Sparkles },
+  { id: "education", index: "02", category: "Education & skills", badgeLabel: "Education", badgeIconSize: 15, image: "/images/sunex-home-learning-studio.jpg", alt: "Students learning with a technology visualisation in a modern studio", headline: "Empowering people", accent: "through knowledge & skills.", summary: "We work to bridge the gap between academic learning and real world capabilities through practical learning, skill development, technology exposure and industry engagement.", contact: "/education", Icon: GraduationCap },
+  { id: "sustainability", index: "03", category: "Environmental sustainability", badgeLabel: "Environmental", badgeIconSize: 19, image: "/images/sunex-home-urbantree-park.jpg", alt: "UrbanTree air-quality infrastructure in a green public park", headline: "A healthier, more", accent: "sustainable future.", summary: "We develop and support innovative projects that address real-world challenges across technology, environmental sustainability, society and emerging areas.", contact: "/product", Icon: Leaf },
+  { id: "healthcare", index: "04", category: "Healthcare innovation", badgeLabel: "Healthcare", badgeIconSize: 19, image: "/images/sunex-home-healthcare-campus.jpg", alt: "Technology-enabled hospital campus supporting a care environment", headline: "Technology that puts", accent: "people first.", summary: "We explore technology driven opportunities that can contribute to better healthcare accessibility, efficiency and outcomes.", contact: "/healthcare", Icon: HeartPulse },
 ] as const;
 
-type VerticalId = (typeof verticals)[number]["id"];
+const focusAreas = [
+  { index: "01", title: "Technology", summary: "We explore and develop technology solutions that address real challenges and improve efficiency, accessibility and decision making.", image: "/images/sunex-home-future-city.jpg", alt: "Sustainable technology city landscape", href: "/service", Icon: Cpu },
+  { index: "02", title: "Innovative projects", summary: "Ideas move into action through practical, sustainable and impactful initiatives that create value for communities and society.", image: "/images/sunex-home-urbantree-park.jpg", alt: "Innovative environmental infrastructure in a public park", href: "/service", Icon: Lightbulb },
+  { index: "03", title: "Education", summary: "We bridge academic learning and real-world capabilities through practical learning, skill development and industry engagement.", image: "/images/sunex-home-learning-studio.jpg", alt: "Students in a technology-enabled learning environment", href: "/education", Icon: GraduationCap },
+  { index: "04", title: "Healthcare", summary: "We explore technology-driven opportunities that can contribute to better healthcare accessibility, efficiency and outcomes.", image: "/images/sunex-home-healthcare-campus.jpg", alt: "Modern hospital campus with connected care infrastructure", href: "/healthcare", Icon: HeartPulse },
+] as const;
 
-const currentIndicators = [
-  { value: "03", label: "Business verticals" },
-  { value: "200+", label: "IoT sensors deployed" },
-  { value: "2,500+", label: "Students trained" },
-  { value: "50+", label: "Partner institutions" },
-];
+const approachSteps = [
+  ["01", "Understand", "We identify the challenge, its context, requirements, and the people or organisations it affects.", Search],
+  ["02", "Explore", "We research relevant technologies, ideas, existing solutions and opportunities to find practical ways forward.", Compass],
+  ["03", "Design", "We develop solution concepts and frameworks with feasibility, usability, sustainability and intended impact in view.", PenTool],
+  ["04", "Build", "We transform concepts into working solutions through development, prototyping, testing and continuous iteration.", Wrench],
+  ["05", "Implement", "We introduce solutions into real-world environments, evaluate performance and gather practical insights.", Rocket],
+  ["06", "Improve", "We measure outcomes, identify gaps and refine solutions to improve effectiveness, reliability and impact.", RefreshCw],
+  ["07", "Scale", "Solutions that demonstrate value are developed further through strategic partnerships, collaboration and scalable implementation.", Maximize2],
+] as const;
+
+const partnerPrinciples = [
+  ["Multi-Domain Perspective", "Our work across technology, innovation, education, sustainability and healthcare enables us to approach challenges from multiple perspectives.", Network],
+  ["Innovation & Technology", "We explore new ideas, emerging technologies and innovative approaches to identify opportunities and develop effective solutions.", Lightbulb],
+  ["Practical Approach", "We focus on solutions that are feasible, applicable and designed for real-world implementation, moving beyond ideas and concepts.", Wrench],
+  ["Collaborative Ecosystem", "We work with industry, academia, government, technology partners, healthcare institutions, environmental organisations, innovation ecosystems and communities to bring together knowledge, expertise and resources.", UsersRound],
+  ["Impact Orientation", "We focus on practical value, measurable outcomes and meaningful impact, while continuously improving solutions based on real-world learning.", Target],
+  ["Future Focus", "We look ahead to emerging technologies, evolving needs and new opportunities to develop solutions that remain relevant, adaptable and scalable.", Radar],
+] as const;
+
+const testimonials = [
+  ["Padmanabha N", "3rd Year BVA", "The College of Fine Arts, Chitrakala Parishat, Bengaluru", "My experience with SkillConnect by SunEx Technologies gave me great practical exposure and helped me improve my skills in design and composition, animation and applied art. I also learned how creativity and technology can come together to create meaningful work. The experience really helped me grow in confidence and creativity."],
+  ["Omkar Chaithanya R", "CSE B.Tech", "Dayananda Sagar University", "My experience with SkillConnect by SunEx Technologies gave me practical exposure beyond academics. I improved my skills in Python, website development and cybersecurity, while learning how they are applied in real-world projects. The guidance and hands-on learning helped me build confidence and strengthen my technical skills."],
+  ["Divyashree M S", "Administrative Executive", "HSR Coaching Centre, Mysuru", "SunEx Technologies helped us develop a professional website and automate our weekly tests, making our assessment process much easier. Their team understood our needs well and delivered a practical solution with excellent support."],
+  ["Dr. Ranganath H B", "Owner", "HSR Digital Hub, Mysuru", "SunEx Technologies helped us develop our website and strengthen our digital presence through SEO and social media marketing. Their team was professional, responsive and understood our requirements well. We are happy with the results and their support."],
+] as const;
 
 const HERO_SCENE_DURATION = 6800;
+const TESTIMONIAL_DURATION = 6200;
 
 export function HomeExperience({ forceReducedMotion }: { forceReducedMotion?: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sceneProgress, setSceneProgress] = useState(0);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
   const systemReducedMotion = useReducedMotion();
   const reducedMotion = forceReducedMotion ?? systemReducedMotion;
-  const active = verticals[activeIndex] ?? verticals[0];
+  const active = slides[activeIndex] ?? slides[0];
   const ActiveIcon = active.Icon;
 
   useEffect(() => {
-    if (reducedMotion) {
-      setActiveIndex(0);
-      setSceneProgress(0);
-      return;
-    }
-
+    if (reducedMotion) { setActiveIndex(0); setSceneProgress(0); return; }
     const startedAt = Date.now();
-    const progressTimer = window.setInterval(() => {
-      const elapsed = (Date.now() - startedAt) % HERO_SCENE_DURATION;
-      setSceneProgress((elapsed / HERO_SCENE_DURATION) * 100);
-    }, 80);
-    const sceneTimer = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % verticals.length);
-      setSceneProgress(0);
-    }, HERO_SCENE_DURATION);
-
-    return () => {
-      window.clearInterval(progressTimer);
-      window.clearInterval(sceneTimer);
-    };
+    const progressTimer = window.setInterval(() => setSceneProgress(((Date.now() - startedAt) % HERO_SCENE_DURATION) / HERO_SCENE_DURATION * 100), 80);
+    const sceneTimer = window.setInterval(() => { setActiveIndex((current) => (current + 1) % slides.length); setSceneProgress(0); }, HERO_SCENE_DURATION);
+    return () => { window.clearInterval(progressTimer); window.clearInterval(sceneTimer); };
   }, [reducedMotion]);
 
-  return (
-    <>
-      <section className="home-hero home-hero--controlled home-hero--cinematic content-wrap" aria-labelledby="home-title">
-        <div className={`home-hero__stage home-hero__stage--${active.id}`}>
-          {verticals.map((vertical, index) => <div className={`home-hero__reel ${index === activeIndex ? "is-active" : ""}`} aria-hidden={index !== activeIndex} key={vertical.id}><img src={vertical.image} alt={index === activeIndex ? vertical.alt : ""} fetchPriority={vertical.id === "urbantree" ? "high" : "auto"} /></div>)}
-          <div className="home-hero__veil" />
-          <div className="home-hero__content home-hero__content--controlled" aria-live="off">
-            <motion.div key={`${active.id}-badge`} initial={reducedMotion ? false : { opacity: 0, y: 12 }} animate={reducedMotion ? undefined : { opacity: 1, y: 0 }} transition={{ duration: .48, ease: [0.22, 1, 0.36, 1] }} className="hero-badge"><ActiveIcon size={15} /> {active.category}</motion.div>
-            <motion.h1 key={`${active.id}-title`} id="home-title" initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={reducedMotion ? undefined : { opacity: 1, y: 0 }} transition={{ duration: .58, delay: .04, ease: [0.22, 1, 0.36, 1] }}>{active.headline}<br /><strong>{active.accent}</strong></motion.h1>
-            <motion.p key={`${active.id}-summary`} initial={reducedMotion ? false : { opacity: 0 }} animate={reducedMotion ? undefined : { opacity: 1 }} transition={{ duration: .5, delay: .12, ease: [0.22, 1, 0.36, 1] }}>{active.summary}</motion.p>
-            <Link href={active.contact} className="hero-primary-action">Discuss {active.label} <span><ArrowUpRight size={15} /></span></Link>
-          </div>
-          <div className="hero-glass-card hero-glass-card--controlled"><div><strong>{active.index}</strong><small>{active.label} focus</small></div><Link href={active.route}><span><ArrowUpRight size={14} /></span> Explore the vertical</Link></div>
-          <div className="hero-corner hero-corner--controlled"><span className="hero-corner__icon"><Sparkles size={20} /></span><div><strong>SunEx cinematic sequence</strong><span><small>{reducedMotion ? "Scene one held" : `Next: ${verticals[(activeIndex + 1) % verticals.length]?.label}`}</small><i style={{ width: `${sceneProgress}%` }} /></span></div></div>
-        </div>
-      </section>
+  useEffect(() => {
+    if (reducedMotion) { setTestimonialIndex(0); return; }
+    const testimonialTimer = window.setInterval(() => setTestimonialIndex((current) => (current + 1) % testimonials.length), TESTIMONIAL_DURATION);
+    return () => window.clearInterval(testimonialTimer);
+  }, [reducedMotion]);
 
-      <section className="metrics content-wrap" aria-label="Current SunEx indicators"><div className="metrics__card">{currentIndicators.map((metric, index) => <Reveal className="metric" delay={index * .07} key={metric.label}><strong>{metric.value}</strong><span>{metric.label}</span></Reveal>)}</div></section>
+  const testimonial = testimonials[testimonialIndex] ?? testimonials[0];
 
-      <section className="section impact-navigator-section" aria-labelledby="impact-navigator-title"><div className="content-wrap"><Reveal className="impact-navigator-heading"><div><p className="eyebrow">SunEx Impact Navigator</p><h2 id="impact-navigator-title">Choose the challenge.<br /><em>See the next move.</em></h2></div><p>Start with the outcome that matters to you. The navigator connects each SunEx vertical to its practical role, current focus, and the right next conversation.</p></Reveal><div className="impact-navigator"><div className="impact-navigator__rail" role="group" aria-label="Impact verticals">{verticals.map((vertical, index) => { const Icon = vertical.Icon; const isActive = index === activeIndex; return <button key={vertical.id} className={isActive ? "is-active" : ""} onClick={() => setActiveIndex(index)} aria-pressed={isActive}><span>{vertical.index}</span><Icon size={20} /><div><small>{vertical.category}</small><strong>{vertical.label}</strong></div><ChevronRight size={17} /></button>; })}</div><Reveal className="impact-navigator__stage" delay={.08}><div className="impact-navigator__media"><img src={active.image} alt={active.alt} loading="lazy" /><div className="impact-navigator__shade" /><div className="impact-navigator__media-label"><span className="status-dot" /> Current focus: {active.label}</div></div><div className="impact-navigator__content" aria-live="polite"><div className="impact-navigator__title"><span>{active.index}</span><div><p>{active.category}</p><h3>{active.label}</h3></div></div><p>{active.summary}</p><div className="impact-navigator__signals">{active.navigator.map((signal, index) => <div key={signal}><span>{String(index + 1).padStart(2, "0")}</span><strong>{signal}</strong></div>)}</div><div className="impact-navigator__actions"><Link href={active.route} className="text-link">Explore {active.label} <ArrowUpRight size={15} /></Link><Link href={active.contact} className="action-pill">Start a conversation <span><ArrowUpRight size={16} /></span></Link></div></div></Reveal></div></div></section>
-
-      <section className="section section--mist proof-section" aria-labelledby="proof-title"><div className="content-wrap"><Reveal className="proof-intro"><div><p className="eyebrow">Proof of impact</p><h2 id="proof-title">Evidence we can<br /><em>share today.</em></h2></div><p>SunEx shares only the company indicators currently available in approved material. Project locations, field outcomes, partner details, and case stories are added only when they are confirmed for publication.</p></Reveal><div className="proof-grid">{currentIndicators.slice(0, 3).map((indicator, index) => <Reveal className="proof-card" delay={index * .06} key={indicator.label}><span>{String(index + 1).padStart(2, "0")}</span><strong>{indicator.value}</strong><p>{indicator.label}</p><i /></Reveal>)}<Reveal className="proof-card proof-card--next" delay={.18}><span>04</span><strong>Next</strong><p>Verified deployment stories will appear here as SunEx programs are approved for publication.</p><i /></Reveal></div><Reveal className="proof-standard"><div><span>Publication standard</span><h3>Context before claims.</h3></div><p>Every future proof story will identify what was implemented, where it took place, what was measured, and who approved the information for public use.</p><div><span>01 / Approved data</span><span>02 / Clear context</span><span>03 / Publishable evidence</span></div></Reveal></div></section>
-
-      <section className="section section--mist"><div className="content-wrap editorial"><Reveal><p className="eyebrow">Who we are</p><h2 className="display">Innovation <em>with purpose.</em></h2></Reveal><Reveal delay={.1} className="editorial__copy"><p className="copy">SunEx Technologies Pvt. Ltd. is an innovation-driven company committed to solving real-world challenges through technology and strategic partnerships.</p><p className="copy copy--small">Every solution we build is guided by Innovation, Sustainability, and Social Impact. We believe technology should not only improve businesses but also improve lives.</p><Link href="/about" className="text-link">About SunEx <ArrowUpRight size={15} /></Link></Reveal></div></section>
-
-      <section className="section sunex-partnership-section" aria-labelledby="why-title"><div className="content-wrap"><Reveal className="sunex-partnership-hero"><div className="sunex-partnership-hero__copy"><div className="sunex-partnership-hero__label"><span><Sparkles size={15} /></span><p>Why choose SunEx</p></div><p className="eyebrow">A partner for meaningful progress</p><h2 id="why-title">The difference lives<br /><em>in how we show up.</em></h2><p>SunEx pairs practical technology with human understanding—bringing the right insight, partners, and momentum to the challenges that shape cities, careers, and care.</p><div className="sunex-partnership-hero__points"><span>Clarity before complexity</span><span>Progress people can feel</span><span>Systems built to last</span></div><Link href="/about" className="action-pill">Meet SunEx <span><ArrowUpRight size={16} /></span></Link></div><div className="sunex-partnership-hero__media"><img src="/manus-storage/sunex-partnership-studio_691e7bdd.jpg" alt="SunEx team collaboratively planning sustainable city infrastructure" loading="lazy" /><div className="sunex-partnership-hero__veil" /><div className="sunex-partnership-hero__marker"><span>03</span><i /> <small>Purpose in practice</small></div><div className="sunex-partnership-hero__note"><span className="status-dot" /><div><small>Our working principle</small><strong>Listen deeply. Build boldly.</strong></div></div></div></Reveal><div className="sunex-partnership-intro"><div><p className="eyebrow">What carries every project</p><h3>Not just a solution.<br /><em>A standard for impact.</em></h3></div><p>Our work is organized around three commitments. Together, they make innovation more trusted, more useful, and more durable in the real world.</p></div><div className="sunex-commitment-rails">{[{ number: "01", label: "Create", title: "Build with conviction.", text: "We turn emerging capability into practical systems that solve real problems at the scale they deserve.", signals: ["Innovation-Driven Solutions", "Scalable Solutions", "Global Standards"] }, { number: "02", label: "Partner", title: "Lead with people.", text: "We earn alignment through experienced leadership, trusted relationships, and a customer-first way of working.", signals: ["Experienced Leadership", "Trusted Industry Partnerships", "Customer-Centric Approach"] }, { number: "03", label: "Sustain", title: "Leave places better.", text: "Every decision balances performance with purpose—so technology creates lasting social and environmental value.", signals: ["Technology with Social Impact", "Commitment to Sustainability", "Quality & Transparency"] }].map((commitment, index) => <Reveal className="sunex-commitment-rail" delay={index * .07} key={commitment.number}><div className="sunex-commitment-rail__meta"><span>{commitment.number}</span><p>{commitment.label}</p></div><div className="sunex-commitment-rail__body"><h3>{commitment.title}</h3><p>{commitment.text}</p></div><div className="sunex-commitment-rail__signals">{commitment.signals.map((signal) => <span key={signal}>{signal}<ArrowUpRight size={12} /></span>)}</div></Reveal>)}</div></div></section>
-
-      <section className="section content-wrap"><Reveal className="large-cta"><p className="eyebrow">Get started</p><h2>Let’s build a better <em>tomorrow.</em></h2><p>Whether environmental sustainability, future talent, or world-class healthcare — SunEx is your partner in innovation.</p><Link href="/contact?interest=partnership" className="action-pill">Submit inquiry <span><ArrowUpRight size={16} /></span></Link></Reveal></section>
-    </>
-  );
+  return <>
+    <section className="home-hero home-hero--controlled home-hero--cinematic content-wrap" aria-labelledby="home-title"><div className={`home-hero__stage home-hero__stage--${active.id}`}>
+      {slides.map((slide, index) => <div className={`home-hero__reel ${index === activeIndex ? "is-active" : ""}`} aria-hidden={index !== activeIndex} key={slide.id}><img src={slide.image} alt={index === activeIndex ? slide.alt : ""} fetchPriority={slide.id === "future-city" ? "high" : "auto"} /></div>)}
+      <div className="home-hero__veil" />
+      <div className="home-hero__content home-hero__content--controlled" aria-live="off"><motion.div key={`${active.id}-badge`} initial={reducedMotion ? false : { opacity: 0, y: 12 }} animate={reducedMotion ? undefined : { opacity: 1, y: 0 }} transition={{ duration: .48, ease: [0.22, 1, 0.36, 1] }} className={`hero-badge hero-badge--${active.id}`}><ActiveIcon size={active.badgeIconSize} /> {active.badgeLabel}</motion.div><motion.h1 key={`${active.id}-title`} id="home-title" initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={reducedMotion ? undefined : { opacity: 1, y: 0 }} transition={{ duration: .58, delay: .04, ease: [0.22, 1, 0.36, 1] }}>{active.headline}<br />{" "}<strong className={active.id === "education" ? "hero-title__accent hero-title__accent--education" : "hero-title__accent"}>{active.accent}</strong></motion.h1><motion.p key={`${active.id}-summary`} initial={reducedMotion ? false : { opacity: 0 }} animate={reducedMotion ? undefined : { opacity: 1 }} transition={{ duration: .5, delay: .12, ease: [0.22, 1, 0.36, 1] }}>{active.summary}</motion.p><Link href={active.contact} className="hero-primary-action">Explore our area <span><ArrowUpRight size={15} /></span></Link></div>
+      <div className="hero-corner hero-corner--controlled"><span className="hero-corner__icon"><Sparkles size={20} /></span><div><strong>SunEx, turning ideas into impact.</strong><span><small>{reducedMotion ? "First scene held" : `Next: ${slides[(activeIndex + 1) % slides.length]?.category}`}</small><i style={{ width: `${sceneProgress}%` }} /></span></div></div>
+    </div></section>
+    <section className="metrics content-wrap" aria-label="SunEx focus indicators"><div className="metrics__card">{[{ value: "15+", label: "Learning opportunities" }, { value: "10k+", label: "Students plan to train" }, { value: "05+", label: "Product R&D" }, { value: "20+", label: "Industry professionals" }].map((metric, index) => <Reveal className="metric" delay={index * .07} key={metric.label}><strong>{metric.value}</strong><span>{metric.label}</span></Reveal>)}</div></section>
+    <section id="sunex-purpose" className="section section--mist sunex-overview"><div className="content-wrap editorial"><Reveal><p className="eyebrow">SunEx Technologies</p><h2 className="display">Innovation with<br /><em>a real-world purpose.</em></h2></Reveal><Reveal delay={.1} className="editorial__copy"><p className="copy copy--overview-primary">SunEx Technologies is a technology and innovation-driven organisation working across Education, Technology, Innovative Projects, Environmental Sustainability and Healthcare.</p><p className="copy copy--small">We bring together ideas, technology, people and partnerships to address real-world challenges and transform innovative ideas into practical solutions with meaningful impact.</p><p className="copy copy--small">Our focus is on empowering people, enabling innovation, developing sustainable solutions and creating lasting value for communities, organisations and society.</p><Link href="/about" className="text-link">About SunEx <ArrowUpRight size={15} /></Link></Reveal></div></section>
+    <section className="section sunex-why-section" aria-labelledby="why-sunex-title"><div className="content-wrap"><Reveal className="sunex-why-card"><div className="sunex-why-card__copy"><p className="eyebrow">Why SunEx</p><h2 id="why-sunex-title">Technology with purpose.<br /><em>Innovation with impact.</em></h2><p>At SunEx, we believe technology can be a powerful enabler of progress, but technology alone is not enough. Meaningful solutions require purpose, innovation, expertise, collaboration and effective execution.</p><p>We bridge the gap between industry, academia, government, technology partners, healthcare institutions, environmental organisations, innovation ecosystems and communities, connecting the right people, knowledge, technology and resources to develop practical, responsible and scalable solutions that address real-world challenges and create measurable impact.</p><Link href="/contact?interest=partnership" className="action-pill">Partner with SunEx <span><ArrowUpRight size={16} /></span></Link></div><div className="sunex-why-card__media"><img src="/images/sunex-home-learning-studio.jpg" alt="Technology-enabled learning studio representing people and partnerships" loading="lazy" /><div className="sunex-why-card__veil" /><div className="sunex-why-card__note"><span>02</span><small>Together, we can turn ideas, capabilities and opportunities into meaningful action.</small></div></div></Reveal></div></section>
+    <section className="section sunex-purpose-section sunex-purpose-section--vision" aria-labelledby="vision-title"><div className="content-wrap"><div className="sunex-mission sunex-mission--standalone"><Reveal><p className="eyebrow">Our vision</p><h3 id="vision-title">A smarter, healthier<br /><em>and more sustainable future.</em></h3></Reveal><Reveal delay={.08}><p>We envision a future where technology, education, healthcare and innovation come together to improve lives, empower people, strengthen communities and create a more sustainable environment.</p><p>We aspire to contribute to a world where technology creates opportunities, education builds capabilities, healthcare improves well-being, and innovation transforms ideas into meaningful solutions and lasting impact.</p></Reveal></div></div></section>
+    <section className="section sunex-purpose-section" aria-labelledby="mission-title"><div className="content-wrap"><Reveal className="sunex-purpose-hero sunex-purpose-hero--mission"><div className="sunex-purpose-hero__copy"><p className="eyebrow">Our mission</p><h2 id="mission-title">Turning ideas into<br /><em>meaningful impact.</em></h2><p className="sunex-purpose-hero__mission-intro">We <strong>enable</strong>, <strong>develop</strong>, <strong>build</strong>, <strong>advance</strong>, <strong>collaborate</strong> and <strong>innovate</strong> to create practical solutions and opportunities that improve lives and support a sustainable future.</p><ul className="sunex-mission-list"><li><strong>Enable</strong> education, training, internships and skill development to build future-ready capabilities.</li><li><strong>Develop</strong> purposeful technology that addresses real-world needs.</li><li><strong>Build</strong> innovative projects that turn ideas into practical solutions.</li><li><strong>Advance</strong> sustainable technology for environmental challenges.</li><li><strong>Explore</strong> technology-enabled solutions that contribute to better healthcare and well-being.</li><li><strong>Collaborate</strong> with industry, academia, government, institutions and communities to combine expertise and resources.</li><li><strong>Foster</strong> innovation, entrepreneurship and continuous learning.</li></ul><Link href="#sunex-approach" className="action-pill">See our approach <span><ArrowUpRight size={16} /></span></Link></div><div className="sunex-purpose-hero__media"><img src="/images/sunex-home-future-city.jpg" alt="Sustainable future city with renewable energy" loading="lazy" /><div className="sunex-purpose-hero__veil" /></div></Reveal></div></section>
+    <section id="sunex-areas" className="section sunex-areas-section" aria-labelledby="areas-title"><div className="content-wrap"><Reveal className="split-heading"><div><p className="eyebrow">Our verticals</p><h2 id="areas-title" className="display">Four areas.<br /><em>One purpose.</em></h2></div><p className="copy">SunEx operates across four connected areas where technology and innovation can create meaningful impact.</p></Reveal><div className="sunex-areas-grid">{focusAreas.map((area, index) => { const Icon = area.Icon; return <Reveal className={`sunex-area-card sunex-area-card--${area.index}`} delay={index * .05} key={area.title}><div className="sunex-area-card__media"><img src={area.image} alt={area.alt} loading="lazy" /><div className="sunex-area-card__top"><span>{area.index}</span><Icon size={18} /></div></div><div className="sunex-area-card__content"><h3>{area.title}</h3><p>{area.summary}</p><Link href={area.href}>Explore {area.title} <ArrowUpRight size={16} /></Link></div></Reveal>; })}</div></div></section>
+    <section id="sunex-approach" className="section section--mist sunex-approach-section" aria-labelledby="approach-title"><div className="content-wrap"><Reveal className="split-heading"><div><p className="eyebrow">Our approach</p><h2 id="approach-title" className="display">From challenge<br /><em>to impact.</em></h2></div><div className="sunex-approach-intro"><p className="copy sunex-approach-intro__statement">At SunEx, we focus on moving beyond ideas - turning concepts into practical solutions, capabilities and initiatives that can create measurable and lasting impact.</p><p className="copy sunex-approach-intro__pathway">Understand <span aria-hidden="true">→</span> Innovate <span aria-hidden="true">→</span> Build <span aria-hidden="true">→</span> Collaborate <span aria-hidden="true">→</span> Implement <span aria-hidden="true">→</span> Create impact.</p></div></Reveal><div className="sunex-approach-grid sunex-approach-grid--layered">{approachSteps.map(([index, title, text, Icon], stepIndex) => <Reveal className="sunex-approach-card" delay={stepIndex * .04} key={title}><div className="sunex-approach-card__meta"><span className="sunex-approach-card__index">{index}</span><span className="sunex-approach-card__icon" aria-hidden="true"><Icon size={19} strokeWidth={1.8} /></span></div><h3>{title}</h3><p>{text}</p></Reveal>)}</div></div></section>
+    <section className="section content-wrap"><Reveal className="large-cta large-cta--partner"><div className="large-cta__layout"><div className="large-cta__content"><p className="eyebrow">Why Partner with SunEx?</p><h2>Building Through<br /><em>Collaboration</em></h2><p>SunEx Technologies brings together technology, innovation, expertise and partnerships to address real-world challenges and develop practical solutions with meaningful impact.</p><p>We believe the strongest solutions are created when different perspectives, capabilities and resources come together.</p><Link href="/contact" className="action-pill large-cta__action">Start a conversation <span><ArrowUpRight size={16} /></span></Link></div><ul className="large-cta__principles">{partnerPrinciples.map(([title, text, Icon], index) => <li key={title}><span className="large-cta__principle-icon" aria-hidden="true"><Icon size={18} strokeWidth={1.8} /></span><div><small>{String(index + 1).padStart(2, "0")}</small><h3>{title}</h3><p>{text}</p></div></li>)}</ul></div></Reveal></section>
+    <section className="section sunex-testimonials-section" aria-labelledby="testimonials-title"><div className="content-wrap"><Reveal className="sunex-testimonials-heading"><div><p className="eyebrow">Testimonials</p><h2 id="testimonials-title">Built through<br /><em>real experience.</em></h2></div><p>The strongest measure of our work is the experience of the people and organisations we work with.</p></Reveal><Reveal className="sunex-testimonial-showcase" aria-roledescription="carousel" aria-label="Approved SunEx testimonials">{testimonial && <motion.article key={testimonial[0]} className="sunex-testimonial" role="group" aria-roledescription="slide" aria-label={`Testimonial ${testimonialIndex + 1} of ${testimonials.length}`} initial={reducedMotion ? false : { opacity: 0, y: 15, scale: .985 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: reducedMotion ? 0 : .45, ease: [0.16, 1, 0.3, 1] }}><div className="sunex-testimonial__quote-area"><div className="sunex-testimonial__quote-row"><span className="sunex-testimonial__quote" aria-hidden="true">“</span><span className="sunex-testimonial__slide-count">{String(testimonialIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}</span></div><blockquote>{testimonial[3]}</blockquote></div><div className="sunex-testimonial__attribution"><div><span className="sunex-testimonial__kicker">SunEx testimonial</span><strong>{testimonial[0]}</strong><p><span>{testimonial[1]}</span><i aria-hidden="true">•</i><span>{testimonial[2]}</span></p></div></div></motion.article>}<div className="sunex-testimonial-showcase__controls" aria-label="Testimonial selection">{testimonials.map(([name], index) => <button key={name} type="button" className={index === testimonialIndex ? "is-active" : ""} onClick={() => setTestimonialIndex(index)} aria-label={`Show testimonial from ${name}`} aria-current={index === testimonialIndex ? "true" : undefined}><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div></Reveal><p className="sunex-testimonials-note">Only genuine and approved testimonials are published.</p></div></section>
+  </>;
 }
 
-export default function Home() {
-  return <HomeExperience />;
-}
+export default function Home() { return <HomeExperience />; }

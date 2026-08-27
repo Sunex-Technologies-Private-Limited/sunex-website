@@ -1,0 +1,361 @@
+/* Editorial focus board: six approved focus areas gain distinct hierarchy without changing their content. */
+.education-focus-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 96% 3%, rgba(255, 106, 18, 0.09), transparent 23%),
+    linear-gradient(180deg, #f8fafb 0%, #edf3f5 100%);
+}
+
+.education-focus-section::before {
+  position: absolute;
+  top: 60px;
+  left: -120px;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgba(24, 58, 96, 0.08);
+  border-radius: 50%;
+  box-shadow: 0 0 0 42px rgba(24, 58, 96, 0.025);
+  content: "";
+  pointer-events: none;
+}
+
+.education-focus-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: stretch;
+  gap: clamp(17px, 2vw, 28px);
+  grid-template-columns: minmax(290px, 0.73fr) minmax(0, 1.27fr);
+}
+
+.education-focus-manifesto {
+  position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 5% 5%, rgba(123, 181, 218, 0.22), transparent 34%),
+    linear-gradient(145deg, #193f68, #103054);
+  padding: clamp(30px, 4vw, 52px);
+  color: #fff;
+  box-shadow: 0 18px 42px rgba(11, 42, 74, 0.17);
+}
+
+.education-focus-manifesto::before {
+  position: absolute;
+  top: 32px;
+  left: clamp(30px, 4vw, 52px);
+  width: 42px;
+  height: 2px;
+  background: #ffd1b5;
+  content: "";
+}
+
+.education-focus-manifesto::after {
+  position: absolute;
+  right: -80px;
+  bottom: -90px;
+  width: 270px;
+  height: 270px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  box-shadow: 0 0 0 34px rgba(255, 255, 255, 0.035), 0 0 0 68px rgba(255, 255, 255, 0.018);
+  content: "";
+}
+
+.education-focus-manifesto > * {
+  position: relative;
+  z-index: 1;
+}
+
+.education-focus-manifesto__content {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+}
+
+.education-focus-manifesto .eyebrow {
+  margin-bottom: 25px;
+  color: #ffd1b5;
+}
+
+.education-focus-manifesto h2 {
+  max-width: 440px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(39px, 4.25vw, 61px);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+  line-height: 0.98;
+}
+
+.education-focus-manifesto h2 em {
+  color: #bfe2c9;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.education-focus-manifesto__range {
+  margin-top: 46px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+}
+
+.education-focus-grid {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.education-focus-card {
+  display: grid;
+  min-height: 218px;
+  border: 1px solid rgba(24, 58, 96, 0.1);
+  border-radius: 23px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 21px;
+  box-shadow: 0 11px 25px rgba(20, 49, 76, 0.045);
+  grid-template-rows: auto 1fr;
+  transition: transform 0.24s var(--ease-rivr), box-shadow 0.24s ease, background-color 0.24s ease;
+}
+
+.education-focus-card:hover {
+  box-shadow: 0 17px 34px rgba(20, 49, 76, 0.1);
+  transform: translateY(-4px);
+}
+
+.education-focus-card__meta {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.education-focus-card__index {
+  color: var(--sunex-orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.education-focus-card__icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgba(255, 106, 18, 0.24);
+  border-radius: 50%;
+  background: rgba(255, 106, 18, 0.08);
+  color: var(--sunex-orange);
+}
+
+.education-focus-card__copy {
+  align-self: end;
+}
+
+.education-focus-card h3 {
+  max-width: 250px;
+  margin: 0 0 10px;
+  color: var(--foreground);
+  font-size: clamp(21px, 1.8vw, 26px);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.education-focus-card p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.education-focus-card:nth-child(3) {
+  background: linear-gradient(145deg, #fbf6f2, #f6eee7);
+}
+
+.education-focus-card:nth-child(5) {
+  background: linear-gradient(145deg, #f4f8f6, #eaf3ef);
+}
+
+.education-focus-card:nth-child(1),
+.education-focus-card:nth-child(4) {
+  border-color: rgba(18, 52, 87, 0.26);
+  background: linear-gradient(145deg, #1a4169, #113357);
+  box-shadow: 0 15px 29px rgba(13, 44, 76, 0.16);
+}
+
+.education-focus-card:nth-child(1) .education-focus-card__index,
+.education-focus-card:nth-child(4) .education-focus-card__index {
+  color: #ffd1b5;
+}
+
+.education-focus-card:nth-child(1) .education-focus-card__icon,
+.education-focus-card:nth-child(4) .education-focus-card__icon {
+  border-color: rgba(255, 209, 181, 0.35);
+  background: rgba(255, 209, 181, 0.1);
+  color: #ffd1b5;
+}
+
+.education-focus-card:nth-child(1) h3,
+.education-focus-card:nth-child(4) h3 {
+  color: #fff;
+}
+
+.education-focus-card:nth-child(1) p,
+.education-focus-card:nth-child(4) p {
+  color: rgba(255, 255, 255, 0.73);
+}
+
+@media (max-width: 1020px) {
+  .education-focus-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .education-focus-manifesto {
+    min-height: 285px;
+  }
+}
+
+@media (max-width: 620px) {
+  .education-focus-layout {
+    gap: 13px;
+  }
+
+  .education-focus-manifesto {
+    min-height: 255px;
+    border-radius: 26px;
+    padding: 31px 23px;
+  }
+
+  .education-focus-manifesto::before {
+    top: 26px;
+    left: 23px;
+  }
+
+  .education-focus-manifesto .eyebrow {
+    margin-bottom: 20px;
+  }
+
+  .education-focus-manifesto h2 {
+    font-size: clamp(36px, 9.6vw, 45px);
+  }
+
+  .education-focus-manifesto__range {
+    margin-top: 31px;
+  }
+
+  .education-focus-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .education-focus-card {
+    min-height: 192px;
+    border-radius: 20px;
+    padding: 19px;
+  }
+
+  .education-focus-card h3 {
+    font-size: 24px;
+  }
+
+  .education-focus-card p {
+    font-size: 14px;
+  }
+}
+
+/* Compact the manifesto into a confident section header rather than stretching it alongside every card. */
+.education-focus-layout--balanced {
+  gap: 18px;
+  grid-template-columns: 1fr;
+}
+
+.education-focus-layout--balanced .education-focus-manifesto {
+  align-self: start;
+  min-height: 0 !important;
+  height: auto;
+  justify-content: flex-start;
+  padding: 51px clamp(30px, 5vw, 70px) 36px;
+}
+
+.education-focus-layout--balanced .education-focus-manifesto::before {
+  top: 34px;
+  left: clamp(30px, 5vw, 70px);
+}
+
+.education-focus-layout--balanced .education-focus-manifesto .eyebrow {
+  margin-bottom: 16px;
+}
+
+.education-focus-layout--balanced .education-focus-manifesto h2 {
+  max-width: 650px;
+  font-size: clamp(40px, 4.2vw, 59px);
+}
+
+.education-focus-layout--balanced .education-focus-manifesto__range {
+  margin-top: 24px;
+}
+
+.education-focus-layout--balanced .education-focus-manifesto--compact {
+  height: 330px !important;
+  min-height: 330px !important;
+  overflow: hidden;
+  padding-top: 46px;
+  padding-bottom: 28px;
+}
+
+.education-focus-layout--balanced .education-focus-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .education-focus-layout--balanced .education-focus-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .education-focus-layout--balanced {
+    gap: 13px;
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto {
+    min-height: 0;
+    height: auto;
+    justify-content: flex-start;
+    padding: 51px 23px 31px;
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto::before {
+    top: 26px;
+    left: 23px;
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto .eyebrow {
+    margin-bottom: 16px;
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto h2 {
+    font-size: clamp(36px, 9.6vw, 45px);
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto__range {
+    margin-top: 22px;
+  }
+
+  .education-focus-layout--balanced .education-focus-manifesto--compact {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 51px;
+    padding-bottom: 31px;
+  }
+
+  .education-focus-layout--balanced .education-focus-grid {
+    grid-template-columns: 1fr;
+  }
+}

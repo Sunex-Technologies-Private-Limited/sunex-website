@@ -20,7 +20,7 @@ export const contactInputSchema = z.object({
   message: z.string().trim().min(10, "Please share a little more about your project or challenge.").max(5000),
 });
 
-function contactClientFingerprint(headers: Record<string, string | string[] | undefined>) {
+export function contactClientFingerprint(headers: Record<string, string | string[] | undefined>) {
   const fingerprintSource = [headers["user-agent"], headers["accept-language"], headers.accept]
     .map(value => Array.isArray(value) ? value.join(",") : value ?? "")
     .join("|");

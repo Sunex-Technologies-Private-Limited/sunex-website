@@ -16,6 +16,10 @@ function saveCurrentScrollY() {
   );
 }
 
+function notifyScrollState() {
+  window.requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+}
+
 /**
  * Starts new page visits at the top while retaining expected scroll restoration
  * when visitors use browser Back or Forward. Hash targets remain available for
@@ -48,6 +52,7 @@ export function RouteScrollManager() {
 
     if (restoredScrollY.current !== null) {
       window.scrollTo({ top: restoredScrollY.current, left: 0, behavior: "auto" });
+      notifyScrollState();
       restoredScrollY.current = null;
       return;
     }
@@ -56,11 +61,13 @@ export function RouteScrollManager() {
     if (targetId) {
       window.requestAnimationFrame(() => {
         document.getElementById(decodeURIComponent(targetId))?.scrollIntoView({ block: "start" });
+        notifyScrollState();
       });
       return;
     }
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    notifyScrollState();
   }, [location]);
 
   return null;

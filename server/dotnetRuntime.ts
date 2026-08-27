@@ -6,7 +6,7 @@ const apiBaseUrl = () => (process.env.SUNEX_API_URL || "http://127.0.0.1:5090").
 let child: ChildProcess | undefined;
 
 export function isDotnetApiEnabled(): boolean {
-  return process.env.SUNEX_DOTNET_API_ENABLED === "true";
+  return process.env.SUNEX_DOTNET_API_ENABLED === "true" || process.env.NODE_ENV === "production";
 }
 
 async function waitForLiveness(attempts = 40): Promise<void> {

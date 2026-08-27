@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 const defaultImage = "/manus-storage/sunex-partnership-studio_691e7bdd.jpg";
+const urbanTreeMeta = { title: "UrbanTree", description: "Explore UrbanTree, SunEx’s advanced bio-mechanical air purification infrastructure for healthier urban environments.", image: "/manus-storage/urbantree-city-clean_b9b26676.png" };
 
 const pageMeta: Record<string, { title: string; description: string; image?: string }> = {
   "/": { title: "SunEx Technologies", description: "SunEx Technologies brings together UrbanTree, SkillConnect, and SunEx Healthcare to create sustainable, practical progress.", image: defaultImage },
   "/about": { title: "About SunEx", description: "Explore SunEx Technologies’ purpose, values, leadership, and work across environmental innovation, education, and healthcare.", image: "/manus-storage/about-hero-bg_bd135a7e.jpg" },
-  "/product": { title: "UrbanTree", description: "Explore UrbanTree, SunEx’s advanced bio-mechanical air purification infrastructure for healthier urban environments.", image: "/manus-storage/urbantree-city-clean_b9b26676.png" },
+  "/technology": { title: "Technology With Purpose", description: "Explore SunEx Technologies’ practical approach to AI, digital solutions, automation, smart systems, and data-driven solutions.", image: "/manus-storage/technology-water-city_f764dbb1.png" },
+  "/product": urbanTreeMeta,
+  "/urbantree": urbanTreeMeta,
   "/education": { title: "SkillConnect by SunEx", description: "Explore SkillConnect’s industry-oriented technology courses and learning pathways.", image: "/manus-storage/skillconnect-coding-lab_8415e96a.jpg" },
   "/healthcare": { title: "SunEx Healthcare", description: "Explore SunEx Healthcare’s developing medical-tourism journey for international patients.", image: "/manus-storage/healthcare_60e8d462.png" },
   "/contact": { title: "Contact SunEx", description: "Start a guided conversation with SunEx about UrbanTree, SkillConnect, Healthcare, partnerships, or CSR.", image: defaultImage },

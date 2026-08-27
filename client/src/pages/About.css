@@ -1,0 +1,341 @@
+/* About alternates light editorial surfaces with deep SunEx-navy chapters. */
+.origin-section--dark {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 93% 7%, rgba(111, 179, 202, 0.16), transparent 31%),
+    linear-gradient(142deg, #163e67, #102e50 68%);
+}
+
+.origin-section--dark::before {
+  position: absolute;
+  top: -18vw;
+  right: -16vw;
+  width: 48vw;
+  height: 48vw;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 0 0 68px rgba(255, 255, 255, 0.025), 0 0 0 136px rgba(255, 255, 255, 0.012);
+  content: "";
+  pointer-events: none;
+}
+
+.origin-section--dark .content-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.origin-section--dark .eyebrow,
+.origin-section--dark .origin-section__note > span {
+  color: #ffd1b5;
+}
+
+.origin-section--dark .display,
+.origin-section--dark .origin-step h3 {
+  color: #fff;
+}
+
+.origin-section--dark .display em {
+  color: #bfe2c9;
+}
+
+.origin-section--dark .origin-section__heading > p,
+.origin-section--dark .origin-step p,
+.origin-section--dark .origin-section__note p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.origin-section--dark .origin-step {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.origin-section--dark .origin-step > span {
+  color: #ffd1b5;
+}
+
+.origin-section--dark .origin-section__note {
+  border-left-color: #ffb783;
+}
+
+.values-field-section--dark {
+  background:
+    radial-gradient(circle at 7% 74%, rgba(126, 193, 181, 0.12), transparent 26%),
+    linear-gradient(143deg, #102e50, #193e67 72%);
+}
+
+.values-field-section--dark::before {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 72px rgba(255, 255, 255, 0.025), 0 0 0 144px rgba(255, 255, 255, 0.012);
+}
+
+.values-field-section--dark .values-field-hero {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 22px 51px rgba(5, 24, 42, 0.24);
+}
+
+.values-field-section--dark .values-field-hero__copy h2,
+.values-field-section--dark .values-field-intro h3,
+.values-field-section--dark .values-field-pair__values {
+  color: #fff;
+}
+
+.values-field-section--dark .values-field-hero__copy h2 em,
+.values-field-section--dark .values-field-intro h3 em {
+  color: #bfe2c9;
+}
+
+.values-field-section--dark .values-field-hero__label p,
+.values-field-section--dark .values-field-hero__copy > p,
+.values-field-section--dark .values-field-intro > p,
+.values-field-section--dark .values-field-pair__meta p,
+.values-field-section--dark .values-field-pair__copy p {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.values-field-section--dark .values-field-intro .eyebrow {
+  color: #ffd1b5;
+}
+
+.values-field-section--dark .values-field-hero__compass i,
+.values-field-section--dark .values-field-pairs,
+.values-field-section--dark .values-field-pair {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.values-field-section--dark .values-field-hero__compass i {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.values-field-section--dark .values-field-hero__compass > span,
+.values-field-section--dark .values-field-pair__values i {
+  border-color: rgba(255, 209, 181, 0.32);
+  background: rgba(255, 209, 181, 0.12);
+  color: #ffd1b5;
+}
+
+.values-field-section--dark .values-field-hero__compass small,
+.values-field-section--dark .values-field-pair__copy span {
+  color: #ffd1b5;
+}
+
+.values-field-section--dark .values-field-pair:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* A single blue Core Values composition replaces the previous busy image-and-card split. */
+.values-field-section--dark .values-field-hero--blue {
+  display: block;
+  isolation: isolate;
+  min-height: 510px;
+  overflow: hidden;
+  border-color: rgba(184, 221, 243, 0.23);
+  background:
+    radial-gradient(circle at 83% 18%, rgba(174, 222, 237, 0.17), transparent 19%),
+    radial-gradient(circle at 91% 88%, rgba(66, 150, 196, 0.24), transparent 28%),
+    linear-gradient(138deg, #1f6093, #164d7b 57%, #123d66);
+}
+
+.values-field-section--dark .values-field-hero--blue::before,
+.values-field-section--dark .values-field-hero--blue::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(225, 247, 255, 0.18);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.values-field-section--dark .values-field-hero--blue::before {
+  right: -120px;
+  bottom: -172px;
+  width: 520px;
+  height: 520px;
+  box-shadow: 0 0 0 58px rgba(225, 247, 255, 0.035), 0 0 0 116px rgba(225, 247, 255, 0.02);
+}
+
+.values-field-section--dark .values-field-hero--blue::after {
+  top: -210px;
+  right: 26%;
+  width: 390px;
+  height: 390px;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__media {
+  display: none;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__copy {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 790px);
+  min-height: 510px;
+  padding: clamp(40px, 6vw, 82px);
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__label {
+  gap: 9px;
+  margin-bottom: 17px;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__label > span {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: none;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__label p,
+.values-field-section--dark .values-field-hero--blue .eyebrow {
+  color: #d7eff9;
+}
+
+.values-field-section--dark .values-field-hero--blue .eyebrow {
+  margin-bottom: 17px;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__copy h2 {
+  max-width: 710px;
+  color: #fff;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__copy h2 em {
+  color: #c8ebc7;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__copy > p {
+  max-width: 620px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__compass {
+  margin-top: 34px;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__compass > span {
+  border-color: rgba(221, 244, 255, 0.34);
+  background: rgba(255, 255, 255, 0.11);
+  color: #e1f4fb;
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__compass i {
+  background: rgba(231, 248, 255, 0.5);
+}
+
+.values-field-section--dark .values-field-hero--blue .values-field-hero__compass small {
+  color: #d7eff9;
+}
+
+/* Present the three value pairings as compact blue panels instead of long busy rows. */
+.values-field-section--dark .values-field-pairs {
+  display: grid;
+  gap: 14px;
+  border: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.values-field-section--dark .values-field-pair {
+  display: flex;
+  min-height: 248px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  border: 1px solid rgba(192, 228, 246, 0.18);
+  border-radius: 22px;
+  background: linear-gradient(154deg, rgba(54, 126, 174, 0.42), rgba(24, 75, 119, 0.58));
+  padding: 25px;
+}
+
+.values-field-section--dark .values-field-pair:hover {
+  background: linear-gradient(154deg, rgba(69, 145, 193, 0.5), rgba(27, 84, 131, 0.72));
+  padding: 25px;
+  transform: translateY(-3px);
+}
+
+.values-field-section--dark .values-field-pair__meta {
+  gap: 9px;
+}
+
+.values-field-section--dark .values-field-pair__meta span,
+.values-field-section--dark .values-field-pair__copy span {
+  color: #cfeefa;
+}
+
+.values-field-section--dark .values-field-pair__values {
+  display: grid;
+  gap: 8px;
+}
+
+.values-field-section--dark .values-field-pair__values strong {
+  font-size: clamp(23px, 2.2vw, 31px);
+}
+
+.values-field-section--dark .values-field-pair__values i {
+  width: 25px;
+  height: 25px;
+}
+
+.values-field-section--dark .values-field-pair__copy {
+  margin-top: auto;
+}
+
+.values-field-section--dark .values-field-pair__copy p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Keep every leadership portrait comfortably clear of the top frame while retaining a shared eye line. */
+.team-card--sanjeeth {
+  --team-focus: 50% 33%;
+}
+
+.team-card--umesh {
+  --team-focus: 50% 0%;
+}
+
+.team-card--raghavendra {
+  --team-focus: 50% 10%;
+}
+
+@media (max-width: 900px) {
+  .values-field-section--dark .values-field-pairs {
+    grid-template-columns: 1fr;
+  }
+
+  .values-field-section--dark .values-field-pair,
+  .values-field-section--dark .values-field-pair:hover {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .values-field-section--dark .values-field-pair__copy {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .values-field-section--dark .values-field-hero--blue,
+  .values-field-section--dark .values-field-hero--blue .values-field-hero__copy {
+    min-height: 0;
+  }
+
+  .values-field-section--dark .values-field-hero--blue .values-field-hero__copy {
+    padding: 39px 23px 43px;
+  }
+
+  .values-field-section--dark .values-field-hero--blue::before {
+    right: -180px;
+    bottom: -225px;
+  }
+}
+
+@media (max-width: 620px) {
+  .origin-section--dark::before {
+    top: -44vw;
+    right: -40vw;
+    width: 95vw;
+    height: 95vw;
+  }
+}
