@@ -98,10 +98,11 @@
 }
 
 .contact-side__heading > span {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
-  place-items: center;
   border: 1px solid color-mix(in srgb, var(--sunex-orange), transparent 70%);
   border-radius: 11px 11px 11px 4px;
   background: rgba(255, 255, 255, 0.65);

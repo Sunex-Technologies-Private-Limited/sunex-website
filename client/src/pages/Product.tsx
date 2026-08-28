@@ -1,6 +1,6 @@
 import { Activity, AirVent, ArrowUpRight, CircleGauge, Compass, Filter, Leaf, MapPin, ShieldCheck, Sun, Wind, Workflow } from "lucide-react";
 import { Link } from "wouter";
-import React, { useState } from "react";
+import React from "react";
 import { PageHero } from "@/components/sunex/PageHero";
 import { Reveal } from "@/components/sunex/Reveal";
 
@@ -12,18 +12,10 @@ const features = [
   [Workflow, "Greener Cities", "Infrastructure built for cleaner air."],
 ] as const;
 
-const stages = [
-  { title: "Atmospheric Intake", label: "Capture", description: "Smart directional airflow channels collect polluted air efficiently from the surrounding urban environment.", note: "Directional intake flow", Icon: Wind },
-  { title: "Mechanical Filtration", label: "Separate", description: "Captures heavy dust particles using patented centrifugal funnel dust collection technology for maximum separation.", note: "Centrifugal dust collection", Icon: CircleGauge },
-  { title: "Prefilter Layer", label: "Screen", description: "Traps large airborne particles such as dust, lint, pet hair and dander before they reach the main filter stages.", note: "Large-particle screen", Icon: Filter },
-  { title: "Carbon Filter", label: "Absorb", description: "Removes VOCs, odors, fumes, moisture and gaseous pollutants through advanced activated carbon adsorption.", note: "Activated carbon adsorption", Icon: AirVent },
-  { title: "HEPA Filter", label: "Refine", description: "Primary defence against airborne contaminants, designed to trap 99.97% of particles as small as 0.3 micron.", note: "Fine-particle defence", Icon: ShieldCheck },
-  { title: "Bio-Purification Core", label: "Regenerate", description: "Living moss chamber that kills airborne pollutants and improves air quality through natural biological absorption.", note: "Living moss absorption", Icon: Leaf },
-  { title: "UV Chamber", label: "Protect", description: "Powerful disinfectant that inactivates and kills airborne microorganisms like bacteria, mold spores, and viruses.", note: "Final UV disinfection", Icon: Sun },
-] as const;
+
 
 export default function Product() {
-  const [activeStage, setActiveStage] = useState(0);
+
 
   return (
     <>
@@ -38,51 +30,7 @@ export default function Product() {
 
       <section className="section content-wrap"><div className="feature-list">{features.map(([Icon, title, description], index) => <Reveal className="feature-card" delay={index * 0.05} key={title}><Icon size={22} /><h3>{title}</h3><p>{description}</p></Reveal>)}</div></section>
 
-      <section className="section section--mist purification-section">
-        <div className="content-wrap">
-          <Reveal className="purification-heading"><div><p className="eyebrow">7-stage purification stack</p><h2 className="display">One intelligent air journey.<br /><em>Seven layers of defence.</em></h2></div><p className="copy">Select a treatment stage to follow the path through capture, separation, filtration, absorption, and biological protection.</p></Reveal>
-          <div className="purification-experience">
-            <Reveal className="urban-airfield" delay={0.08}>
-              <div className="urban-airfield__topbar"><div><span className="status-dot" /> Interactive treatment field</div><span>Seven live layers</span></div>
-              <div className="urban-airfield__stage-map">
-                <div className="urban-airfield__device-stage" aria-live="polite">
-                  <div className="urban-airfield__device-halo" />
-                  <div className="urban-airfield__device-frame">
-                    <img src="/manus-storage/urbantree-single-device_d3285164.png" alt="SunEx UrbanTree device" />
-                  </div>
-                </div>
-                {stages.map((stage, index) => {
-                  const StageIcon = stage.Icon;
-                  const isActive = activeStage === index;
-                  return (
-                    <button type="button" className={`urban-airfield__node ${isActive ? "is-active" : ""}`} key={stage.title} onClick={() => setActiveStage(index)} aria-label={`View ${stage.title}`} aria-pressed={isActive}>
-                      <span className="urban-airfield__node-icon"><StageIcon size={18} /></span><span className="urban-airfield__node-copy"><small>{String(index + 1).padStart(2, "0")} · {stage.label}</small><strong>{stage.title}</strong></span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="urban-airfield__flowline"><span>City atmosphere</span><i /><span>Refined local air</span></div>
-            </Reveal>
 
-            <div className="purification-stack">
-              {stages.map((stage, index) => {
-                const StageIcon = stage.Icon;
-                const isActive = activeStage === index;
-                return (
-                  <Reveal className="purification-stage-wrap" delay={(index % 3) * 0.05} key={stage.title}>
-                    <button type="button" className={`purification-stage ${isActive ? "is-active" : ""}`} onClick={() => setActiveStage(index)} aria-pressed={isActive}>
-                      <div className="purification-stage__index">{String(index + 1).padStart(2, "0")}</div>
-                      <div className="purification-stage__icon"><StageIcon size={21} /></div>
-                      <div className="purification-stage__copy"><span>{stage.label}</span><h3>{stage.title}</h3><p>{stage.description}</p></div>
-                      <div className="purification-stage__note">{stage.note}</div>
-                    </button>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="section urban-vision-section">
         <div className="content-wrap">
