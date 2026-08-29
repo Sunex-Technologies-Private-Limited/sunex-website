@@ -1,4 +1,4 @@
-# Sunex Website
+# Sunex Website #
 
 A modern, full-stack application built with React, Vite, Node.js, and an optional .NET backend. This project utilizes an extensive suite of cutting-edge web technologies to deliver a robust, performant, and scalable solution.
 
@@ -103,12 +103,4 @@ pnpm run db:push
 
 ## 📝 Documentation & Notes
 
-All architecture, onboarding, and environment reference materials have been consolidated into the [`/docs`](./docs) folder:
-
-- [`ONBOARDING.md`](./docs/ONBOARDING.md): **Start here!** Prerequisites, local setup, and troubleshooting common environment issues.
-- [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md): High-level system overview, diagrams, and explanations for the dual backend (.NET/Node).
-- [`FRONTEND.md`](./docs/FRONTEND.md): React/Vite guidelines, routing, and styling rules.
-- [`BACKEND.md`](./docs/BACKEND.md): TRPC error handling, logging, and how the `.NET` bridge works.
-- [`DATABASE.md`](./docs/DATABASE.md): Dual ORM usage (Prisma/Drizzle), migration plans, and rollback procedures.
-- [`DEPLOYMENT.md`](./docs/DEPLOYMENT.md): Container build steps, CI/CD logic, and production rollbacks.
-- [`/notes`](./docs/notes): Miscellaneous historical audit notes, checklists, and redesign ideas.
+All documentation, environment references, architecture plans, and miscellaneous notes have been consolidated into the [`/docs`](./docs) folder for easy reference.
