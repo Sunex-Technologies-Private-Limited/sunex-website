@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { useLocation } from "wouter";
-import { SunexMark } from "@/components/sunex/SunexMark";
+import { SunexMark } from "@/components/sunex/SiteShell";
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
