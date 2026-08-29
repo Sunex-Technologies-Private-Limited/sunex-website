@@ -43,7 +43,11 @@
 }
 
 * { box-sizing: border-box; }
- html { scroll-behavior: smooth; scroll-padding-top: 104px; background: var(--background); }
+html { scroll-behavior: smooth; scroll-padding-top: 104px; background: var(--background); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: hsl(214 24% 80%); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(214 24% 65%); }
 body { min-width: 320px; margin: 0; background: var(--background); color: var(--foreground); font-family: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 .location-list { display: grid; gap: 12px; }.location-list__item { border-top: 1px solid rgba(25,55,95,.12); padding-top: 12px; }.location-list__item:first-child { border-top: 0; padding-top: 0; }.location-list__item > span { display: block; margin-bottom: 3px; color: var(--sunex-orange); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }.location-list__item > strong { color: var(--foreground); font-size: 15px; font-weight: 650; }.location-list__item p { margin: 5px 0 0; }.location-list__landmark { font-size: 12px !important; font-style: italic; }.location-list__item--coming { position: relative; }
 button, input, select, textarea { font: inherit; }

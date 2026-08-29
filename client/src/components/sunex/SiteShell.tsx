@@ -1,4 +1,4 @@
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X, CheckCircle, Linkedin, Twitter, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -34,8 +34,24 @@ export function SunexMark({ inverse = false, showLockup = false }: { inverse?: b
 export function SiteHeader() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const hasTransparentStart = location !== "/404";
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setContactOpen(false);
+      }, 2500);
+    }, 1200);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 22);
@@ -77,7 +93,7 @@ export function SiteHeader() {
           </DropdownMenu>
           {navItems.slice(2).map(([label, href]) => <Link key={href} href={href} className={location === href ? "is-active" : ""}>{label}</Link>)}
         </nav>
-        <Dialog>
+        <Dialog open={contactOpen} onOpenChange={setContactOpen}>
           <DialogTrigger asChild>
             <button className="rivr-pill rivr-pill--nav site-nav__action">Get in touch <span><ArrowUpRight className="sunex-action-glyph" size={15} /></span></button>
           </DialogTrigger>
@@ -94,36 +110,44 @@ export function SiteHeader() {
                 </DialogDescription>
               </DialogHeader>
 
-              <form className="form-grid relative z-10" onSubmit={(e) => { e.preventDefault(); alert("Inquiry submitted!"); }}>
-                <label className="form-field">
-                  <span>Your Name</span>
-                  <input required type="text" placeholder="John Doe" />
-                </label>
-                <label className="form-field">
-                  <span>Email Address</span>
-                  <input required type="email" placeholder="john@example.com" />
-                </label>
-                <label className="form-field form-field--wide">
-                  <span>Solution Interest</span>
-                  <select required defaultValue="">
-                    <option value="" disabled>Select your focus area</option>
-                    <option value="urbantree">UrbanTree — Air Purification</option>
-                    <option value="education">SkillConnect — Training Programs</option>
-                    <option value="healthcare">SunEx Healthcare — Medical Tourism</option>
-                    <option value="partnership">Strategic Partnership</option>
-                    <option value="other">Other Inquiry</option>
-                  </select>
-                </label>
-                <label className="form-field form-field--wide">
-                  <span>Project or Challenge</span>
-                  <textarea required placeholder="Tell us what you would like to explore with SunEx..." style={{ minHeight: '90px' }} />
-                </label>
-                <div className="form-field--wide mt-4">
-                  <button className="rivr-pill form-submit w-full justify-center" type="submit" style={{ marginTop: 0, padding: '18px 24px', fontSize: '15px' }}>
-                    Send inquiry <span><ArrowUpRight className="sunex-action-glyph" size={17} /></span>
-                  </button>
+              {isSuccess ? (
+                <div className="relative z-10 flex flex-col items-center justify-center py-12 text-center">
+                  <CheckCircle className="text-green-500 mb-4" size={48} />
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Message Sent</h3>
+                  <p className="text-slate-600">Thank you for reaching out. We will get back to you shortly.</p>
                 </div>
-              </form>
+              ) : (
+                <form className="form-grid relative z-10" onSubmit={handleContactSubmit}>
+                  <label className="form-field">
+                    <span>Your Name</span>
+                    <input required type="text" placeholder="John Doe" disabled={isSubmitting} />
+                  </label>
+                  <label className="form-field">
+                    <span>Email Address</span>
+                    <input required type="email" placeholder="john@example.com" disabled={isSubmitting} />
+                  </label>
+                  <label className="form-field form-field--wide">
+                    <span>Solution Interest</span>
+                    <select required defaultValue="" disabled={isSubmitting}>
+                      <option value="" disabled>Select your focus area</option>
+                      <option value="urbantree">UrbanTree — Air Purification</option>
+                      <option value="education">SkillConnect — Training Programs</option>
+                      <option value="healthcare">SunEx Healthcare — Medical Tourism</option>
+                      <option value="partnership">Strategic Partnership</option>
+                      <option value="other">Other Inquiry</option>
+                    </select>
+                  </label>
+                  <label className="form-field form-field--wide">
+                    <span>Project or Challenge</span>
+                    <textarea required placeholder="Tell us what you would like to explore with SunEx..." style={{ minHeight: '90px' }} disabled={isSubmitting} />
+                  </label>
+                  <div className="form-field--wide mt-4">
+                    <button className="rivr-pill form-submit w-full justify-center" type="submit" disabled={isSubmitting} style={{ marginTop: 0, padding: '18px 24px', fontSize: '15px' }}>
+                      {isSubmitting ? <><Loader2 className="animate-spin mr-2" size={17} /> Sending...</> : <>Send inquiry <span><ArrowUpRight className="sunex-action-glyph" size={17} /></span></>}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </DialogContent>
         </Dialog>
@@ -177,7 +201,18 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
-        <div className="site-footer__bottom"><span>© {new Date().getFullYear()} SunEx Technologies. All rights reserved.</span><div><Link href="/privacy">Privacy information</Link><Link href="/contact">Get in touch <ArrowUpRight className="sunex-action-glyph" size={13} /></Link></div></div>
+        <div className="site-footer__bottom">
+          <span>© {new Date().getFullYear()} SunEx Technologies. All rights reserved.</span>
+          <div className="flex items-center gap-5 flex-wrap">
+            <Link href="/privacy" className="hover:text-[var(--foreground)] transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[var(--foreground)] transition-colors">Terms of Service</Link>
+            <div className="flex items-center gap-3">
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={15} className="hover:text-[var(--sunex-orange)] transition-colors" /></a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><Twitter size={15} className="hover:text-[var(--sunex-orange)] transition-colors" /></a>
+            </div>
+            <Link href="/contact" className="hover:text-[var(--foreground)] transition-colors">Get in touch <ArrowUpRight className="sunex-action-glyph" size={13} /></Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
