@@ -11,6 +11,7 @@ const logo = "/manus-storage/sunex-logo-symbol-only_428f5f83.png";
 const navItems = [
   ["Home", "/"],
   ["About", "/about"],
+  ["Hire From Us", "/hire-from-us"],
   ["Contact", "/contact"],
 ] as const;
 

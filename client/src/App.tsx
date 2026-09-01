@@ -11,6 +11,7 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const About = lazy(() => import("@/pages/About"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const HireFromUs = lazy(() => import("@/pages/HireFromUs"));
 const Education = lazy(() => import("@/pages/Education"));
 const Faq = lazy(() => import("@/pages/Faq"));
 const Healthcare = lazy(() => import("@/pages/Healthcare"));
@@ -37,6 +38,8 @@ function Router() {
         <Route path="/faq" component={Faq} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/service" component={Services} />
+        <Route path="/hire-from-us" component={HireFromUs} />
+        <Route path="/hire from us" component={HireFromUs} />
         <Route path="/contact" component={Contact} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
