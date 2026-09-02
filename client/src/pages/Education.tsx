@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import React, { useState } from "react";
-import { ArrowRight, ArrowUpRight, BadgeCheck, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Handshake, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Handshake, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench, Clock, BarChart, BookOpen, Filter } from "lucide-react";
 import "./EducationFocus.css";
 import "./EducationAudience.css";
 import "./EducationMetrics.css";
@@ -54,6 +54,10 @@ const studentBenefits = ["Develop practical skills", "Understand emerging techno
 
 export default function Education() {
   const [activeCourse, setActiveCourse] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = ["All", ...Array.from(new Set(courseCatalog.map(c => c.area)))];
+  const filteredCourses = activeCategory === "All" ? courseCatalog : courseCatalog.filter(c => c.area === activeCategory);
 
   return <>
     <PageHero eyebrow="Skill Connect by sunex technology" title={<>Preparing People for What Comes Next</>} image={skillConnectHeroImages[0]} backgroundImages={skillConnectHeroImages} description="We create learning opportunities that help students, professionals, job seekers and organisations build relevant capabilities, gain practical experience and stay prepared for the future" action={{ label: "Talk to our learning team", href: "/contact?interest=education" }} />
@@ -77,7 +81,59 @@ export default function Education() {
       <Reveal className="course-showcase-hero"><div className="course-showcase-hero__copy"><div className="skillconnect-lockup" aria-label="SkillConnect by SunEx Education"><span className="skillconnect-lockup__icon"><GraduationCap size={17} /></span><div><strong>Skill<span>Connect</span></strong><small>by SunEx Education</small></div></div><p className="eyebrow eyebrow--orange">Courses offered</p><h2 className="display">Choose a course<br /><em>built around your next step.</em></h2><p className="copy">Browse individual SkillConnect courses and focus the learning conversation on the technology work you want to explore.</p><div className="course-showcase-hero__facts"><div><strong>14</strong><span>Course offerings</span></div><div><strong>03</strong><span>Learning contexts</span></div><div><strong>01</strong><span>SkillConnect catalogue</span></div></div><Link href="/contact?interest=education" className="text-link">Talk to our learning team <ArrowRight size={15} /></Link></div><div className="course-showcase-photo"><img src="/manus-storage/skillconnect-editorial-studio_dd1b29e6.jpg" alt="SkillConnect learners collaborating in a technology studio" loading="lazy" /><div className="course-showcase-photo__shade" /><div className="course-showcase-photo__caption"><span>Applied learning</span><strong>From the studio to<br />the real world.</strong></div><div className="course-showcase-photo__index"><span>01</span><i /> <span>SkillConnect learning environment</span></div></div></Reveal>
       <div className="course-market-intro"><div><p className="eyebrow">Explore courses</p><h3>Pick the topic.<br /><em>See the learning focus.</em></h3></div><p>Course listings stay visible like a catalogue, while your selected course brings its learning focus and next action forward.</p></div>
       <Reveal className="course-market-feature course-market-feature--invitation"><div className="course-market-feature__media"><img src="/manus-storage/skillconnect-course-invitation_b174345c.jpg" alt="SkillConnect learners collaborating on engineering hardware" /><div><span>SkillConnect</span><strong>01</strong></div></div><div className="course-market-feature__copy"><p>For the curious, the makers, the doers</p><h3>Find the idea<br />you want to <em>build next.</em></h3><span className="course-market-feature__line" /><p className="course-market-feature__dialogue">Every course is a place to question, make, and move toward the kind of work you care about. Pick the topic that makes you want to keep learning.</p><div className="course-market-feature__meta"><span>Explore deeply</span><span>Apply confidently</span></div><Link href="/contact?interest=education" className="rivr-pill">Start your learning conversation <span><ArrowUpRight size={16} /></span></Link></div></Reveal>
-      <div className="course-market-catalogue"><div className="course-market-catalogue__header"><h2 className="display" style={{ margin: 0 }}>Course index</h2></div><div className="course-market-grid course-market-grid--catalogue">{courseCatalog.map((course, index) => <Reveal className="course-market-card-wrap" delay={(index % 3) * .05} key={course.title}><button type="button" className={`course-market-card course-market-card--catalogue course-market-card--tone-${(index % 4) + 1} ${activeCourse === index ? "is-active" : ""}`} onClick={() => setActiveCourse(index)} aria-label={`View ${course.title}`} aria-pressed={activeCourse === index}><div className="course-market-card__visual"><img src={course.image} alt="" loading="lazy" /><span>Course visual</span></div><div className="course-market-card__number">{String(index + 1).padStart(2, "0")}</div><div className="course-market-card__copy"><span>{course.area}</span><h3>{course.title}</h3><p>{course.description}</p></div><div className="course-market-card__action"><span>View learning brief</span><ArrowUpRight size={15} /></div></button></Reveal>)}</div></div>
+      <div className="modern-course-catalogue">
+        <div className="modern-course-catalogue__header">
+          <h2 className="display" style={{ margin: 0 }}>Course index</h2>
+          <div className="modern-course-filters">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                className={`filter-pill ${activeCategory === cat ? "is-active" : ""}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="modern-course-list">
+          {filteredCourses.map((course) => {
+            const index = courseCatalog.findIndex(c => c.title === course.title);
+            const level = index % 3 === 0 ? "Beginner" : index % 2 === 0 ? "Advanced" : "Intermediate";
+            const duration = `${(index % 4) + 4} Weeks`;
+            const lessons = (index % 5) + 8;
+            
+            return (
+              <Reveal className="modern-course-item-wrap" delay={(index % 3) * .05} key={course.title}>
+                <div className="modern-course-card">
+                  <div className="modern-course-card__image">
+                    <img src={course.image} alt={course.title} loading="lazy" />
+                    <div className="modern-course-card__overlay">
+                      <span className="modern-course-card__area">{course.area}</span>
+                    </div>
+                  </div>
+                  <div className="modern-course-card__content">
+                    <div className="modern-course-card__main">
+                      <h3>{course.title}</h3>
+                      <p>{course.description}</p>
+                    </div>
+                    <div className="modern-course-card__meta">
+                      <span><BarChart size={14}/> {level}</span>
+                      <span><Clock size={14}/> {duration}</span>
+                      <span><BookOpen size={14}/> {lessons} Lessons</span>
+                    </div>
+                  </div>
+                  <div className="modern-course-card__action">
+                    <Link href={`/contact?interest=education&course=${encodeURIComponent(course.title)}`} className="rivr-pill rivr-pill--outline">
+                      Enroll Now <span><ArrowUpRight size={16} /></span>
+                    </Link>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
     </div></section>
 
     <Testimonials />
