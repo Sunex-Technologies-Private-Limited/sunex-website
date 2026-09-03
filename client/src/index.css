@@ -12801,3 +12801,25 @@ textarea:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 12px)); }
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: marquee-scroll 35s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}

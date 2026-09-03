@@ -45,16 +45,18 @@ const successFeatures = [
 
 export default function Education() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [showAllCourses, setShowAllCourses] = useState(false);
 
   const categories = ["All", ...Array.from(new Set(courseCatalog.map(c => c.area)))];
   const filteredCourses = activeCategory === "All" ? courseCatalog : courseCatalog.filter(c => c.area === activeCategory);
+  const displayedCourses = showAllCourses ? filteredCourses : filteredCourses.slice(0, 4);
 
   return <>
     {/* Custom Hero Section matching the home-hero cinematic perception */}
     <section className="home-hero home-hero--controlled home-hero--cinematic content-wrap" style={{ marginBottom: '60px' }} aria-labelledby="education-title">
       <div className="home-hero__stage home-hero__stage--education" style={{ minHeight: '600px', borderRadius: '32px' }}>
         <div className="home-hero__reel is-active" aria-hidden="false">
-          <img src="/images/sunex-home-learning-studio.jpg" alt="Students learning in a modern studio" />
+          <img src="/images/hero-students.png" alt="Students looking forward" style={{ objectPosition: 'right center' }} />
         </div>
         <div className="home-hero__veil" />
         <div className="home-hero__content home-hero__content--controlled">
@@ -112,14 +114,17 @@ export default function Education() {
             <p className="eyebrow">POPULAR COURSES</p>
             <h2 className="display" style={{ margin: 0 }}>Explore Our Most<br /><em>In-Demand Courses</em></h2>
           </div>
-          <Link href="/contact?interest=education" className="rivr-pill rivr-pill--outline" style={{ background: 'transparent' }}>
-            View All Courses <span><ArrowRight size={16} /></span>
-          </Link>
+          <button 
+            onClick={() => setShowAllCourses(!showAllCourses)} 
+            className="rivr-pill" 
+            style={{ border: 'none', cursor: 'pointer', background: 'var(--foreground)', color: 'white' }}>
+            {showAllCourses ? "Show Less" : "View All Courses"} <span><ArrowRight size={16} /></span>
+          </button>
         </div>
       </Reveal>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }}>
-        {filteredCourses.map((course, index) => (
+        {displayedCourses.map((course, index) => (
           <Reveal delay={(index % 3) * .05} key={course.title}>
             <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', height: '100%' }}>
               <div style={{ position: 'relative', height: '200px' }}>
@@ -137,7 +142,7 @@ export default function Education() {
                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><BookOpen size={14}/> {course.lessons} Lessons</span>
                 </div>
                 
-                <Link href={`/contact?interest=education&course=${encodeURIComponent(course.title)}`} className="rivr-pill rivr-pill--outline" style={{ justifyContent: 'space-between', width: '100%' }}>
+                <Link href={`/contact?interest=education&course=${encodeURIComponent(course.title)}`} className="rivr-pill" style={{ justifyContent: 'space-between', width: '100%', background: 'var(--sunex-orange)', color: 'white', border: 'none' }}>
                   Enroll Now <span><ArrowRight size={16} /></span>
                 </Link>
               </div>
@@ -155,19 +160,21 @@ export default function Education() {
           <h2 id="education-focus-title" className="display" style={{ margin: 0 }}>What Do You Want To <em>Learn?</em></h2>
         </div>
       </Reveal>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
-        {learningCategories.map(({ title, description, Icon }, index) => 
-          <Reveal delay={(index % 3) * .05} key={title}>
-            <div style={{ background: 'white', borderRadius: '24px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}>
-              <div style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                <Icon size={32} />
+      <Reveal>
+        <div className="marquee-container">
+          <div className="marquee-track">
+            {[...learningCategories, ...learningCategories].map(({ title, description, Icon }, index) => 
+              <div key={`${title}-${index}`} style={{ width: '220px', background: 'white', borderRadius: '24px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', flexShrink: 0, border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}>
+                <div style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                  <Icon size={32} />
+                </div>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px', color: 'var(--foreground)' }}>{title}</h3>
+                <Link href="/contact?interest=education" className="text-link" style={{ fontSize: '14px', marginTop: 'auto', justifyContent: 'center', color: 'var(--muted-foreground)' }}>Explore Courses <ArrowRight size={14} /></Link>
               </div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px', color: 'var(--foreground)' }}>{title}</h3>
-              <Link href="/contact?interest=education" className="text-link" style={{ fontSize: '14px', marginTop: 'auto', justifyContent: 'center', color: 'var(--muted-foreground)' }}>Explore Courses <ArrowRight size={14} /></Link>
-            </div>
-          </Reveal>
-        )}
-      </div>
+            )}
+          </div>
+        </div>
+      </Reveal>
     </div></section>
 
     {/* Approach Section */}
@@ -236,8 +243,8 @@ export default function Education() {
             <div style={{ background: 'white', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '16px', height: '100%', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sunex-orange)' }}>{String(index + 1).padStart(2, '0')}</span>
-                <span style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={22} strokeWidth={1.8} />
+                <span style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '56px', height: '56px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={28} strokeWidth={1.8} />
                 </span>
               </div>
               <div>
