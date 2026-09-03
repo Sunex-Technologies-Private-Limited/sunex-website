@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import React, { useState } from "react";
-import { ArrowRight, ArrowUpRight, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench, Clock, BarChart, BookOpen, UsersRound, Code, Target, ShieldCheck, TerminalSquare, Settings, Leaf, CheckCircle2, HeartPulse, Sparkles, BrainCircuit, Cloud, Server, Network } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench, Clock, BarChart, BookOpen, UsersRound, Code, Target, ShieldCheck, TerminalSquare, Settings, Leaf, CheckCircle2, HeartPulse, Sparkles, BrainCircuit, Cloud, Server, Network, Search } from "lucide-react";
 import "./EducationFocus.css";
 import "./EducationAudience.css";
 import "./EducationMetrics.css";
@@ -46,17 +46,27 @@ const successFeatures = [
 export default function Education() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const categories = ["All", ...Array.from(new Set(courseCatalog.map(c => c.area)))];
-  const filteredCourses = activeCategory === "All" ? courseCatalog : courseCatalog.filter(c => c.area === activeCategory);
+  const filteredCourses = courseCatalog.filter(c => {
+    const matchesCategory = activeCategory === "All" || c.area === activeCategory;
+    const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) || c.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
   const displayedCourses = showAllCourses ? filteredCourses : filteredCourses.slice(0, 4);
 
   return <>
     {/* Custom Hero Section matching the home-hero cinematic perception */}
     <section className="home-hero home-hero--controlled home-hero--cinematic content-wrap" style={{ marginBottom: '60px' }} aria-labelledby="education-title">
+      <style>{`
+        .home-hero__stage--education .home-hero__content::before {
+          display: none !important;
+        }
+      `}</style>
       <div className="home-hero__stage home-hero__stage--education" style={{ minHeight: '600px', borderRadius: '32px' }}>
         <div className="home-hero__reel is-active" aria-hidden="false">
-          <img src="/images/hero-students.png" alt="Students looking forward" style={{ objectPosition: 'right center' }} />
+          <img src="/images/hero-students.png" alt="Students looking forward" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'right center' }} />
         </div>
         <div className="home-hero__veil" />
         <div className="home-hero__content home-hero__content--controlled">
@@ -73,12 +83,12 @@ export default function Education() {
             </p>
             
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
-              <Link href="/contact?interest=education" className="hero-primary-action" style={{ textDecoration: 'none' }}>
+              <a href="#courses-section" className="hero-primary-action" style={{ textDecoration: 'none' }}>
                 Explore Courses <span><ArrowUpRight size={15} /></span>
-              </Link>
-              <Link href="/contact?interest=education" className="hero-primary-action" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: 'white', textDecoration: 'none' }}>
+              </a>
+              <a href="#courses-section" className="hero-primary-action" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: 'white', textDecoration: 'none' }}>
                 Find Your Course
-              </Link>
+              </a>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', paddingRight: '20px' }}>
@@ -107,23 +117,42 @@ export default function Education() {
     </section>
 
     {/* Popular Courses Section */}
-    <section className="section course-showcase-section"><div className="content-wrap">
+    <section id="courses-section" className="section course-showcase-section"><div className="content-wrap">
       <Reveal>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '20px' }}>
           <div>
             <p className="eyebrow">POPULAR COURSES</p>
             <h2 className="display" style={{ margin: 0 }}>Explore Our Most<br /><em>In-Demand Courses</em></h2>
           </div>
-          <button 
-            onClick={() => setShowAllCourses(!showAllCourses)} 
-            className="rivr-pill" 
-            style={{ border: 'none', cursor: 'pointer', background: 'var(--foreground)', color: 'white' }}>
-            {showAllCourses ? "Show Less" : "View All Courses"} <span><ArrowRight size={16} /></span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ position: 'relative' }}>
+              <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted-foreground)' }} />
+              <input 
+                type="text" 
+                placeholder="Search courses..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ width: '100%', minWidth: '250px', padding: '10px 16px 10px 40px', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.1)', fontSize: '15px' }}
+              />
+            </div>
+            <button 
+              onClick={() => {
+                if (activeCategory !== "All") {
+                  setActiveCategory("All");
+                  setShowAllCourses(true);
+                } else {
+                  setShowAllCourses(!showAllCourses);
+                }
+              }} 
+              className="rivr-pill" 
+              style={{ border: 'none', cursor: 'pointer', background: 'var(--foreground)', color: 'white' }}>
+              {activeCategory !== "All" ? "Clear Filter" : (showAllCourses ? "Show Less" : "View All Courses")} <span><ArrowRight size={16} /></span>
+            </button>
+          </div>
         </div>
       </Reveal>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
         {displayedCourses.map((course, index) => (
           <Reveal delay={(index % 3) * .05} key={course.title}>
             <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -169,7 +198,7 @@ export default function Education() {
                   <Icon size={32} />
                 </div>
                 <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px', color: 'var(--foreground)' }}>{title}</h3>
-                <Link href="/contact?interest=education" className="text-link" style={{ fontSize: '14px', marginTop: 'auto', justifyContent: 'center', color: 'var(--muted-foreground)' }}>Explore Courses <ArrowRight size={14} /></Link>
+                <a href="#courses-section" onClick={() => { setActiveCategory(title); setShowAllCourses(true); }} className="text-link" style={{ fontSize: '14px', marginTop: 'auto', justifyContent: 'center', color: 'var(--muted-foreground)' }}>Explore Courses <ArrowRight size={14} /></a>
               </div>
             )}
           </div>
