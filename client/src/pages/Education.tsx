@@ -1,142 +1,291 @@
 import { Link } from "wouter";
 import React, { useState } from "react";
-import { ArrowRight, ArrowUpRight, BadgeCheck, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Handshake, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench, Clock, BarChart, BookOpen, Filter } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpenCheck, BriefcaseBusiness, Building2, Compass, Cpu, GraduationCap, Lightbulb, MessagesSquare, Presentation, School, UserRound, Wrench, Clock, BarChart, BookOpen, UsersRound, Code, Target, ShieldCheck, TerminalSquare, Settings, Leaf, CheckCircle2, HeartPulse, Sparkles, BrainCircuit, Cloud, Server, Network } from "lucide-react";
 import "./EducationFocus.css";
 import "./EducationAudience.css";
 import "./EducationMetrics.css";
-import { PageHero } from "@/components/sunex/PageHero";
 import { Reveal } from "@/components/sunex/Reveal";
 import { Testimonials } from "@/components/sunex/Testimonials";
 
 const courseCatalog = [
-  { title: "Responsible and Safe AI Systems", area: "AI & emerging technology", briefTitle: "Build responsible AI decisions.", description: "Explore responsible design and deployment considerations for modern AI systems.", dialogue: "Use this selection to discuss governance priorities, evaluation questions, and the kinds of AI decisions you want to examine.", themes: ["Governance", "Evaluation"], image: "/manus-storage/responsible-ai_f08891c8.jpg" },
-  { title: "Agentic AI Intern & generative AI", area: "AI & emerging technology", briefTitle: "Plan intelligent workflows.", description: "Explore agent-led and generative AI workflows for changing technology environments.", dialogue: "Start the learning conversation with the workflow you want to improve, the human role you want to retain, and the outcomes that matter.", themes: ["Agent workflows", "Generative systems"], image: "/manus-storage/agentic-ai_b2999545.png" },
-  { title: "LLM fine tuning", area: "AI & emerging technology", briefTitle: "Refine models for a focused task.", description: "Explore approaches to adapting and refining large language models for focused use cases.", dialogue: "Bring a use case, a domain question, or a data-curation interest to shape a more focused conversation with the learning team.", themes: ["Data curation", "Model adaptation"], image: "/manus-storage/llm-tuning_38979604.jpg" },
-  { title: "Quantum computing", area: "AI & emerging technology", briefTitle: "Explore a new computing frontier.", description: "Explore foundational quantum-computing concepts and their place in future technology work.", dialogue: "Use the conversation to connect your current technical background with the quantum concepts and future-system questions you want to explore.", themes: ["Quantum foundations", "Future systems"], image: "/manus-storage/quantum_acd066e0.jpg" },
-  { title: "AI for Electrical Power systems", area: "Energy systems", briefTitle: "Read energy systems with AI.", description: "Explore AI applications in electrical power systems and connected energy environments.", dialogue: "Discuss the energy environment you are interested in, the decisions that need better visibility, and how AI may support the conversation.", themes: ["Power analytics", "Connected energy"], image: "/manus-storage/ai-power_b71aa6be.jpg" },
-  { title: "Industrial Programmable Logic Controllers", area: "Industrial automation", briefTitle: "Control systems in action.", description: "Explore programmable control foundations for industrial systems and operations.", dialogue: "Start with the industrial process or automation setting you want to understand, then map the control questions you want to work through.", themes: ["PLC logic", "Automation"], image: "/manus-storage/industrial-plc_13944bcb.jpg" },
-  { title: "Battery management systems", area: "Energy systems", briefTitle: "Understand energy at cell level.", description: "Explore the systems thinking behind battery monitoring and management.", dialogue: "Frame the discussion around the energy-storage context, monitoring questions, or system trade-offs you want to investigate.", themes: ["Battery monitoring", "Energy storage"], image: "/manus-storage/battery-management_4c7944c2.jpg" },
-  { title: "Industrial IOT", area: "Industrial automation", briefTitle: "Connect the industrial edge.", description: "Explore connected-device concepts for industrial operations and data-aware systems.", dialogue: "Bring the devices, signals, or operational questions that interest you to shape a practical connected-systems conversation.", themes: ["Sensors", "Edge systems"], image: "/manus-storage/industrial-iot_8d9a86f6.webp" },
-  { title: "Cyber physical system Intern", area: "Connected systems", briefTitle: "Make software meet the real world.", description: "Explore the connection between physical processes, sensing, software, and systems engineering.", dialogue: "Use this course selection to discuss the physical process, software layer, and sensing challenge you want to connect.", themes: ["Sensing", "System integration"], image: "/manus-storage/cyber-physical_ca08a4b7.png" },
-  { title: "Forward deployed engineering", area: "Applied engineering", briefTitle: "Take engineering into operation.", description: "Explore engineering patterns that take technical work into real operational environments.", dialogue: "Begin with the setting where engineering needs to work in practice, then discuss the constraints and decisions that make it real.", themes: ["Field delivery", "Applied problem solving"], image: "/manus-storage/forward-engineering_50edeae5.jpg" },
-  { title: "Ethical Hacking & Cyber security", area: "Digital security", briefTitle: "Think like a defensive builder.", description: "Explore foundational ethical-hacking and cybersecurity concepts for modern technology systems.", dialogue: "Use the conversation to identify the systems you want to protect, the risks you want to recognise, and the defensive mindset you want to build.", themes: ["Security practice", "Threat awareness"], image: "/manus-storage/cybersecurity_9f1311f9.jpg" },
-  { title: "Cloud computing", area: "Digital platforms", briefTitle: "Design for scalable platforms.", description: "Explore core cloud-computing foundations for scalable digital technology work.", dialogue: "Discuss the product, platform, or digital service context you care about, then focus the learning conversation on scale and reliability questions.", themes: ["Cloud foundations", "Platform thinking"], image: "/manus-storage/cloud-computing_58c80cbc.jpg" },
-  { title: "Block chain", area: "Digital platforms", briefTitle: "Trace trust across a network.", description: "Explore distributed-ledger concepts and their role in connected digital systems.", dialogue: "Start with the trust, traceability, or coordination problem you want to explore before discussing distributed-ledger concepts.", themes: ["Distributed ledgers", "Network trust"], image: "/manus-storage/blockchain_4b0691fb.jpg" },
-  { title: "Loop engineering, harness", area: "Applied engineering", briefTitle: "Turn precision into a system.", description: "Explore practical engineering foundations for structured electronic systems and harness work.", dialogue: "Use this selection to discuss the product context, precision work, and systems-assembly questions that you want to bring into focus.", themes: ["Harness design", "Systems assembly"], image: "/manus-storage/loop-harness_cc70f53f.jpeg" },
-] as const;
+  { title: "Responsible and Safe AI Systems", area: "AI & emerging technology", briefTitle: "Design and deployment considerations for modern AI", description: "Explore responsible design and deployment considerations for modern AI systems.", level: "Beginner", duration: "4 Weeks", format: "Online / Offline", image: "/images/course_safe_ai_1788432194154.jpg", lessons: "8" },
+  { title: "Agentic AI Intern & generative AI", area: "AI & emerging technology", briefTitle: "Agent-led workflows for changing environments", description: "Explore agent-led and generative AI workflows for changing technology environments.", level: "Intermediate", duration: "5 Weeks", format: "Online / Offline", image: "/images/course_agentic_ai_1788432236466.jpg", lessons: "9" },
+  { title: "LLM fine tuning", area: "AI & emerging technology", briefTitle: "Adapting large language models for focused use", description: "Explore approaches to adapting and refining large language models for focused use cases.", level: "Advanced", duration: "6 Weeks", format: "Online / Offline", image: "/images/course_llm_tuning_1788432278947.jpg", lessons: "10" },
+  { title: "Quantum computing", area: "AI & emerging technology", briefTitle: "Foundational quantum-computing concepts", description: "Explore foundational quantum-computing concepts and their place in future technology work.", level: "Beginner", duration: "7 Weeks", format: "Online / Offline", image: "/images/course_quantum_1788432321434.jpg", lessons: "11" },
+  { title: "AI for Electrical Power systems", area: "Energy systems", briefTitle: "AI applications in power systems", description: "Explore AI applications in electrical power systems and connected energy environments.", level: "Advanced", duration: "4 Weeks", format: "Online / Offline", image: "/images/course_power_systems_1788432358170.jpg", lessons: "12" },
+  { title: "Industrial Programmable Logic Controllers", area: "Industrial automation", briefTitle: "Programmable control foundations", description: "Explore programmable control foundations for industrial systems and operations.", level: "Intermediate", duration: "5 Weeks", format: "Online / Offline", image: "/images/course_plc_1788432399650.jpg", lessons: "8" },
+  { title: "Battery management systems", area: "Energy systems", briefTitle: "Battery monitoring and management", description: "Explore the systems thinking behind battery monitoring and management.", level: "Beginner", duration: "6 Weeks", format: "Online / Offline", image: "/images/course_battery_1788432437952.jpg", lessons: "9" },
+  { title: "Industrial IOT", area: "Industrial automation", briefTitle: "Connected-device concepts for operations", description: "Explore connected-device concepts for industrial operations and data-aware systems.", level: "Intermediate", duration: "7 Weeks", format: "Online / Offline", image: "/images/course_iot_1788432480704.jpg", lessons: "10" },
+  { title: "Cyber physical system Intern", area: "Connected systems", briefTitle: "Connection between software and physical processes", description: "Explore the connection between physical processes, sensing, software, and systems engineering.", level: "Advanced", duration: "4 Weeks", format: "Online / Offline", image: "/images/course_cyber_physical_1788432523724.jpg", lessons: "11" },
+  { title: "Forward deployed engineering", area: "Applied engineering", briefTitle: "Engineering patterns for real operations", description: "Explore engineering patterns that take technical work into real operational environments.", level: "Beginner", duration: "5 Weeks", format: "Online / Offline", image: "/images/course_forward_deployed_1788432568636.jpg", lessons: "12" },
+  { title: "Ethical Hacking & Cyber security", area: "Digital security", briefTitle: "Foundational cybersecurity concepts", description: "Explore foundational ethical-hacking and cybersecurity concepts for modern technology systems.", level: "Advanced", duration: "6 Weeks", format: "Online / Offline", image: "/images/course_cybersec_1788432611715.jpg", lessons: "8" },
+  { title: "Cloud computing", area: "Digital platforms", briefTitle: "Core cloud-computing foundations", description: "Explore core cloud-computing foundations for scalable digital technology work.", level: "Intermediate", duration: "7 Weeks", format: "Online / Offline", image: "/images/course_cloud_1788432649210.jpg", lessons: "9" },
+  { title: "Block chain", area: "Digital platforms", briefTitle: "Distributed-ledger concepts", description: "Explore distributed-ledger concepts and their role in connected digital systems.", level: "Beginner", duration: "4 Weeks", format: "Online / Offline", image: "/images/technology-digital-systems.jpg", lessons: "10" },
+  { title: "Loop engineering, harness", area: "Applied engineering", briefTitle: "Practical foundations for structured systems", description: "Explore practical engineering foundations for structured electronic systems and harness work.", level: "Intermediate", duration: "5 Weeks", format: "Online / Offline", image: "/images/sunex_about_innovation_new.jpg", lessons: "11" },
+];
 
-const skillConnectHeroImages = [
-  "/images/skillconnect-celebration.jpg",
-  "/images/skillconnect-professional.jpg",
-  "/images/skillconnect-collaboration.jpg",
-] as const;
+const learningCategories = [
+  { title: "AI & emerging technology", Icon: BrainCircuit, description: "Master artificial intelligence and emerging tech." },
+  { title: "Energy systems", Icon: Lightbulb, description: "Explore sustainable power and electrical systems." },
+  { title: "Industrial automation", Icon: Settings, description: "Learn programmable control and industrial operations." },
+  { title: "Connected systems", Icon: Network, description: "Discover sensors, physical processes and data-aware systems." },
+  { title: "Applied engineering", Icon: Wrench, description: "Build structured electronic systems for the real world." },
+  { title: "Digital security", Icon: ShieldCheck, description: "Learn ethical hacking and digital security concepts." },
+  { title: "Digital platforms", Icon: Cloud, description: "Explore scalable cloud and distributed-ledger networks." }
+];
 
-const educationFocusAreas = [
-  { title: "Skill Development", description: "Practical learning programs designed to build relevant skills, applied knowledge and career-ready capabilities through hands-on learning and real-world applications.", Icon: Wrench },
-  { title: "Technology Education", description: "Hands-on exposure to emerging technologies, modern tools and evolving technology practices, guided by industry professionals and practitioners.", Icon: Cpu },
-  { title: "Industry Readiness", description: "Helping learners understand workplace expectations, industry practices, professional skills and real-world applications to become job-ready.", Icon: BriefcaseBusiness },
-  { title: "Workshops & Training", description: "Delivering practical workshops, expert-led training programs and technology bootcamps designed around current industry needs and emerging technologies.", Icon: BookOpenCheck },
-  { title: "Innovation & Entrepreneurship", description: "Encouraging learners to explore ideas, solve real-world problems and develop innovative solutions through collaborative and experiential learning.", Icon: Lightbulb },
-  { title: "Institutional Collaboration", description: "Partnering with schools, colleges, universities and educational institutions to design and deliver industry-oriented training programs, internships, skill development initiatives and academic collaborations.", Icon: Handshake },
-] as const;
-
-const institutionInitiatives = [
-  { label: "Skill development", Icon: Wrench },
-  { label: "Technology workshops", Icon: Presentation },
-  { label: "Industry interaction", Icon: MessagesSquare },
-  { label: "Training programs", Icon: BookOpenCheck },
-  { label: "Innovation initiatives", Icon: Lightbulb },
-  { label: "Career readiness", Icon: Compass },
-  { label: "Technology awareness", Icon: Cpu },
-  { label: "Industry oriented programs", Icon: Building2 },
-] as const;
-const studentBenefits = ["Develop practical skills", "Understand emerging technologies", "Gain industry exposure", "Explore career opportunities", "Build problem solving capabilities", "Develop innovation mindset", "Understand real world applications"] as const;
+const successFeatures = [
+  { title: "Expert Trainers", description: "Learn from experienced industry professionals who bring real-world knowledge to the classroom.", Icon: UsersRound },
+  { title: "Practical Learning", description: "Hands-on projects and assignments designed to provide real-world experience and capability.", Icon: Code },
+  { title: "Certification", description: "Industry-recognized completion certificates that validate your skills and knowledge.", Icon: GraduationCap },
+  { title: "Placement Assistance", description: "Resume building, mock interviews, and dedicated job support to launch your career.", Icon: Target },
+  { title: "Small Batch Sizes", description: "Personalized attention and an interactive learning environment for better understanding.", Icon: UserRound },
+  { title: "Student Support", description: "Dedicated support and guidance at every step of your learning journey and beyond.", Icon: CheckCircle2 },
+];
 
 export default function Education() {
-  const [activeCourse, setActiveCourse] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
 
   const categories = ["All", ...Array.from(new Set(courseCatalog.map(c => c.area)))];
   const filteredCourses = activeCategory === "All" ? courseCatalog : courseCatalog.filter(c => c.area === activeCategory);
 
   return <>
-    <PageHero eyebrow="Skill Connect by sunex technology" title={<>Preparing People for What Comes Next</>} image={skillConnectHeroImages[0]} backgroundImages={skillConnectHeroImages} description="We create learning opportunities that help students, professionals, job seekers and organisations build relevant capabilities, gain practical experience and stay prepared for the future" action={{ label: "Talk to our learning team", href: "/contact?interest=education" }} />
+    {/* Custom Hero Section matching the home-hero cinematic perception */}
+    <section className="home-hero home-hero--controlled home-hero--cinematic content-wrap" style={{ marginBottom: '60px' }} aria-labelledby="education-title">
+      <div className="home-hero__stage home-hero__stage--education" style={{ minHeight: '600px', borderRadius: '32px' }}>
+        <div className="home-hero__reel is-active" aria-hidden="false">
+          <img src="/images/sunex-home-learning-studio.jpg" alt="Students learning in a modern studio" />
+        </div>
+        <div className="home-hero__veil" />
+        <div className="home-hero__content home-hero__content--controlled">
+          <Reveal>
+            <div className="hero-badge hero-badge--education" style={{ marginBottom: '24px' }}>
+              <GraduationCap size={15} /> Education
+            </div>
+            <h1 id="education-title">
+              Learn. Build.<br />
+              <strong className="hero-title__accent hero-title__accent--education">Grow Your Future.</strong>
+            </h1>
+            <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: 'clamp(16px, 1.5vw, 19px)', textShadow: '0 2px 20px rgba(4, 20, 35, .25)' }}>
+              Industry-oriented training and practical learning that helps you build skills, confidence and a successful career.
+            </p>
+            
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '48px' }}>
+              <Link href="/contact?interest=education" className="hero-primary-action" style={{ textDecoration: 'none' }}>
+                Explore Courses <span><ArrowUpRight size={15} /></span>
+              </Link>
+              <Link href="/contact?interest=education" className="hero-primary-action" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: 'white', textDecoration: 'none' }}>
+                Find Your Course
+              </Link>
+            </div>
 
-    <section className="section section--mist skillconnect-section"><div className="content-wrap">
-      <Reveal className="skillconnect-intro skillconnect-intro--editorial"><div className="skillconnect-intro__lead"><p className="eyebrow eyebrow--orange">SkillConnect by SunEx Education</p><h2 className="display">The bridge between<br /><em>learning and work.</em></h2></div><div className="skillconnect-intro__copy"><p className="copy">Skill Connect by SunEx bridges the gap between academic education and industry requirements through practical learning, technology exposure and skill development.</p><p className="copy copy--small">Our programs are designed and delivered by industry experts, supported by a passionate team of young professionals and experienced mentors with over two decades of industry experience, bringing together fresh perspectives and real-world expertise</p><Link href="/contact?interest=education" className="text-link">Explore SkillConnect <ArrowRight size={15} /></Link></div></Reveal>
-      <div className="skillconnect-metrics">{[{ value: "15+", label: "Learning opportunities", Icon: GraduationCap }, { value: "10k+", label: "Students planned to train", Icon: UserRound }, { value: "5+", label: "Products under R & D", Icon: Cpu }, { value: "20+", label: "Industry professionals", Icon: BriefcaseBusiness }].map(({ value, label, Icon }, index) => <Reveal className="skillconnect-metric" delay={index * .05} key={label}><Icon size={18} /><strong>{value}</strong><span>{label}</span></Reveal>)}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', paddingRight: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255, 255, 255, 0.05)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
+                <div style={{ background: 'rgba(255, 106, 18, 0.15)', color: 'var(--sunex-orange)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <UsersRound size={24} />
+                </div>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'white', lineHeight: 1.3 }}>Industry Expert<br/>Trainers</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255, 255, 255, 0.05)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
+                <div style={{ background: 'rgba(255, 106, 18, 0.15)', color: 'var(--sunex-orange)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Code size={24} />
+                </div>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'white', lineHeight: 1.3 }}>Practical Learning<br/>Hands-on Projects</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255, 255, 255, 0.05)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
+                <div style={{ background: 'rgba(255, 106, 18, 0.15)', color: 'var(--sunex-orange)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Target size={24} />
+                </div>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'white', lineHeight: 1.3 }}>Placement<br/>Assistance</span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+
+    {/* Popular Courses Section */}
+    <section className="section course-showcase-section"><div className="content-wrap">
+      <Reveal>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '20px' }}>
+          <div>
+            <p className="eyebrow">POPULAR COURSES</p>
+            <h2 className="display" style={{ margin: 0 }}>Explore Our Most<br /><em>In-Demand Courses</em></h2>
+          </div>
+          <Link href="/contact?interest=education" className="rivr-pill rivr-pill--outline" style={{ background: 'transparent' }}>
+            View All Courses <span><ArrowRight size={16} /></span>
+          </Link>
+        </div>
+      </Reveal>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }}>
+        {filteredCourses.map((course, index) => (
+          <Reveal delay={(index % 3) * .05} key={course.title}>
+            <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ position: 'relative', height: '200px' }}>
+                <img src={course.image} alt={course.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', top: '16px', left: '16px', display: 'flex', gap: '8px' }}>
+                  <span style={{ background: 'rgba(255,255,255,0.9)', color: 'var(--foreground)', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 600 }}>{course.duration}</span>
+                </div>
+              </div>
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px', color: 'var(--foreground)' }}>{course.title}</h3>
+                <p style={{ margin: '0 0 20px', color: 'var(--muted-foreground)', fontSize: '14px', lineHeight: 1.5, flex: 1 }}>{course.description}</p>
+                
+                <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--muted-foreground)', marginBottom: '24px', flexWrap: 'wrap' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><UserRound size={14}/> {course.level}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><BookOpen size={14}/> {course.lessons} Lessons</span>
+                </div>
+                
+                <Link href={`/contact?interest=education&course=${encodeURIComponent(course.title)}`} className="rivr-pill rivr-pill--outline" style={{ justifyContent: 'space-between', width: '100%' }}>
+                  Enroll Now <span><ArrowRight size={16} /></span>
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
     </div></section>
 
-    <section className="section education-approach-section" aria-labelledby="education-approach-title"><div className="content-wrap"><Reveal className="education-approach"><div><p className="eyebrow">Our approach</p><h2 id="education-approach-title">Learning beyond<br /><em>the classroom.</em></h2></div><div className="education-approach__content"><p>We believe effective education goes beyond theoretical knowledge. It should help learners understand, apply and continuously improve what they learn.</p><p className="education-approach__lead">Our approach combines:</p><div className="education-approach__pathway" aria-label="Education approach"><span>Knowledge</span><i>•</i><span>Practical Skills</span><i>•</i><span>Technology Exposure</span><i>•</i><span>Industry Relevance</span><i>•</i><span>Continuous Learning</span></div><p>Every learning experience is designed to combine academic concepts with hands-on practice, industry insights and mentorship from experienced professionals.</p><p>Through this approach, we help learners develop the confidence, competence and practical capabilities needed to adapt to evolving technologies and future career opportunities.</p></div></Reveal></div></section>
+    {/* Categories Section */}
+    <section className="section section--mist" aria-labelledby="education-focus-title"><div className="content-wrap">
+      <Reveal>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <p className="eyebrow">EXPLORE BY CATEGORY</p>
+          <h2 id="education-focus-title" className="display" style={{ margin: 0 }}>What Do You Want To <em>Learn?</em></h2>
+        </div>
+      </Reveal>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+        {learningCategories.map(({ title, description, Icon }, index) => 
+          <Reveal delay={(index % 3) * .05} key={title}>
+            <div style={{ background: 'white', borderRadius: '24px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}>
+              <div style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '64px', height: '64px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Icon size={32} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px', color: 'var(--foreground)' }}>{title}</h3>
+              <Link href="/contact?interest=education" className="text-link" style={{ fontSize: '14px', marginTop: 'auto', justifyContent: 'center', color: 'var(--muted-foreground)' }}>Explore Courses <ArrowRight size={14} /></Link>
+            </div>
+          </Reveal>
+        )}
+      </div>
+    </div></section>
 
-    <section className="section education-focus-section" aria-labelledby="education-focus-title"><div className="content-wrap"><div className="education-focus-layout education-focus-layout--balanced"><div className="education-focus-manifesto education-focus-manifesto--compact"><div className="education-focus-manifesto__content"><p className="eyebrow">What we focus on</p><h2 id="education-focus-title">Learning that builds<br /><em>real-world capability.</em></h2><span className="education-focus-manifesto__range" aria-hidden="true">01 — 06</span></div></div><div className="education-focus-grid">{educationFocusAreas.map(({ title, description, Icon }, index) => <Reveal className="education-focus-card" delay={(index % 3) * .05} key={title}><div className="education-focus-card__meta"><span className="education-focus-card__index">{String(index + 1).padStart(2, "0")}</span><span className="education-focus-card__icon"><Icon size={20} /></span></div><div className="education-focus-card__copy"><h3>{title}</h3><p>{description}</p></div></Reveal>)}</div></div></div></section>
-
-    <section className="section education-institutions-section" aria-labelledby="institutions-title"><div className="content-wrap"><Reveal className="education-audience education-audience--dark"><div className="education-audience__heading"><span className="education-audience__icon"><School size={23} /></span><p className="eyebrow">For educational institutions</p><h2 id="institutions-title">Partnerships that make<br /><em>learning more relevant.</em></h2><p>We collaborate with educational institutions on relevant initiatives including:</p><Link href="/contact?interest=partnership" className="rivr-pill education-audience__action">Partner with SunEx <span><ArrowUpRight size={16} /></span></Link></div><ul className="education-audience__list education-audience__list--initiatives">{institutionInitiatives.map(({ label, Icon }, index) => <li key={label}><span className="education-audience__list-icon"><Icon size={17} /></span><strong>{label}</strong><small>{String(index + 1).padStart(2, "0")}</small></li>)}</ul></Reveal></div></section>
-
-    <section className="section education-students-section" aria-labelledby="students-title"><div className="content-wrap"><Reveal className="education-audience education-audience--light"><div className="education-audience__heading"><span className="education-audience__icon"><UserRound size={23} /></span><p className="eyebrow eyebrow--orange">For students</p><h2 id="students-title">Confidence for the<br /><em>real world.</em></h2><p>Our initiatives can help students:</p></div><ul className="education-audience__list">{studentBenefits.map((benefit, index) => <li key={benefit}><span>{String(index + 1).padStart(2, "0")}</span>{benefit}</li>)}</ul></Reveal></div></section>
-
-    <section className="section education-goal-section" aria-labelledby="education-goal-title"><div className="content-wrap"><Reveal className="education-goal"><p className="eyebrow">Our goal</p><h2 id="education-goal-title">Make learning more relevant.<br /><em>Make skills more practical.</em></h2><p>We want to contribute to an education ecosystem where learners are better prepared for the opportunities and challenges of tomorrow.</p><Link href="/contact?interest=education" className="rivr-pill education-goal__action">Explore our education initiatives <span><ArrowUpRight size={16} /></span></Link></Reveal></div></section>
-
-    <section className="section course-showcase-section"><div className="content-wrap">
-      <Reveal className="course-showcase-hero"><div className="course-showcase-hero__copy"><div className="skillconnect-lockup" aria-label="SkillConnect by SunEx Education"><span className="skillconnect-lockup__icon"><GraduationCap size={17} /></span><div><strong>Skill<span>Connect</span></strong><small>by SunEx Education</small></div></div><p className="eyebrow eyebrow--orange">Courses offered</p><h2 className="display">Choose a course<br /><em>built around your next step.</em></h2><p className="copy">Browse individual SkillConnect courses and focus the learning conversation on the technology work you want to explore.</p><div className="course-showcase-hero__facts"><div><strong>14</strong><span>Course offerings</span></div><div><strong>03</strong><span>Learning contexts</span></div><div><strong>01</strong><span>SkillConnect catalogue</span></div></div><Link href="/contact?interest=education" className="text-link">Talk to our learning team <ArrowRight size={15} /></Link></div><div className="course-showcase-photo"><img src="/manus-storage/skillconnect-editorial-studio_dd1b29e6.jpg" alt="SkillConnect learners collaborating in a technology studio" loading="lazy" /><div className="course-showcase-photo__shade" /><div className="course-showcase-photo__caption"><span>Applied learning</span><strong>From the studio to<br />the real world.</strong></div><div className="course-showcase-photo__index"><span>01</span><i /> <span>SkillConnect learning environment</span></div></div></Reveal>
-      <div className="course-market-intro"><div><p className="eyebrow">Explore courses</p><h3>Pick the topic.<br /><em>See the learning focus.</em></h3></div><p>Course listings stay visible like a catalogue, while your selected course brings its learning focus and next action forward.</p></div>
-      <Reveal className="course-market-feature course-market-feature--invitation"><div className="course-market-feature__media"><img src="/manus-storage/skillconnect-course-invitation_b174345c.jpg" alt="SkillConnect learners collaborating on engineering hardware" /><div><span>SkillConnect</span><strong>01</strong></div></div><div className="course-market-feature__copy"><p>For the curious, the makers, the doers</p><h3>Find the idea<br />you want to <em>build next.</em></h3><span className="course-market-feature__line" /><p className="course-market-feature__dialogue">Every course is a place to question, make, and move toward the kind of work you care about. Pick the topic that makes you want to keep learning.</p><div className="course-market-feature__meta"><span>Explore deeply</span><span>Apply confidently</span></div><Link href="/contact?interest=education" className="rivr-pill">Start your learning conversation <span><ArrowUpRight size={16} /></span></Link></div></Reveal>
-      <div className="modern-course-catalogue">
-        <div className="modern-course-catalogue__header">
-          <h2 className="display" style={{ margin: 0 }}>Course index</h2>
-          <div className="modern-course-filters">
-            {categories.map(cat => (
-              <button 
-                key={cat} 
-                className={`filter-pill ${activeCategory === cat ? "is-active" : ""}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
+    {/* Approach Section */}
+    <section className="section education-approach-section" aria-labelledby="education-approach-title"><div className="content-wrap">
+      <Reveal>
+        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto', color: 'white' }}>
+          <p className="eyebrow" style={{ color: '#ffd1b5', marginBottom: '16px' }}>OUR LEARNING APPROACH</p>
+          <h2 id="education-approach-title" className="display" style={{ color: 'white', marginBottom: '16px' }}>Learn. Build. Grow.</h2>
+          <p className="copy" style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '48px' }}>A practical learning path designed for real-world success.</p>
+        </div>
+      </Reveal>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', marginTop: '24px' }}>
+        <Reveal delay={0}>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '180px', fontWeight: 900, color: 'rgba(255,255,255,0.03)', lineHeight: 1, zIndex: 0, userSelect: 'none' }}>1</div>
+            <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '24px' }}>
+                <BookOpen size={28} />
+              </div>
+              <h3 style={{ color: 'white', fontSize: '28px', fontWeight: 700, marginBottom: '16px', letterSpacing: '-0.02em' }}>Learn</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, fontSize: '16px', margin: 0 }}>Master the fundamentals and advanced concepts through expert-led, interactive online and offline sessions tailored for real-world application.</p>
+            </div>
           </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <div style={{ background: 'rgba(255, 106, 18, 0.05)', border: '1px solid rgba(255, 106, 18, 0.2)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '180px', fontWeight: 900, color: 'rgba(255,106,18,0.05)', lineHeight: 1, zIndex: 0, userSelect: 'none' }}>2</div>
+            <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'var(--sunex-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '24px' }}>
+                <Code size={28} />
+              </div>
+              <h3 style={{ color: 'white', fontSize: '28px', fontWeight: 700, marginBottom: '16px', letterSpacing: '-0.02em' }}>Build</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, fontSize: '16px', margin: 0 }}>Apply your knowledge immediately by working on hands-on industry projects, building a robust portfolio of practical solutions.</p>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.2}>
+          <div style={{ background: 'rgba(34, 197, 94, 0.05)', border: '1px solid rgba(34, 197, 94, 0.2)', borderRadius: '24px', padding: '40px', position: 'relative', overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '180px', fontWeight: 900, color: 'rgba(34,197,94,0.05)', lineHeight: 1, zIndex: 0, userSelect: 'none' }}>3</div>
+            <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '24px' }}>
+                <BarChart size={28} />
+              </div>
+              <h3 style={{ color: 'white', fontSize: '28px', fontWeight: 700, marginBottom: '16px', letterSpacing: '-0.02em' }}>Grow</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, fontSize: '16px', margin: 0 }}>Accelerate your career with our dedicated placement support, interview prep, and industry-recognized certifications.</p>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </div></section>
+
+    {/* Everything You Need Section */}
+    <section className="section section--mist" aria-labelledby="why-sunex-title"><div className="content-wrap">
+      <Reveal>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <p className="eyebrow">WHY SUNEX EDUCATION?</p>
+          <h2 id="why-sunex-title" className="display" style={{ margin: 0 }}>Everything You Need To <em>Succeed</em></h2>
         </div>
-        <div className="modern-course-list">
-          {filteredCourses.map((course) => {
-            const index = courseCatalog.findIndex(c => c.title === course.title);
-            const level = index % 3 === 0 ? "Beginner" : index % 2 === 0 ? "Advanced" : "Intermediate";
-            const duration = `${(index % 4) + 4} Weeks`;
-            const lessons = (index % 5) + 8;
-            
-            return (
-              <Reveal className="modern-course-item-wrap" delay={(index % 3) * .05} key={course.title}>
-                <div className="modern-course-card">
-                  <div className="modern-course-card__image">
-                    <img src={course.image} alt={course.title} loading="lazy" />
-                    <div className="modern-course-card__overlay">
-                      <span className="modern-course-card__area">{course.area}</span>
-                    </div>
-                  </div>
-                  <div className="modern-course-card__content">
-                    <div className="modern-course-card__main">
-                      <h3>{course.title}</h3>
-                      <p>{course.description}</p>
-                    </div>
-                    <div className="modern-course-card__meta">
-                      <span><BarChart size={14}/> {level}</span>
-                      <span><Clock size={14}/> {duration}</span>
-                      <span><BookOpen size={14}/> {lessons} Lessons</span>
-                    </div>
-                  </div>
-                  <div className="modern-course-card__action">
-                    <Link href={`/contact?interest=education&course=${encodeURIComponent(course.title)}`} className="rivr-pill rivr-pill--outline">
-                      Enroll Now <span><ArrowUpRight size={16} /></span>
-                    </Link>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+      </Reveal>
+      <div className="success-features-grid">
+        {successFeatures.map(({ title, description, Icon }, index) => 
+          <Reveal delay={(index % 3) * .05} key={title}>
+            <div style={{ background: 'white', borderRadius: '24px', padding: '32px', display: 'flex', flexDirection: 'column', gap: '16px', height: '100%', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sunex-orange)' }}>{String(index + 1).padStart(2, '0')}</span>
+                <span style={{ background: 'rgba(255, 106, 18, 0.08)', color: 'var(--sunex-orange)', width: '48px', height: '48px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={22} strokeWidth={1.8} />
+                </span>
+              </div>
+              <div>
+                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: 'var(--foreground)' }}>{title}</h3>
+                <p style={{ margin: 0, color: 'var(--muted-foreground)', fontSize: '15px', lineHeight: 1.5 }}>{description}</p>
+              </div>
+            </div>
+          </Reveal>
+        )}
+      </div>
+    </div></section>
+
+    {/* Metrics Bar Section */}
+    <section className="section skillconnect-section"><div className="content-wrap">
+      <div className="metrics__card" style={{ background: 'linear-gradient(145deg, #193f68, #103054)', border: '1px solid rgba(255,255,255,0.1)' }}>
+        {[{ value: "10000+", label: "Students Trained", Icon: UsersRound }, 
+          { value: "500+", label: "Placement Partners", Icon: Building2 }, 
+          { value: "95%+", label: "Placement Record", Icon: Target }, 
+          { value: "200+", label: "Expert Trainers", Icon: GraduationCap }
+         ].map(({ value, label, Icon }, index) => 
+          <Reveal className="metric" delay={index * .05} key={label}>
+            <div style={{ color: 'white', alignItems: 'center', textAlign: 'center', display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
+              <Icon size={28} style={{ color: '#93c5fd', opacity: 1, marginBottom: '16px' }} />
+              <strong style={{ color: 'white', fontSize: '36px', marginBottom: '8px' }}>{value}</strong>
+              <span style={{ color: '#bfdbfe', fontSize: '15px' }}>{label}</span>
+            </div>
+          </Reveal>
+        )}
       </div>
     </div></section>
 
     <Testimonials />
-    <section className="section content-wrap"><Reveal className="large-cta"><p className="eyebrow">Build your next step</p><h2>Plan a learning pathway<br /><em>around your ambition.</em></h2><p>Talk with the SkillConnect team about courses, institutional training, and industry-aligned capability building.</p><Link href="/contact?interest=education" className="rivr-pill">Talk to our learning team <span><ArrowUpRight size={16} /></span></Link></Reveal></section>
+
+    {/* Footer CTA */}
+    <section className="section content-wrap"><Reveal className="large-cta">
+      <div style={{ position: 'relative', zIndex: 2 }}>
+        <p className="eyebrow">Build your next step</p>
+        <h2>Your Next Skill Could<br /><em>Change Your Future.</em></h2>
+        <p>Choose a course, start learning and build the career you've always wanted.</p>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '16px' }}>
+          <Link href="/contact?interest=education" className="rivr-pill">
+            Explore Courses <span><ArrowUpRight size={16} /></span>
+          </Link>
+          <Link href="/contact?interest=education" className="rivr-pill" style={{ background: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.3)' }}>
+            Talk To Our Expert
+          </Link>
+        </div>
+      </div>
+    </Reveal></section>
   </>;
 }
