@@ -182,6 +182,14 @@ All documentation, environment references, architecture plans, and miscellaneous
 
 ---
 
+## 📬 Contact & Support
+
+For inquiries, support, or more information, please reach out to us at:
+- **General Info:** [info@thesunex.com](mailto:info@thesunex.com)
+- **SkillConnect:** [skillconnect@thesunex.com](mailto:skillconnect@thesunex.com)
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
