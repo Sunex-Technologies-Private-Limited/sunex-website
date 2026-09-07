@@ -132,6 +132,10 @@ export default function Contact() {
               </ContactSideCard>
               <ContactSideCard Icon={Mail} title="Direct contact" delay={0.1}>
                 <p><strong>Enquiries</strong><br />Use the enquiry form to start a conversation with SunEx.</p>
+                <p><strong>Emails</strong><br />
+                  <a href="mailto:info@thesunex.com" style={{ textDecoration: 'underline' }}>info@thesunex.com</a><br />
+                  <a href="mailto:skillconnect@thesunex.com" style={{ textDecoration: 'underline' }}>skillconnect@thesunex.com</a>
+                </p>
                 <p><strong>Response time</strong><br />Within 24 Hours</p>
               </ContactSideCard>
               <ContactSideCard Icon={MapPin} title="Locations" delay={0.12}>

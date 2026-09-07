@@ -199,6 +199,13 @@ export function SiteFooter() {
                 <strong style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', color: 'var(--foreground)', marginBottom: '4px' }}>Training Location (Mysuru)</strong>
                 <span style={{ fontSize: '13px', lineHeight: 1.5, display: 'block' }}>1133/D, Third Floor, Gokulam 2nd Stage,<br/>2nd Main, Mysuru, Karnataka 570002.</span>
               </div>
+              <div>
+                <strong style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', color: 'var(--foreground)', marginBottom: '4px' }}>Email Us</strong>
+                <span style={{ fontSize: '13px', lineHeight: 1.5, display: 'block' }}>
+                  <a href="mailto:info@thesunex.com" className="hover:text-[var(--sunex-orange)] transition-colors">info@thesunex.com</a><br/>
+                  <a href="mailto:skillconnect@thesunex.com" className="hover:text-[var(--sunex-orange)] transition-colors">skillconnect@thesunex.com</a>
+                </span>
+              </div>
             </div>
           </div>
         </div>
