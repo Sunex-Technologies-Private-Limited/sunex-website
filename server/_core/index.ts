@@ -6,6 +6,7 @@ import { registerApiSecurity } from "./apiSecurity";
 import { registerHealthRoute } from "./health";
 import { registerHttpSecurity } from "./httpSecurity";
 import { registerOAuthRoutes } from "./oauth";
+import { createProxyMiddleware } from "http-proxy-middleware";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
@@ -31,6 +32,7 @@ async function startServer() {
   registerInternalDispatchHealthRoute(app);
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  app.use("/certificate", createProxyMiddleware({ target: "https://certification.thesunex.com", changeOrigin: true, pathRewrite: { "^/certificate": "/" } }));
   // tRPC API
   app.use(
     "/api/trpc",
@@ -55,6 +57,7 @@ async function startServer() {
 
   server.listen(port, () => {
     logger.info({ event: "server_started", port }, "server started");
+    console.log(`\n  ➜  Local:   http://localhost:${port}/\n`);
   });
 
   const shutdown = () => stopDotnetApi();
