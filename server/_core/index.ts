@@ -23,6 +23,7 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
   registerHttpSecurity(app);
+  app.use("/certificate", createProxyMiddleware({ target: "https://certification.thesunex.com", changeOrigin: true, pathRewrite: { "^/certificate": "/" } }));
   // This public site does not accept file uploads. Keep request parsing bounded
   // so anonymous form submissions cannot reserve excessive process memory.
   app.use(express.json({ limit: "64kb" }));
@@ -32,7 +33,6 @@ async function startServer() {
   registerInternalDispatchHealthRoute(app);
   registerStorageProxy(app);
   registerOAuthRoutes(app);
-  app.use("/certificate", createProxyMiddleware({ target: "https://certification.thesunex.com", changeOrigin: true, pathRewrite: { "^/certificate": "/" } }));
   // tRPC API
   app.use(
     "/api/trpc",
