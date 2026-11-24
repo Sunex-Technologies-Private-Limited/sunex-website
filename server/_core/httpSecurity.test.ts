@@ -33,4 +33,20 @@ describe("public HTTP security middleware", () => {
 
     expect(setHeader).not.toHaveBeenCalledWith("Strict-Transport-Security", expect.any(String));
   });
+
+  it("lets only the static platform preview be framed by our own pages", () => {
+    const use = vi.fn();
+    registerHttpSecurity({ disable: vi.fn(), set: vi.fn(), use } as never);
+    const middleware = use.mock.calls[0]?.[0];
+
+    const preview = vi.fn();
+    middleware({ secure: true, path: "/lms-preview/index.html" }, { setHeader: preview }, vi.fn());
+    expect(preview).toHaveBeenCalledWith("X-Frame-Options", "SAMEORIGIN");
+    expect(preview).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("frame-ancestors 'self'"));
+
+    const other = vi.fn();
+    middleware({ secure: true, path: "/education/kids" }, { setHeader: other }, vi.fn());
+    expect(other).toHaveBeenCalledWith("X-Frame-Options", "DENY");
+    expect(other).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("frame-ancestors 'none'"));
+  });
 });

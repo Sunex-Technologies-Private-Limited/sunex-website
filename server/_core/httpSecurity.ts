@@ -1,6 +1,6 @@
 import type { Express, RequestHandler } from "express";
 
-function contentSecurityPolicy() {
+function contentSecurityPolicy(frameAncestors = "'none'") {
   const configuredSources = (process.env.SUNEX_CSP_ADDITIONAL_SOURCES ?? "")
     .split(",")
     .map(value => value.trim())
@@ -22,7 +22,7 @@ function contentSecurityPolicy() {
     "style-src 'self' 'unsafe-inline'",
     "object-src 'none'",
     "base-uri 'self'",
-    "frame-ancestors 'none'",
+    `frame-ancestors ${frameAncestors}`,
     "form-action 'self'",
   ].join("; ");
 }
@@ -36,10 +36,12 @@ export function registerHttpSecurity(app: Express) {
 
   const middleware: RequestHandler = (req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
-    res.setHeader("X-Frame-Options", "DENY");
+    // Only the static platform preview may be shown inside our own pages. Everything else stays unframeable.
+    const framableByUs = (req.path ?? "").startsWith("/lms-preview/");
+    res.setHeader("X-Frame-Options", framableByUs ? "SAMEORIGIN" : "DENY");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     res.setHeader("Permissions-Policy", "camera=(), geolocation=(), microphone=()");
-    res.setHeader("Content-Security-Policy", contentSecurityPolicy());
+    res.setHeader("Content-Security-Policy", contentSecurityPolicy(framableByUs ? "'self'" : "'none'"));
     if (req.secure) {
       res.setHeader("Strict-Transport-Security", "max-age=31536000");
     }

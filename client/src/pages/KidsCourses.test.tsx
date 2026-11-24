@@ -53,5 +53,6 @@ describe("SkillConnect Kids page", () => {
     expect(html).not.toContain('data-v="admin"');
     expect(html.toLowerCase()).not.toContain("build vs buy");
     expect(html.toLowerCase()).not.toContain("recorded");
+    expect(html).not.toMatch(/<script>/);
   });
 });
