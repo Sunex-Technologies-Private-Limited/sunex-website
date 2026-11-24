@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
+import { injectKidsMeta, kidsRouteMeta } from "../../shared/kidsSeo";
 
 export const reactRefreshPreamble = `
     <script type="module">
@@ -74,7 +75,18 @@ export function serveStatic(app: Express) {
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  app.use("*", (req, res) => {
+    const indexPath = path.resolve(distPath, "index.html");
+    // Kids pages get their own title and description in the first HTML so search engines and link previews can read them.
+    if (kidsRouteMeta(req.originalUrl.split("?")[0])) {
+      try {
+        const page = injectKidsMeta(fs.readFileSync(indexPath, "utf-8"), req.originalUrl.split("?")[0]);
+        res.status(200).set({ "Content-Type": "text/html" }).end(page);
+        return;
+      } catch {
+        /* fall back to the plain file below */
+      }
+    }
+    res.sendFile(indexPath);
   });
 }

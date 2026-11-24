@@ -1,6 +1,8 @@
-import { ArrowUpRight, BadgeCheck, Building2, CheckCircle2, Compass, GraduationCap, Leaf, Mail, MapPin, Stethoscope } from "lucide-react";
-import React, { FormEvent, useEffect, useState } from "react";
+import { ArrowUpRight, BadgeCheck, Building2, CheckCircle2, Compass, GraduationCap, Leaf, Mail, MapPin, MessageCircle, Phone, Stethoscope } from "lucide-react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
+import { kidsCourses } from "@/data/kidsCourses";
+import { skillconnectContact, skillconnectMapsUrl } from "@/data/skillconnectContact";
 import { PageHero } from "@/components/sunex/PageHero";
 import { Reveal } from "@/components/sunex/Reveal";
 import { trpc } from "@/lib/trpc";
@@ -35,6 +37,11 @@ const guidedInterests = [
 export default function Contact() {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [submitted, setSubmitted] = useState(false);
+  const [enquiry, setEnquiry] = useState<{ audience: "kids" | "college"; course: string } | null>(null);
+  const [childAge, setChildAge] = useState("");
+  const [kidsConsent, setKidsConsent] = useState(false);
+  const [nextContact, setNextContact] = useState<{ audience: "kids" | "college"; course: string } | null>(null);
+  const successRef = useRef<HTMLDivElement>(null);
   const submit = trpc.contact.submit.useMutation({
     onSuccess: () => {
       setSubmitted(true);
@@ -47,14 +54,32 @@ export default function Contact() {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitted(false);
+    if (enquiry) {
+      const who = enquiry.audience === "kids" ? `Kids (ages 7–16) enquiry. Course: ${enquiry.course || "not chosen"}. Child's age: ${childAge || "not given"}.` : "College students: notify me when programs launch.";
+      setNextContact({ course: enquiry.course, audience: enquiry.audience });
+      submit.mutate({ ...values, message: `${who}\n\n${values.message}` });
+      return;
+    }
+    setNextContact(null);
     submit.mutate(values);
   };
 
   useEffect(() => {
-    const interest = new URLSearchParams(window.location.search).get("interest");
-    if (!interest || !guidedInterests.some((item) => item.id === interest)) return;
-    change("solution", interest);
+    const params = new URLSearchParams(window.location.search);
+    const interest = params.get("interest");
+    const audience = params.get("audience");
+    const course = params.get("course");
+    if (interest && guidedInterests.some((item) => item.id === interest)) change("solution", interest);
+    if (audience === "kids" || audience === "college") {
+      const known = kidsCourses.find((item) => item.title === course);
+      setEnquiry({ audience, course: known?.title ?? "" });
+      setValues((current) => ({ ...current, solution: "education", industry: "other" }));
+    }
   }, []);
+
+  useEffect(() => {
+    if (submitted) successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [submitted]);
 
   return (
     <>
@@ -103,6 +128,12 @@ export default function Contact() {
                   <Field label="Organization" value={values.organization} onChange={(value) => change("organization", value)} />
                   <Field label="Email address" type="email" value={values.email} onChange={(value) => change("email", value)} required />
                   <Field label="Phone number" type="tel" value={values.phone} onChange={(value) => change("phone", value)} />
+                  {enquiry?.audience === "kids" && (
+                    <>
+                      <SelectField label="Course of interest" value={enquiry.course} onChange={(value) => setEnquiry({ ...enquiry, course: value })} options={[["", "Not sure yet, please advise"], ...kidsCourses.map((item) => [item.title, item.title])]} />
+                      <SelectField label="Child's age" value={childAge} onChange={setChildAge} options={[["", "Select age"], ...Array.from({ length: 10 }, (_, index) => [String(index + 7), `${index + 7} years`])]} />
+                    </>
+                  )}
                   <SelectField label="Solution interest" value={values.solution} onChange={(value) => change("solution", value)} options={[["urbantree", "UrbanTree — Air Purification"], ["education", "SkillConnect — Training Programs"], ["healthcare", "SunEx Healthcare — Medical Tourism"], ["partnership", "Strategic Partnership"], ["csr", "CSR Initiative"], ["other", "Other"]]} />
                   <SelectField label="Your industry" value={values.industry} onChange={(value) => change("industry", value)} options={[["gov", "Government"], ["smartcity", "Smart City"], ["edu", "Educational Institution"], ["health", "Healthcare Provider"], ["mfg", "Manufacturing"], ["realestate", "Real Estate"], ["ngo", "NGO"], ["other", "Other"]]} />
                   <label className="form-field form-field--wide">
@@ -110,6 +141,12 @@ export default function Contact() {
                     <textarea required value={values.message} onChange={(event) => change("message", event.target.value)} placeholder={`Tell us what you would like to explore with ${guidedInterests.find((interest) => interest.id === values.solution)?.label || "SunEx"}`} />
                   </label>
                 </div>
+                {enquiry?.audience === "kids" && (
+                  <label className="form-field form-field--wide" style={{ flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 12 }}>
+                    <input type="checkbox" required checked={kidsConsent} onChange={(event) => setKidsConsent(event.target.checked)} style={{ width: 18, height: 18, marginTop: 2, flex: "none" }} />
+                    <span style={{ fontSize: 13, fontWeight: 500 }}>I am the parent or legal guardian, and I agree that SkillConnect may contact me about my child&apos;s enquiry and use these details only for this enquiry.</span>
+                  </label>
+                )}
                 {submit.error && <p className="form-error">{submit.error.message || "We could not submit your inquiry. Please try again."}</p>}
                 <button className="rivr-pill form-submit" type="submit" disabled={submit.isPending}>
                   {submit.isPending ? "Submitting..." : <>Submit inquiry <span><ArrowUpRight className="sunex-action-glyph" size={16} /></span></>}
@@ -118,10 +155,22 @@ export default function Contact() {
               </form>
 
               {submitted && (
-                <div className="contact-success" style={{ marginTop: 20 }}>
+                <div className="contact-success" style={{ marginTop: 20 }} ref={successRef} role="status">
                   <CheckCircle2 size={21} />
                   <h3>Inquiry submitted</h3>
-                  <p>Thank you for reaching out. The SunEx team will be in touch.</p>
+                  <p>Thank you for reaching out. The SunEx team will be in touch {skillconnectContact.response.toLowerCase()}.</p>
+                  {nextContact && (
+                    <div className="contact-next" style={{ marginTop: 14, display: "grid", gap: 10 }}>
+                      <strong>Want to talk right now?</strong>
+                      <div className="contact-next__actions" style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                        {skillconnectContact.whatsapp && <a className="rivr-pill" href={`https://wa.me/${skillconnectContact.whatsapp}?text=${encodeURIComponent(`Hi SkillConnect, I just sent an enquiry${nextContact.course ? ` about ${nextContact.course}` : ""}.`)}`} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp us</a>}
+                        {skillconnectContact.phone && <a className="rivr-pill" href={`tel:${skillconnectContact.phone.replace(/\s/g, "")}`}><Phone size={16} /> Call {skillconnectContact.phone}</a>}
+                        <a className="rivr-pill" href={`mailto:${skillconnectContact.email}?subject=${encodeURIComponent(`SkillConnect Kids enquiry${nextContact.course ? `: ${nextContact.course}` : ""}`)}`}><Mail size={16} /> {skillconnectContact.email}</a>
+                      </div>
+                      <p style={{ margin: 0, fontSize: 13 }}>Or visit us: {skillconnectContact.centre.address}. <a href={skillconnectMapsUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>Open in Maps</a></p>
+                      <Link href="/education/kids" className="text-link">Keep exploring kids courses</Link>
+                    </div>
+                  )}
                 </div>
               )}
             </Reveal>
@@ -132,6 +181,9 @@ export default function Contact() {
               </ContactSideCard>
               <ContactSideCard Icon={Mail} title="Direct contact" delay={0.1}>
                 <p><strong>Enquiries</strong><br />Use the enquiry form to start a conversation with SunEx.</p>
+                <p><strong>Call or WhatsApp (SkillConnect)</strong><br />
+                  <a href={`tel:${skillconnectContact.phone.replace(/\s/g, "")}`} style={{ textDecoration: 'underline' }}>{skillconnectContact.phone}</a>
+                </p>
                 <p><strong>Emails</strong><br />
                   <a href="mailto:info@thesunex.com" style={{ textDecoration: 'underline' }}>info@thesunex.com</a><br />
                   <a href="mailto:skillconnect@thesunex.com" style={{ textDecoration: 'underline' }}>skillconnect@thesunex.com</a>

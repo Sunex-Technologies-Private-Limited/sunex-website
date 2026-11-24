@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { findCourse } from "@/data/kidsCourses";
 
 const defaultImage = "/manus-storage/sunex-partnership-studio_691e7bdd.jpg";
 const urbanTreeMeta = { title: "UrbanTree", description: "Explore UrbanTree, SunEx’s advanced bio-mechanical air purification infrastructure for healthier urban environments.", image: "/manus-storage/urbantree-city-clean_b9b26676.png" };
@@ -11,6 +12,7 @@ const pageMeta: Record<string, { title: string; description: string; image?: str
   "/product": urbanTreeMeta,
   "/urbantree": urbanTreeMeta,
   "/education": { title: "SkillConnect by SunEx", description: "Explore SkillConnect’s industry-oriented technology courses and learning pathways.", image: "/manus-storage/skillconnect-coding-lab_8415e96a.jpg" },
+  "/education/kids": { title: "SkillConnect Kids", description: "Hands-on coding, electricity, AI, IoT and robotics courses for children aged 7 to 16 from SkillConnect by SunEx. Book a free demo class.", image: "/manus-storage/skillconnect-coding-lab_8415e96a.jpg" },
   "/healthcare": { title: "SunEx Healthcare", description: "Explore SunEx Healthcare’s developing medical-tourism journey for international patients.", image: "/manus-storage/healthcare_60e8d462.png" },
   "/contact": { title: "Contact SunEx", description: "Start a guided conversation with SunEx about UrbanTree, SkillConnect, Healthcare, partnerships, or CSR.", image: defaultImage },
   "/faq": { title: "SunEx FAQs", description: "Find answers about UrbanTree, SkillConnect, SunEx Healthcare, and starting a conversation with SunEx.", image: defaultImage },
@@ -42,7 +44,11 @@ export function PageMeta() {
   const [location] = useLocation();
 
   useEffect(() => {
-    const current = pageMeta[location] ?? pageMeta["/"];
+    const kidsCourse = findCourse(location.match(/^\/education\/kids\/([^/]+)\/?$/)?.[1] ?? "");
+    const minAge = kidsCourse ? Number(kidsCourse.entryAge.match(/\d+/)?.[0] ?? 7) : 7;
+    const current = kidsCourse
+      ? { title: `${kidsCourse.title} for Kids (Ages ${minAge}–16)`, description: `${kidsCourse.summary} ${kidsCourse.weeks}-week course with 3 levels, learn at your own pace plus live weekend classes. Book a free demo class.`, image: "/manus-storage/skillconnect-coding-lab_8415e96a.jpg" }
+      : pageMeta[location] ?? pageMeta["/"];
     const title = `${current.title} | Powering the Next Clean Future`;
     const url = `${window.location.origin}${location}`;
     const image = `${window.location.origin}${current.image ?? defaultImage}`;
@@ -73,9 +79,27 @@ export function PageMeta() {
       "@type": "Organization",
       name: "SunEx Technologies Pvt. Ltd.",
       url: window.location.origin,
-      email: "contact@sunextech.com",
+      email: "info@thesunex.com",
       description: "SunEx Technologies brings together UrbanTree, SkillConnect, and SunEx Healthcare to create sustainable, practical progress.",
     });
+
+    const courseSchema = document.head.querySelector('script[data-sunex-schema="course"]');
+    if (kidsCourse) {
+      upsertStructuredData("course", {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        name: kidsCourse.title,
+        description: kidsCourse.summary,
+        url,
+        provider: { "@type": "Organization", name: "SkillConnect by SunEx", url: window.location.origin },
+        educationalLevel: "Beginner to Intermediate",
+        timeRequired: `PT${kidsCourse.hours}H`,
+        audience: { "@type": "PeopleAudience", suggestedMinAge: minAge, suggestedMaxAge: 16 },
+        hasCourseInstance: { "@type": "CourseInstance", courseMode: ["online", "blended"] },
+      });
+    } else {
+      courseSchema?.remove();
+    }
   }, [location]);
 
   return null;

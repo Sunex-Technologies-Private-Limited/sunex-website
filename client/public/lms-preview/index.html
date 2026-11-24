@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillConnect Kids: Platform Preview</title>
+<style>
+:root{--navy:#193f68;--navy2:#103054;--orange:#ff6a12;--green:#22c55e;--blue:#3b82f6;--bg:#f3f5f9;--card:#fff;--ink:#1b2b44;--mute:#64748b;--line:#e3e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(145deg,var(--navy),var(--navy2));color:#fff;padding:18px 24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+header b{font-size:18px}header small{display:block;opacity:.75;font-size:12px}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav button{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;font-size:14px}
+nav button.on{background:var(--orange);border-color:var(--orange)}
+main{max-width:1100px;margin:24px auto;padding:0 16px}
+.view{display:none}.view.on{display:block}
+.note{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:12px 16px;font-size:13px;margin-bottom:20px;color:#7c2d12}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:2fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:800px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 6px 20px rgba(0,0,0,.04)}
+.card h3{margin:0 0 12px;font-size:16px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--orange);text-transform:uppercase;margin-bottom:6px}
+.player{background:#0f2a47;border-radius:16px;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center;color:#fff;position:relative;overflow:hidden}
+.player .play{width:64px;height:64px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:26px}
+.player .cap{position:absolute;left:14px;bottom:12px;font-size:13px;background:rgba(0,0,0,.45);padding:4px 10px;border-radius:8px}
+.clips{display:flex;gap:6px;margin:14px 0}.clip{flex:1;border-radius:10px;padding:8px 6px;font-size:12px;text-align:center;background:#eef2f7;color:var(--mute);font-weight:600;cursor:pointer;border:2px solid transparent}
+.clip.done{background:#dcfce7;color:#166534}.clip.now{border-color:var(--orange);background:#fff;color:var(--ink)}
+.bar{height:10px;background:#e8edf4;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+.p-g{background:#dcfce7;color:#166534}.p-o{background:#ffedd5;color:#9a3412}.p-b{background:#dbeafe;color:#1e40af}.p-r{background:#fee2e2;color:#991b1b}
+ul.plain{list-style:none;margin:0;padding:0}ul.plain li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}ul.plain li:last-child{border:0}
+.btn{border:0;background:var(--orange);color:#fff;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer;font-size:13px}.btn.ghost{background:#eef2f7;color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.badge{display:inline-flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--mute);width:68px;text-align:center}.badge span{width:46px;height:46px;border-radius:50%;background:#fff7ed;display:flex;align-items:center;justify-content:center;font-size:22px}.badge.off span{filter:grayscale(1);opacity:.35}
+.quiz label{display:block;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;cursor:pointer;font-size:14px}.quiz label:hover{border-color:var(--orange)}
+.week{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;font-size:12px}.week div{border-radius:12px;padding:10px 6px;text-align:center;background:#eef2f7}.week .live{background:#dbeafe;color:#1e40af;font-weight:700}.week .done{background:#dcfce7;color:#166534}
+.stack{display:grid;gap:16px}
+.kpi{font-size:30px;font-weight:800}.mut{color:var(--mute);font-size:13px}
+.rub td:not(:first-child){text-align:center}.dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#e2e8f0;margin:0 1px}.dot.f{background:var(--orange)}
+.phone{width:300px;margin:0 auto;border:8px solid #0f172a;border-radius:34px;background:#fff;padding:14px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div><b>SkillConnect Kids · Learning Platform (LMS)</b><small>Design preview. Sample data only, not a working product.</small></div>
+  <nav id="tabs">
+    <button class="on" data-v="student">Child view</button>
+    <button data-v="parent">Parent view</button>
+    <button data-v="mentor">Mentor view</button>
+  </nav>
+</header>
+<main>
+
+<!-- CHILD -->
+<section class="view on" id="student">
+  <div class="note">Meet <b>a sample learner, age 11</b> · Scratch · Week 4 · Middle track (10–12). The child sees one clear next step, never a wall of menus.</div>
+  <div class="grid g2">
+    <div class="stack">
+      <div class="card">
+        <div class="eyebrow">Week 4 · Session R2</div>
+        <h3>If this, then that: making sprites decide</h3>
+        <div class="player"><div class="play">▶</div><div class="cap">Clip 3 of 5 · Watch me · 6:00 · ⏸ pause cue at 2:00</div></div>
+        <div class="clips" id="clips">
+          <div class="clip done">1 Spark ✓</div><div class="clip done">2 Learn ✓</div><div class="clip now">3 Watch me</div><div class="clip">4 Your turn</div><div class="clip">5 Level up</div>
+        </div>
+        <div class="mut">Downloads: starter project · 1-page cheat sheet · challenge card &nbsp;|&nbsp; Speed 1× · Captions on · 20-20-20 eye-break reminder on</div>
+      </div>
+      <div class="card quiz">
+        <h3>Checkpoint question <span class="pill p-b">not scored</span></h3>
+        <p style="margin:0 0 6px;font-size:14px">Which block asks a yes-or-no question?</p>
+        <label><input type="radio" name="q"> repeat 10</label>
+        <label><input type="radio" name="q" checked> if &lt; touching color? &gt; then</label>
+        <label><input type="radio" name="q"> say Hello!</label>
+        <button class="btn" onclick="this.textContent='✓ Correct! Keep going'">Check answer</button>
+      </div>
+      <div class="card">
+        <h3>Stuck? Send a Stuck Card</h3>
+        <p class="mut" style="margin-top:0">Add a screenshot and one line: “I expected ___, but got ___.” Your mentor picks the top questions for Saturday’s Lab.</p>
+        <button class="btn ghost">📎 Add screenshot</button> <button class="btn">Send Stuck Card</button>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>This week</h3>
+        <div class="week"><div class="done">R1 ✓</div><div class="done">R2 ✓</div><div>R3</div><div>R4</div><div class="live">Sat Lab 4 pm</div><div class="live">Sun Studio 4 pm</div></div>
+        <p class="mut">Weekly challenge due Sunday</p><div class="bar"><i style="width:45%"></i></div>
+        <p class="mut" style="margin-bottom:0">Course progress: Week 4 of 8</p>
+        <p style="margin:14px 0 0"><button class="btn">Join Saturday Lab (opens 3:55 pm)</button></p>
+      </div>
+      <div class="card"><h3>My badges</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="badge"><span>🔁</span>Loop Master</div><div class="badge"><span>🐞</span>Debugger</div><div class="badge off"><span>📖</span>Storyteller</div><div class="badge off"><span>🛡️</span>Safety Star</div>
+        </div><p class="mut" style="margin-bottom:0">Gentle streak: 3 weeks in a row 🌱 (no pressure, no leaderboards)</p>
+      </div>
+      <div class="card"><h3>My portfolio</h3>
+        <ul class="plain"><li>🎮 Dance Party<span class="pill p-g">Proficient</span></li><li>🧩 Maze Runner<span class="pill p-o">Developing → retry</span></li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARENT -->
+<section class="view" id="parent">
+  <div class="note">Parent of the sample learner. Parents get clarity and reassurance, not homework to manage.</div>
+  <div class="grid g3">
+    <div class="card"><div class="mut">Sessions completed</div><div class="kpi">14 / 32</div><div class="bar"><i style="width:44%"></i></div></div>
+    <div class="card"><div class="mut">Quiz mastery</div><div class="kpi">82%</div><span class="pill p-g">On track</span></div>
+    <div class="card"><div class="mut">Live attendance</div><div class="kpi">3 of 4</div><span class="pill p-o">Missed Studio 3 · replay sent</span></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Fortnight report (auto-generated from outcomes)</h3>
+      <p style="font-size:14px;line-height:1.6;margin-top:0"><b>Strengths:</b> The learner can now use loops to avoid repeating blocks and explained “forever” clearly in Studio.<br><b>Next step:</b> conditions inside loops (this week’s Hard Concept).<br><b>Ask them:</b> “Show me how your sprite knows when it touches the wall.”</p>
+      <table class="rub"><tr><th>Skill</th><th>Level</th></tr>
+        <tr><td>Concept</td><td><span class="dot f"></span><span class="dot f"></span><span class="dot f"></span><span class="dot"></span></td></tr>
+        <tr><td>Function</td><td><span class="dot f"></span><span class="dot f"></span><span class="dot f"></span><span class="dot"></span></td></tr>
+        <tr><td>Creativity</td><td><span class="dot f"></span><span class="dot f"></span><span class="dot f"></span><span class="dot f"></span></td></tr>
+        <tr><td>Debugging</td><td><span class="dot f"></span><span class="dot f"></span><span class="dot"></span><span class="dot"></span></td></tr>
+        <tr><td>Communication</td><td><span class="dot f"></span><span class="dot f"></span><span class="dot f"></span><span class="dot"></span></td></tr></table>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>Upcoming</h3><ul class="plain"><li>Sat Lab<span>4:00 pm</span></li><li>Sun Studio<span>4:00 pm</span></li><li>Checkpoint viva<span class="pill p-b">Book slot</span></li></ul></div>
+      <div class="card"><h3>Safety &amp; consent</h3><ul class="plain"><li>Parental consent<span class="pill p-g">Given</span></li><li>Parent-owned tool account<span class="pill p-g">Linked</span></li><li>Class recording policy<span class="pill p-g">Accepted</span></li></ul></div>
+      <div class="card"><h3>Certificates</h3><p class="mut" style="margin:0">Completion · Merit · Distinction appear here with a shareable link after the showcase.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENTOR -->
+<section class="view" id="mentor">
+  <div class="note">Mentor: Scratch · Middle pod (18 children). Tools focus on <b>who needs a person</b>, not on admin.</div>
+  <div class="grid g2">
+    <div class="card"><h3>Pod roster · who needs attention</h3>
+      <table><tr><th>Child</th><th>Mastery</th><th>Stuck Cards</th><th>Flag</th></tr>
+        <tr><td>Learner A</td><td>82%</td><td>1</td><td><span class="pill p-g">OK</span></td></tr>
+        <tr><td>Diya</td><td>54%</td><td>0</td><td><span class="pill p-r">Low mastery · message</span></td></tr>
+        <tr><td>Kabir</td><td>71%</td><td>3</td><td><span class="pill p-o">Many cards · pair up</span></td></tr>
+        <tr><td>Meera</td><td>90%</td><td>0</td><td><span class="pill p-b">Offer stretch</span></td></tr>
+        <tr><td>Rohan</td><td>—</td><td>0</td><td><span class="pill p-r">No activity 6 days</span></td></tr></table>
+    </div>
+    <div class="stack">
+      <div class="card"><h3>Saturday Lab: top Stuck Cards</h3><ul class="plain"><li>“Sprite ignores the wall” <span class="pill p-b">7 kids</span></li><li>“Score resets to 0” <span class="pill p-b">4 kids</span></li><li>“Broadcast not received” <span class="pill p-b">2 kids</span></li></ul><p class="mut" style="margin-bottom:0">Hard Concept to re-teach: conditions inside loops.</p></div>
+      <div class="card"><h3>Class controls</h3><button class="btn">Start breakout rooms (4–5)</button> <button class="btn ghost">Spotlight rotation</button> <button class="btn ghost">Moderate chat</button></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>Grade Weekly Challenge · Sample learner · “Maze Runner”</h3>
+    <table class="rub"><tr><th>Dimension</th><th>1 Starting</th><th>2 Developing</th><th>3 Proficient</th><th>4 Advanced</th></tr>
+      <tr><td>Concept</td><td>○</td><td>○</td><td>●</td><td>○</td></tr><tr><td>Function</td><td>○</td><td>●</td><td>○</td><td>○</td></tr>
+      <tr><td>Creativity</td><td>○</td><td>○</td><td>○</td><td>●</td></tr><tr><td>Debugging</td><td>○</td><td>●</td><td>○</td><td>○</td></tr><tr><td>Communication</td><td>○</td><td>○</td><td>●</td><td>○</td></tr></table>
+    <p class="mut">Feedback due within 48 h · Below Proficient can be retried after a tip (mastery loop).</p><button class="btn">Send feedback</button>
+  </div>
+</section>
+
+</main>
+<script>
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===b.dataset.v));
+});
+document.querySelectorAll('#clips .clip').forEach((c,i,all)=>c.onclick=()=>all.forEach((x,j)=>{x.className='clip'+(j<i?' done':j===i?' now':'')}));
+</script>
+</body>
+</html>

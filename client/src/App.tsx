@@ -13,6 +13,8 @@ const Careers = lazy(() => import("@/pages/Careers"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const HireFromUs = lazy(() => import("@/pages/HireFromUs"));
 const Education = lazy(() => import("@/pages/Education"));
+const KidsCourses = lazy(() => import("@/pages/KidsCourses"));
+const KidsCourseDetail = lazy(() => import("@/pages/KidsCourseDetail"));
 const Faq = lazy(() => import("@/pages/Faq"));
 const Healthcare = lazy(() => import("@/pages/Healthcare"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -34,6 +36,8 @@ function Router() {
         <Route path="/product" component={Product} />
         <Route path="/urbantree" component={Product} />
         <Route path="/education" component={Education} />
+        <Route path="/education/kids" component={KidsCourses} />
+        <Route path="/education/kids/:slug" component={KidsCourseDetail} />
         <Route path="/healthcare" component={Healthcare} />
         <Route path="/faq" component={Faq} />
         <Route path="/privacy" component={Privacy} />
