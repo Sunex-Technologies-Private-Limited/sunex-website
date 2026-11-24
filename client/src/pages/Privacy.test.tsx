@@ -16,7 +16,7 @@ describe("Privacy information", () => {
     render(<Privacy />);
     expect(screen.getByText("What the website")).toBeTruthy();
     expect(screen.getByText("Retention and deletion")).toBeTruthy();
-    expect(screen.getAllByRole("link", { name: "contact@sunextech.com" })[0]?.getAttribute("href")).toBe("mailto:contact@sunextech.com");
+    expect(screen.getAllByRole("link", { name: "info@thesunex.com" })[0]?.getAttribute("href")).toBe("mailto:info@thesunex.com");
     expect(screen.getByRole("link", { name: "Start a guided enquiry" }).getAttribute("href")).toBe("/contact");
   });
 });

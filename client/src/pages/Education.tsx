@@ -116,6 +116,36 @@ export default function Education() {
       </div>
     </section>
 
+    {/* Audience chooser: Kids (live) and College Students (coming soon) */}
+    <section className="section" aria-labelledby="education-audience-title" style={{ paddingTop: 0 }}><div className="content-wrap">
+      <Reveal>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <p className="eyebrow">CHOOSE YOUR PATH</p>
+          <h2 id="education-audience-title" className="display" style={{ margin: 0 }}>Who Is <em>Learning?</em></h2>
+        </div>
+      </Reveal>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <Reveal>
+          <Link href="/education/kids" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'linear-gradient(145deg, #193f68, #103054)', borderRadius: '24px', padding: '36px', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}>
+            <span style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'var(--sunex-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}><Sparkles size={28} /></span>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: '#ffd1b5', letterSpacing: '.06em' }}>AGES 7–16</span>
+            <h3 style={{ color: 'white', fontSize: '28px', fontWeight: 700, margin: '6px 0 12px' }}>Kids</h3>
+            <p style={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: '0 0 24px', flex: 1 }}>Fun, hands-on courses in coding, robotics and AI that help children learn by building.</p>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 700 }}>Explore Kids Courses <ArrowRight size={16} /></span>
+          </Link>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'white', borderRadius: '24px', padding: '36px', border: '1px dashed rgba(0,0,0,0.2)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+            <span style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(255, 106, 18, 0.1)', color: 'var(--sunex-orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}><GraduationCap size={28} /></span>
+            <span style={{ alignSelf: 'flex-start', background: 'rgba(255, 106, 18, 0.1)', color: 'var(--sunex-orange)', borderRadius: '999px', padding: '4px 12px', fontSize: '12px', fontWeight: 700 }}>COMING SOON</span>
+            <h3 style={{ fontSize: '28px', fontWeight: 700, margin: '10px 0 12px', color: 'var(--foreground)' }}>College Students</h3>
+            <p style={{ color: 'var(--muted-foreground)', lineHeight: 1.6, margin: '0 0 24px', flex: 1 }}>Career-focused programs for college students are on the way. Stay tuned.</p>
+            <Link href="/contact?interest=education&audience=college" className="text-link" style={{ fontWeight: 700 }}>Ask to be notified <ArrowRight size={14} /></Link>
+          </div>
+        </Reveal>
+      </div>
+    </div></section>
+
     {/* Popular Courses Section */}
     <section id="courses-section" className="section course-showcase-section"><div className="content-wrap">
       <Reveal>

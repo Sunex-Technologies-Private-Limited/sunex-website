@@ -39,7 +39,8 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const hasTransparentStart = location !== "/404";
+  // The Kids landing page opens with a light hero, so its header must start solid (dark text) instead of transparent (white text).
+  const hasTransparentStart = location !== "/404" && location !== "/education/kids";
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
