@@ -20,6 +20,8 @@ describe("public HTTP security middleware", () => {
     expect(setHeader).toHaveBeenCalledWith("Strict-Transport-Security", "max-age=31536000");
     expect(setHeader).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("frame-ancestors 'none'"));
     expect(setHeader).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("object-src 'none'"));
+    expect(setHeader).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("script-src 'self' https://checkout.razorpay.com"));
+    expect(setHeader).toHaveBeenCalledWith("Content-Security-Policy", expect.stringContaining("frame-src 'self' https://api.razorpay.com"));
     expect(next).toHaveBeenCalledOnce();
   });
 

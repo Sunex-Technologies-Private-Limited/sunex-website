@@ -1,5 +1,6 @@
 import { Bot, BrainCircuit, Code, Gamepad2, Radio, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { feeFor, formatRupees } from "@shared/kidsPricing";
 
 /*
  * Source of truth: projects/2026-11-24_kids-skills-curriculum (Kids Skill-Enhancement Curriculum Pack).
@@ -175,7 +176,11 @@ export const kidsSchedule: Record<string, { fee?: string; nextBatch?: string; se
   robotics: {},
 };
 
-export const feeText = (id: string) => kidsSchedule[id]?.fee || "Contact us for fees";
+export const feeText = (id: string) => {
+  if (kidsSchedule[id]?.fee) return kidsSchedule[id].fee as string;
+  const fee = feeFor(id, 1);
+  return fee ? `From ${formatRupees(fee)} per level` : "Contact us for fees";
+};
 export const batchText = (id: string) => kidsSchedule[id]?.nextBatch || "Dates coming soon";
 
 export const findCourse =(id: string) => kidsCourses.find((course) => course.id === id);

@@ -13,11 +13,19 @@ function contentSecurityPolicy(frameAncestors = "'none'") {
     }
   })();
   const sources = ["'self'", ...configuredSources, analyticsOrigin].filter(Boolean).join(" ");
+  // Razorpay Checkout (SkillConnect Kids payments) loads its script, opens its payment window in a frame and reports status.
+  const razorpay = {
+    script: "https://checkout.razorpay.com",
+    connect: "https://api.razorpay.com https://lumberjack.razorpay.com",
+    frame: "https://api.razorpay.com https://checkout.razorpay.com",
+    img: "https://cdn.razorpay.com",
+  };
   return [
     "default-src 'self'",
-    `script-src ${sources}`,
-    `connect-src ${sources}`,
-    `img-src ${sources} data: blob:`,
+    `script-src ${sources} ${razorpay.script}`,
+    `connect-src ${sources} ${razorpay.connect}`,
+    `img-src ${sources} ${razorpay.img} data: blob:`,
+    `frame-src 'self' ${razorpay.frame}`,
     `font-src ${sources} data:`,
     "style-src 'self' 'unsafe-inline'",
     "object-src 'none'",
