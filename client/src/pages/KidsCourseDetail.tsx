@@ -7,6 +7,7 @@ import "./KidsDemo.css";
 import { Reveal } from "@/components/sunex/Reveal";
 import { JourneyMap, LevelLadder } from "@/components/sunex/KidsWidgets";
 import { KidsDemoForm, KidsStickyCta } from "@/components/sunex/KidsDemoForm";
+import { KidsEnrolPay } from "@/components/sunex/KidsEnrolPay";
 import { batchText, feeText, findCourse, kidsCourses } from "@/data/kidsCourses";
 import NotFound from "@/pages/NotFound";
 
@@ -27,7 +28,7 @@ export default function KidsCourseDetail() {
         <p className="kids-hero__lead">{course.summary}</p>
         <div className="kids-hero__actions">
           <Link href={enquire} className="rivr-pill kids-cta">Book a Free Demo <span><ArrowUpRight size={15} /></span></Link>
-          <a href="#course-levels" className="rivr-pill kids-cta kids-cta--ghost">See the Levels</a>
+          <a href="#course-enrol" className="rivr-pill kids-cta kids-cta--ghost">Pay &amp; Enrol</a>
         </div>
         <div className="kids-hero__chips"><span>{feeText(course.id)}</span><span>{batchText(course.id)}</span><span>3 levels</span><span>Learn at your own pace</span><span>Max 20 per live class</span><span>Certificate at every level</span></div>
       </Reveal>
@@ -119,6 +120,20 @@ export default function KidsCourseDetail() {
           </Reveal>
         ))}
       </div>
+    </div></section>
+
+    <section id="course-enrol" className="section section--mist" aria-labelledby="course-enrol-title"><div className="content-wrap kids-demo-band">
+      <Reveal>
+        <p className="eyebrow">READY TO JOIN?</p>
+        <h2 id="course-enrol-title" className="display" style={{ margin: "0 0 12px" }}>Enrol in <em>{course.short}</em></h2>
+        <p className="kids-about__text">Choose a level, pay securely online and we will confirm your child&apos;s batch. Prefer to try first? Book a free demo class below.</p>
+        <ul className="kp-points">
+          <li>Pay by UPI, card, net banking or wallet</li>
+          <li>Instant confirmation with a payment ID</li>
+          <li>Level certificate on completion</li>
+        </ul>
+      </Reveal>
+      <KidsEnrolPay course={course} />
     </div></section>
 
     <section className="section" aria-labelledby="course-demo"><div className="content-wrap kids-demo-band">
