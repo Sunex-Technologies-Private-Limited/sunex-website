@@ -2,8 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./dotnetApi", () => ({ submitContactInquiry: vi.fn().mockResolvedValue({ success: true, id: 42, requestId: "trace-42" }) }));
 vi.mock("./dotnetRuntime", () => ({ isDotnetApiEnabled: () => true }));
+vi.mock("./enquiryAlerts", () => ({ sendEnquiryAlert: vi.fn().mockResolvedValue(true) }));
 
 import { submitContactInquiry } from "./dotnetApi";
+import { sendEnquiryAlert } from "./enquiryAlerts";
 import { appRouter, contactInputSchema } from "./routers";
 
 describe("contact inquiry validation", () => {
@@ -21,5 +23,6 @@ describe("contact inquiry validation", () => {
     const caller = appRouter.createCaller({ user: null, req: { ip: "203.0.113.25", headers: { "user-agent": "Vitest", "accept-language": "en" } } as never, res: { clearCookie: vi.fn() } as never });
     await expect(caller.contact.submit(validInquiry)).resolves.toEqual({ success: true, id: 42 });
     expect(submitContactInquiry).toHaveBeenCalledWith(expect.any(Object), "203.0.113.25", expect.stringMatching(/^[a-f0-9]{64}$/));
+    expect(sendEnquiryAlert).toHaveBeenCalledWith(expect.objectContaining({ email: "asha@example.com", savedToDatabase: true }));
   });
 });

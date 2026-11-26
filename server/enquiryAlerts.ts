@@ -1,0 +1,113 @@
+import nodemailer from "nodemailer";
+import { logger } from "./_core/logger";
+
+/*
+ * Email alert for every new enquiry, demo request and paid enrolment.
+ *
+ * Uses the SMTP settings already stored in hPanel > thesunex.com > Environment variables:
+ *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
+ * Recipients (optional overrides, comma-separated):
+ *   ENQUIRY_ALERT_EDUCATION_TO  default skillconnect@thesunex.com  (SkillConnect, Kids, college, payments)
+ *   ENQUIRY_ALERT_GENERAL_TO    default info@thesunex.com          (everything else)
+ *   ENQUIRY_ALERT_FROM          default SMTP_USER
+ * If SMTP is not configured, alerts are skipped and enquiries are still saved as before.
+ */
+export const EDUCATION_ALERT_TO = "skillconnect@thesunex.com";
+export const GENERAL_ALERT_TO = "info@thesunex.com";
+
+export type EnquiryAlert = {
+  name: string;
+  email: string;
+  phone?: string | null;
+  organization?: string | null;
+  solution: string;
+  industry?: string;
+  message: string;
+  savedToDatabase: boolean;
+  kind?: "enquiry" | "paid-enrolment";
+};
+
+type SmtpEnv = { host: string; port: number; user: string; pass: string };
+
+export function smtpSettings(env: NodeJS.ProcessEnv = process.env): SmtpEnv | null {
+  const host = (env.SMTP_HOST ?? "").trim();
+  const user = (env.SMTP_USER ?? "").trim();
+  const pass = env.SMTP_PASS ?? "";
+  if (!host || !user || !pass) return null;
+  const port = Number(env.SMTP_PORT) || 465;
+  return { host, port, user, pass };
+}
+
+export function alertRecipients(solution: string, env: NodeJS.ProcessEnv = process.env): string {
+  const education = (env.ENQUIRY_ALERT_EDUCATION_TO ?? "").trim() || EDUCATION_ALERT_TO;
+  const general = (env.ENQUIRY_ALERT_GENERAL_TO ?? "").trim() || GENERAL_ALERT_TO;
+  return solution === "education" ? education : general;
+}
+
+const line = (value: string | null | undefined) => (value ?? "").replace(/[\r\n]+/g, " ").trim();
+
+export function buildAlert(alert: EnquiryAlert, env: NodeJS.ProcessEnv = process.env) {
+  const isKidsDemo = /Free demo class request/i.test(alert.message);
+  const isKids = /SkillConnect Kids|Kids \(ages 7/i.test(alert.message);
+  const label = alert.kind === "paid-enrolment" ? "PAID ENROLMENT" : isKidsDemo ? "Free demo request" : isKids ? "Kids enquiry" : "New enquiry";
+  const area = alert.solution === "education" ? "SkillConnect" : alert.solution;
+  const subject = line(`[${area}] ${label}: ${alert.name}${alert.phone ? ` (${alert.phone})` : ""}`).slice(0, 180);
+  const text = [
+    `${label} from thesunex.com`,
+    "",
+    `Name:          ${line(alert.name)}`,
+    `Phone:         ${line(alert.phone) || "not given"}`,
+    `Email:         ${line(alert.email)}`,
+    alert.organization ? `Organisation:  ${line(alert.organization)}` : null,
+    `Interest:      ${line(alert.solution)}${alert.industry ? ` / ${line(alert.industry)}` : ""}`,
+    "",
+    "Message:",
+    alert.message,
+    "",
+    alert.savedToDatabase ? "Saved in the website database (contact_inquiries)." : "WARNING: this enquiry could NOT be saved in the database. This email is the only copy.",
+    "Reply to this email to answer the sender directly.",
+  ].filter((value) => value !== null).join("\n");
+  return {
+    from: (env.ENQUIRY_ALERT_FROM ?? "").trim() || `"SunEx Website" <${(env.SMTP_USER ?? "").trim()}>`,
+    to: alertRecipients(alert.solution, env),
+    replyTo: line(alert.email) || undefined,
+    subject,
+    text,
+  };
+}
+
+type Transport = { sendMail: (mail: ReturnType<typeof buildAlert>) => Promise<unknown> };
+let cachedTransport: Transport | null = null;
+
+function transport(settings: SmtpEnv): Transport {
+  if (!cachedTransport) {
+    cachedTransport = nodemailer.createTransport({
+      host: settings.host,
+      port: settings.port,
+      secure: settings.port === 465,
+      auth: { user: settings.user, pass: settings.pass },
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
+    }) as unknown as Transport;
+  }
+  return cachedTransport;
+}
+
+/** Sends the alert. Never throws: a mail problem must not break the form for the visitor. */
+export async function sendEnquiryAlert(alert: EnquiryAlert, options: { env?: NodeJS.ProcessEnv; transport?: Transport } = {}): Promise<boolean> {
+  const env = options.env ?? process.env;
+  const settings = smtpSettings(env);
+  if (!settings && !options.transport) {
+    logger.warn({ event: "enquiry_alert_skipped", reason: "smtp_not_configured" }, "enquiry alert skipped");
+    return false;
+  }
+  try {
+    await (options.transport ?? transport(settings!)).sendMail(buildAlert(alert, env));
+    logger.info({ event: "enquiry_alert_sent", solution: alert.solution }, "enquiry alert sent");
+    return true;
+  } catch (cause) {
+    logger.error({ event: "enquiry_alert_failed", errorType: cause instanceof Error ? cause.name : "unknown" }, "enquiry alert failed");
+    return false;
+  }
+}

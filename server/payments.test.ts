@@ -3,8 +3,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("./db", () => ({ createContactInquiry: vi.fn().mockResolvedValue({ id: 7 }) }));
 vi.mock("./dotnetRuntime", () => ({ isDotnetApiEnabled: () => false }));
+vi.mock("./enquiryAlerts", () => ({ sendEnquiryAlert: vi.fn().mockResolvedValue(true) }));
 
 import { createContactInquiry } from "./db";
+import { sendEnquiryAlert } from "./enquiryAlerts";
 import { appRouter, enrolmentInputSchema } from "./routers";
 import { createRazorpayOrder, isValidPaymentSignature, razorpayConfig } from "./payments";
 import { kidsFees } from "../shared/kidsPricing";
@@ -80,5 +82,6 @@ describe("payments API", () => {
     const signature = createHmac("sha256", "secret").update("order_1|pay_1").digest("hex");
     await expect(caller().payments.verify({ orderId: "order_1", paymentId: "pay_1", signature })).resolves.toEqual({ success: true, paymentId: "pay_1" });
     expect(createContactInquiry).toHaveBeenCalledWith(expect.objectContaining({ idempotencyKey: "rzp_pay_1", message: expect.stringContaining("PAID ENROLMENT") }));
+    expect(sendEnquiryAlert).toHaveBeenCalledWith(expect.objectContaining({ kind: "paid-enrolment", savedToDatabase: true }));
   });
 });
