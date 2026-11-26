@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { alertRecipients, buildAlert, createSmtpTransport, mailErrorDetails, sendEnquiryAlert, smtpSettings } from "./enquiryAlerts";
+import { alertRecipients, buildAlert, createSmtpTransport, describeMailError, mailErrorDetails, sendEnquiryAlert, smtpSettings } from "./enquiryAlerts";
 
 const env = { SMTP_HOST: "smtp.example.com", SMTP_PORT: "465", SMTP_USER: "alerts@thesunex.com", SMTP_PASS: "x" } as NodeJS.ProcessEnv;
 const demo = {
@@ -70,5 +70,23 @@ describe("enquiry email alerts", () => {
     const details = mailErrorDetails(Object.assign(new Error("Invalid login: 535 Authentication Failed"), { code: "EAUTH", command: "AUTH PLAIN", responseCode: 535 }));
     expect(details).toMatchObject({ code: "EAUTH", command: "AUTH PLAIN", responseCode: 535 });
     expect(JSON.stringify(details)).not.toContain("pass");
+  });
+
+  it("retries on port 587 when port 465 cannot be reached", async () => {
+    const sendMail = vi.fn().mockResolvedValue({});
+    const createTransport = vi.fn(async (s: { port: number }) =>
+      s.port === 465 ? { sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("connect ECONNREFUSED"), { code: "ECONNECTION" })) } : { sendMail },
+    );
+    await expect(sendEnquiryAlert(demo, { env, createTransport })).resolves.toBe(true);
+    expect(createTransport).toHaveBeenLastCalledWith(expect.objectContaining({ port: 587 }));
+    expect(sendMail).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not retry on a login error and puts the reason in the log message", async () => {
+    const authError = Object.assign(new Error("Invalid login: 535 Authentication Failed"), { code: "EAUTH", command: "AUTH PLAIN", responseCode: 535 });
+    const createTransport = vi.fn(async () => ({ sendMail: vi.fn().mockRejectedValue(authError) }));
+    await expect(sendEnquiryAlert(demo, { env, createTransport })).resolves.toBe(false);
+    expect(createTransport).toHaveBeenCalledTimes(1);
+    expect(describeMailError(authError)).toBe("EAUTH | AUTH PLAIN | 535 | Invalid login: 535 Authentication Failed");
   });
 });
