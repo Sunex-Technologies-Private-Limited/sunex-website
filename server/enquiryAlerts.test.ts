@@ -72,6 +72,22 @@ describe("enquiry email alerts", () => {
     expect(JSON.stringify(details)).not.toContain("pass");
   });
 
+  it("sends education alerts from the SkillConnect mailbox and others from info", async () => {
+    const both = { ...env, SMTP_USER: "info@thesunex.com", SKILLCONNECT_SMTP_USER: "skillconnect@thesunex.com", SKILLCONNECT_SMTP_PASS: "y" } as NodeJS.ProcessEnv;
+    expect(smtpSettings(both, "education")).toMatchObject({ user: "skillconnect@thesunex.com", pass: "y", host: "smtp.example.com", port: 465 });
+    expect(smtpSettings(both, "urbantree")).toMatchObject({ user: "info@thesunex.com", pass: "x" });
+    expect(buildAlert(demo, both).from).toBe('"SunEx SkillConnect" <skillconnect@thesunex.com>');
+    expect(buildAlert({ ...demo, solution: "urbantree" }, both).from).toBe('"SunEx Website" <info@thesunex.com>');
+    const createTransport = vi.fn(async () => ({ sendMail: vi.fn().mockResolvedValue({}) }));
+    await sendEnquiryAlert(demo, { env: both, createTransport });
+    expect(createTransport).toHaveBeenCalledWith(expect.objectContaining({ user: "skillconnect@thesunex.com" }));
+  });
+
+  it("falls back to the general mailbox when the SkillConnect login is not set", () => {
+    expect(smtpSettings(env, "education")).toMatchObject({ user: "alerts@thesunex.com" });
+    expect(buildAlert(demo, env).from).toContain("alerts@thesunex.com");
+  });
+
   it("retries on port 587 when port 465 cannot be reached", async () => {
     const sendMail = vi.fn().mockResolvedValue({});
     const createTransport = vi.fn(async (s: { port: number }) =>
