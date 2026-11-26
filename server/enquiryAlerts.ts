@@ -117,21 +117,50 @@ export function mailErrorDetails(cause: unknown) {
   };
 }
 
+/** One-line summary for log viewers (like Hostinger's) that show only the message text. */
+export function describeMailError(cause: unknown) {
+  const d = mailErrorDetails(cause);
+  return [d.code, d.command, d.responseCode, d.detail].filter((part) => part !== undefined && part !== "").join(" | ") || d.errorType;
+}
+
+/** Errors that mean "could not reach the server on this port", as opposed to a login or message problem. */
+const CONNECTION_ERRORS = new Set(["ECONNECTION", "ECONNREFUSED", "ETIMEDOUT", "ESOCKET", "ECONNRESET", "EHOSTUNREACH", "ENETUNREACH", "EDNS"]);
+export const isConnectionError = (cause: unknown) => CONNECTION_ERRORS.has(String((cause as { code?: string })?.code ?? ""));
+
+type TransportFactory = (settings: SmtpEnv) => Promise<Transport>;
+
 /** Sends the alert. Never throws: a mail problem must not break the form for the visitor. */
-export async function sendEnquiryAlert(alert: EnquiryAlert, options: { env?: NodeJS.ProcessEnv; transport?: Transport } = {}): Promise<boolean> {
+export async function sendEnquiryAlert(
+  alert: EnquiryAlert,
+  options: { env?: NodeJS.ProcessEnv; transport?: Transport; createTransport?: TransportFactory } = {},
+): Promise<boolean> {
   const env = options.env ?? process.env;
   const settings = smtpSettings(env);
   if (!settings && !options.transport) {
     logger.warn({ event: "enquiry_alert_skipped", reason: "smtp_not_configured" }, "enquiry alert skipped");
     return false;
   }
+  const mail = buildAlert(alert, env);
+  const factory = options.createTransport ?? ((s: SmtpEnv) => createSmtpTransport(s));
   try {
-    const mailer = options.transport ?? (await createSmtpTransport(settings!));
-    await mailer.sendMail(buildAlert(alert, env));
-    logger.info({ event: "enquiry_alert_sent", solution: alert.solution }, "enquiry alert sent");
+    const mailer = options.transport ?? (await factory(settings!));
+    await mailer.sendMail(mail);
+    logger.info({ event: "enquiry_alert_sent", solution: alert.solution, port: settings?.port }, "enquiry alert sent");
     return true;
   } catch (cause) {
-    logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(cause) }, "enquiry alert failed");
+    // Some hosts block port 465 but allow 587 (STARTTLS); try once more before giving up.
+    if (!options.transport && settings && settings.port === 465 && isConnectionError(cause)) {
+      logger.warn({ event: "enquiry_alert_retry", ...mailErrorDetails(cause) }, `enquiry alert retrying on port 587 after: ${describeMailError(cause)}`);
+      try {
+        await (await factory({ ...settings, port: 587 })).sendMail(mail);
+        logger.info({ event: "enquiry_alert_sent", solution: alert.solution, port: 587 }, "enquiry alert sent (port 587)");
+        return true;
+      } catch (retryCause) {
+        logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(retryCause) }, `enquiry alert failed on 465 and 587: ${describeMailError(retryCause)}`);
+        return false;
+      }
+    }
+    logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(cause) }, `enquiry alert failed: ${describeMailError(cause)}`);
     return false;
   }
 }
