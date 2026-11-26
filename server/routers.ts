@@ -12,6 +12,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { createRazorpayOrder, fetchRazorpayOrder, isValidPaymentSignature, razorpayConfig } from "./payments";
 import { kidsSeoCourses } from "../shared/kidsSeo";
 import { feeFor } from "../shared/kidsPricing";
+import { sendEnquiryAlert } from "./enquiryAlerts";
 
 export const contactInputSchema = z.object({
   name: z.string().trim().min(2, "Please provide your name.").max(120),
@@ -63,14 +64,24 @@ export const appRouter = router({
   contact: router({
     submit: publicProcedure.input(contactInputSchema).mutation(async ({ input, ctx }) => {
       const payload = { ...input, organization: input.organization || null, phone: input.phone || null };
+      // Email alert goes out whether or not the database save works, so no enquiry is ever silently lost.
+      const alert = (savedToDatabase: boolean) => void sendEnquiryAlert({ ...payload, savedToDatabase });
       if (!isDotnetApiEnabled()) {
-        const legacyResult = await createContactInquiry(payload);
-        return { success: true as const, id: legacyResult.id };
+        try {
+          const legacyResult = await createContactInquiry(payload);
+          alert(true);
+          return { success: true as const, id: legacyResult.id };
+        } catch (cause) {
+          alert(false);
+          throw cause;
+        }
       }
       try {
         const result = await submitContactInquiry(payload, ctx.req.ip, contactClientFingerprint(ctx.req.headers));
+        alert(true);
         return { success: true as const, id: result.id };
       } catch (cause) {
+        alert(false);
         logger.warn({ event: "contact_submission_unavailable", errorType: cause instanceof Error ? cause.name : "unknown" }, "contact submission unavailable");
         throw new TRPCError({ code: "SERVICE_UNAVAILABLE", message: "The enquiry service is temporarily unavailable." });
       }
@@ -127,7 +138,9 @@ export const appRouter = router({
       try {
         if (!isDotnetApiEnabled()) await createContactInquiry({ ...payload, idempotencyKey: `rzp_${input.paymentId}`.slice(0, 72) });
         else await submitContactInquiry(payload, ctx.req.ip, contactClientFingerprint(ctx.req.headers));
+        void sendEnquiryAlert({ ...payload, savedToDatabase: true, kind: "paid-enrolment" });
       } catch (cause) {
+        void sendEnquiryAlert({ ...payload, savedToDatabase: false, kind: "paid-enrolment" });
         // The payment itself succeeded; never show the parent an error for a bookkeeping problem.
         logger.error({ event: "paid_enrolment_record_failed", orderId: input.orderId, paymentId: input.paymentId, errorType: cause instanceof Error ? cause.name : "unknown" }, "paid enrolment could not be recorded");
       }
