@@ -6,8 +6,10 @@ import { logger } from "./_core/logger";
 /*
  * Email alert for every new enquiry, demo request and paid enrolment.
  *
- * Uses the SMTP settings already stored in hPanel > thesunex.com > Environment variables:
- *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
+ * Uses the SMTP settings stored in hPanel > thesunex.com > Environment variables:
+ *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS              (info@thesunex.com, general enquiries)
+ *   SKILLCONNECT_SMTP_USER, SKILLCONNECT_SMTP_PASS           (skillconnect@thesunex.com, education)
+ * For Zoho company-domain mailboxes in India the host is smtppro.zoho.in (port 465).
  * Recipients (optional overrides, comma-separated):
  *   ENQUIRY_ALERT_EDUCATION_TO  default skillconnect@thesunex.com  (SkillConnect, Kids, college, payments)
  *   ENQUIRY_ALERT_GENERAL_TO    default info@thesunex.com          (everything else)
@@ -31,12 +33,28 @@ export type EnquiryAlert = {
 
 type SmtpEnv = { host: string; port: number; user: string; pass: string };
 
-export function smtpSettings(env: NodeJS.ProcessEnv = process.env): SmtpEnv | null {
-  const host = (env.SMTP_HOST ?? "").trim();
-  const user = (env.SMTP_USER ?? "").trim();
-  const pass = env.SMTP_PASS ?? "";
+/*
+ * Which mailbox sends the alert:
+ *   education (SkillConnect, Kids, college, payments) -> SKILLCONNECT_SMTP_USER / SKILLCONNECT_SMTP_PASS
+ *     (skillconnect@thesunex.com; SKILLCONNECT_SMTP_HOST / _PORT optional, default to SMTP_HOST / SMTP_PORT)
+ *   everything else -> SMTP_USER / SMTP_PASS (info@thesunex.com)
+ * If the SkillConnect login is not set, education alerts fall back to the general mailbox.
+ */
+export function smtpSettings(env: NodeJS.ProcessEnv = process.env, solution?: string): SmtpEnv | null {
+  const general = readSmtp(env, "");
+  if (solution === "education") {
+    const skillconnect = readSmtp(env, "SKILLCONNECT_", general);
+    if (skillconnect) return skillconnect;
+  }
+  return general;
+}
+
+function readSmtp(env: NodeJS.ProcessEnv, prefix: string, fallback?: SmtpEnv | null): SmtpEnv | null {
+  const user = (env[`${prefix}SMTP_USER`] ?? "").trim();
+  const pass = env[`${prefix}SMTP_PASS`] ?? "";
+  const host = (env[`${prefix}SMTP_HOST`] ?? "").trim() || (prefix ? fallback?.host ?? (env.SMTP_HOST ?? "").trim() : "");
+  const port = Number(env[`${prefix}SMTP_PORT`]) || (prefix ? fallback?.port ?? (Number(env.SMTP_PORT) || 465) : 465);
   if (!host || !user || !pass) return null;
-  const port = Number(env.SMTP_PORT) || 465;
   return { host, port, user, pass };
 }
 
@@ -44,6 +62,13 @@ export function alertRecipients(solution: string, env: NodeJS.ProcessEnv = proce
   const education = (env.ENQUIRY_ALERT_EDUCATION_TO ?? "").trim() || EDUCATION_ALERT_TO;
   const general = (env.ENQUIRY_ALERT_GENERAL_TO ?? "").trim() || GENERAL_ALERT_TO;
   return solution === "education" ? education : general;
+}
+
+/** The From address must be the mailbox that logs in, or Zoho rejects the message. */
+function senderAddress(solution: string, env: NodeJS.ProcessEnv) {
+  const user = smtpSettings(env, solution)?.user ?? (env.SMTP_USER ?? "").trim();
+  const name = solution === "education" && /skillconnect/i.test(user) ? "SunEx SkillConnect" : "SunEx Website";
+  return `"${name}" <${user}>`;
 }
 
 const line = (value: string | null | undefined) => (value ?? "").replace(/[\r\n]+/g, " ").trim();
@@ -70,7 +95,7 @@ export function buildAlert(alert: EnquiryAlert, env: NodeJS.ProcessEnv = process
     "Reply to this email to answer the sender directly.",
   ].filter((value) => value !== null).join("\n");
   return {
-    from: (env.ENQUIRY_ALERT_FROM ?? "").trim() || `"SunEx Website" <${(env.SMTP_USER ?? "").trim()}>`,
+    from: (env.ENQUIRY_ALERT_FROM ?? "").trim() || senderAddress(alert.solution, env),
     to: alertRecipients(alert.solution, env),
     replyTo: line(alert.email) || undefined,
     subject,
@@ -135,7 +160,7 @@ export async function sendEnquiryAlert(
   options: { env?: NodeJS.ProcessEnv; transport?: Transport; createTransport?: TransportFactory } = {},
 ): Promise<boolean> {
   const env = options.env ?? process.env;
-  const settings = smtpSettings(env);
+  const settings = smtpSettings(env, alert.solution);
   if (!settings && !options.transport) {
     logger.warn({ event: "enquiry_alert_skipped", reason: "smtp_not_configured" }, "enquiry alert skipped");
     return false;
@@ -145,7 +170,7 @@ export async function sendEnquiryAlert(
   try {
     const mailer = options.transport ?? (await factory(settings!));
     await mailer.sendMail(mail);
-    logger.info({ event: "enquiry_alert_sent", solution: alert.solution, port: settings?.port }, "enquiry alert sent");
+    logger.info({ event: "enquiry_alert_sent", solution: alert.solution, port: settings?.port }, `enquiry alert sent (sender ${settings?.user ?? "test"}, to ${mail.to})`);
     return true;
   } catch (cause) {
     // Some hosts block port 465 but allow 587 (STARTTLS); try once more before giving up.
@@ -160,7 +185,7 @@ export async function sendEnquiryAlert(
         return false;
       }
     }
-    logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(cause) }, `enquiry alert failed: ${describeMailError(cause)}`);
+    logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(cause) }, `enquiry alert failed (sender ${settings?.user ?? "test"} via ${settings?.host ?? "test"}): ${describeMailError(cause)}`);
     return false;
   }
 }
