@@ -1,3 +1,5 @@
+import { promises as dns } from "node:dns";
+import { isIP } from "node:net";
 import nodemailer from "nodemailer";
 import { logger } from "./_core/logger";
 
@@ -77,21 +79,42 @@ export function buildAlert(alert: EnquiryAlert, env: NodeJS.ProcessEnv = process
 }
 
 type Transport = { sendMail: (mail: ReturnType<typeof buildAlert>) => Promise<unknown> };
-let cachedTransport: Transport | null = null;
+type Lookup = (host: string) => Promise<string>;
 
-function transport(settings: SmtpEnv): Transport {
-  if (!cachedTransport) {
-    cachedTransport = nodemailer.createTransport({
-      host: settings.host,
-      port: settings.port,
-      secure: settings.port === 465,
-      auth: { user: settings.user, pass: settings.pass },
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-      socketTimeout: 15_000,
-    }) as unknown as Transport;
-  }
-  return cachedTransport;
+/*
+ * Hostinger's Node.js containers hide their network interfaces from the app, so nodemailer's own
+ * resolver decides "no IPv4 network" and fails ("Failed to resolve IPv4 addresses with current network").
+ * We look the SMTP host up with the system resolver ourselves and hand nodemailer the IP address,
+ * keeping the real host name for the TLS certificate check.
+ */
+const systemLookup: Lookup = async (host) => (await dns.lookup(host, { family: 4 })).address;
+
+export async function createSmtpTransport(settings: SmtpEnv, lookup: Lookup = systemLookup): Promise<Transport> {
+  const address = isIP(settings.host) ? settings.host : await lookup(settings.host);
+  return nodemailer.createTransport({
+    host: address,
+    port: settings.port,
+    secure: settings.port === 465,
+    requireTLS: settings.port !== 465,
+    servername: settings.host,
+    tls: { servername: settings.host },
+    auth: { user: settings.user, pass: settings.pass },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
+  }) as unknown as Transport;
+}
+
+/** Safe details for the logs: never includes the password or the email content. */
+export function mailErrorDetails(cause: unknown) {
+  const error = (cause ?? {}) as { name?: string; code?: string; command?: string; responseCode?: number; message?: string };
+  return {
+    errorType: cause instanceof Error ? cause.name : "unknown",
+    code: error.code,
+    command: error.command,
+    responseCode: error.responseCode,
+    detail: typeof error.message === "string" ? error.message.slice(0, 200) : undefined,
+  };
 }
 
 /** Sends the alert. Never throws: a mail problem must not break the form for the visitor. */
@@ -103,11 +126,12 @@ export async function sendEnquiryAlert(alert: EnquiryAlert, options: { env?: Nod
     return false;
   }
   try {
-    await (options.transport ?? transport(settings!)).sendMail(buildAlert(alert, env));
+    const mailer = options.transport ?? (await createSmtpTransport(settings!));
+    await mailer.sendMail(buildAlert(alert, env));
     logger.info({ event: "enquiry_alert_sent", solution: alert.solution }, "enquiry alert sent");
     return true;
   } catch (cause) {
-    logger.error({ event: "enquiry_alert_failed", errorType: cause instanceof Error ? cause.name : "unknown" }, "enquiry alert failed");
+    logger.error({ event: "enquiry_alert_failed", ...mailErrorDetails(cause) }, "enquiry alert failed");
     return false;
   }
 }
